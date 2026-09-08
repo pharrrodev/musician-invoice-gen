@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-GB" data-theme="dark">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -10,46 +10,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Client-side PDF Generation Engine -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
   <!-- Favicons -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2318181b' stroke='%23f59e0b' stroke-width='5'/><circle cx='50' cy='50' r='18' fill='%23f59e0b'/><circle cx='50' cy='50' r='6' fill='%2318181b'/></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23121214'/><circle cx='50' cy='50' r='36' fill='%2318181b' stroke='%23f59e0b' stroke-width='4'/><circle cx='50' cy='50' r='14' fill='%23f59e0b'/><circle cx='50' cy='50' r='5' fill='%23121214'/></svg>">
 
   <style>
-    /* 🌙 NIGHT / DARK MODE (DEFAULT) */
     :root {
       --bg: #0c0d0e;
       --card-bg: #141517;
       --surface: #1b1c1f;
-      --surface-focus: #202226;
       --border: #282a2e;
       --border-focus: #f59e0b;
       --accent: #f59e0b;
-      --accent-btn-text: #000000;
-      --text: #f4f4f5;
+      --accent-muted: rgba(245, 158, 11, 0.12);
+      --text: #f4f4f6;
       --muted: #8b8d94;
       --tag: #686b74;
       --error: #ef4444;
       --font-ui: 'Plus Jakarta Sans', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-    }
-
-    /* ☀️ DAY / LIGHT MODE */
-    [data-theme="light"] {
-      --bg: #f4f4f5;
-      --card-bg: #ffffff;
-      --surface: #f8fafc;
-      --surface-focus: #edf2f7;
-      --border: #e2e8f0;
-      --border-focus: #d97706;
-      --accent: #d97706;
-      --accent-btn-text: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --tag: #94a3b8;
-      --error: #dc2626;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,7 +40,6 @@
       color: var(--text);
       font-family: var(--font-ui);
       -webkit-font-smoothing: antialiased;
-      transition: background 0.2s ease, color 0.2s ease;
     }
 
     .app-shell {
@@ -71,14 +49,15 @@
       height: 100dvh;
       max-width: 480px;
       margin: 0 auto;
-      padding: 12px 14px 10px;
+      padding: 16px 14px;
     }
 
+    /* Top Breadcrumbs / Progress Header */
     .ledger-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--border);
     }
     .brand-title {
@@ -89,44 +68,31 @@
       align-items: center;
       gap: 6px;
     }
-    
-    .theme-toggle-btn {
+    .status-badge {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       text-transform: uppercase;
       background: var(--surface);
-      color: var(--text);
+      color: var(--muted);
       border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-    .theme-toggle-btn:hover {
-      border-color: var(--accent);
+      padding: 3px 7px;
+      border-radius: 4px;
     }
 
     .step-track {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
-      margin: 8px 0 10px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin: 10px 0 14px;
     }
     .step-item {
       font-family: var(--font-mono);
-      font-size: 0.65rem;
+      font-size: 0.72rem;
       color: var(--tag);
       padding-bottom: 4px;
       border-bottom: 2px solid var(--border);
       text-align: center;
       transition: all 0.2s ease;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .step-item.active {
       color: var(--accent);
@@ -134,30 +100,27 @@
       font-weight: 700;
     }
 
+    /* Card Deck Carousel */
     .deck {
       position: relative;
       flex: 1;
       display: flex;
-      align-items: stretch;
-      min-height: 0;
+      align-items: center;
     }
 
     .card {
       position: absolute;
-      inset: 0;
       width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px;
+      padding: 16px;
       opacity: 0;
       pointer-events: none;
       transform: translateY(12px);
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: calc(100dvh - 170px);
       overflow-y: auto;
-      box-shadow: 0 4px 20px -2px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
     }
 
     .card.active {
@@ -167,8 +130,7 @@
     }
 
     .card-heading {
-      margin-bottom: 12px;
-      flex-shrink: 0;
+      margin-bottom: 14px;
     }
     .card-heading h2 {
       font-size: 1.15rem;
@@ -181,16 +143,17 @@
       margin-top: 2px;
     }
 
-    .field { margin-bottom: 10px; }
+    /* Form Fields & Micro Tags */
+    .field { margin-bottom: 12px; }
     .label-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
     label {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.73rem;
       text-transform: uppercase;
       color: var(--muted);
       letter-spacing: 0.04em;
@@ -206,20 +169,20 @@
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
-      color: var(--text);
-      padding: 9px 12px;
+      color: #fff;
+      padding: 10px 12px;
       border-radius: 6px;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-family: var(--font-ui);
       transition: border-color 0.15s ease, background 0.15s ease;
     }
-    optgroup { background: var(--card-bg); color: var(--accent); font-weight: bold; }
-    option { background: var(--surface); color: var(--text); font-weight: normal; }
+    optgroup { background: #141517; color: var(--accent); font-weight: bold; }
+    option { background: #1b1c1f; color: #fff; font-weight: normal; }
 
     input:focus, select:focus {
       outline: none;
       border-color: var(--border-focus);
-      background: var(--surface-focus);
+      background: #202226;
     }
 
     input.invalid, select.invalid {
@@ -229,6 +192,7 @@
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
+    /* Fee Inputs & Chips */
     .fee-hero-wrapper {
       position: relative;
       display: flex;
@@ -236,10 +200,10 @@
     }
     .fee-hero-input {
       font-family: var(--font-mono);
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: var(--accent);
-      padding: 9px 48px 9px 12px;
+      padding: 10px 48px 10px 12px;
       letter-spacing: -0.02em;
     }
     .fee-currency-badge {
@@ -265,7 +229,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 7px 0;
+      padding: 8px 0;
       text-align: center;
       border-radius: 6px;
       font-size: 0.8rem;
@@ -275,197 +239,60 @@
     }
     .chip:hover, .chip.active {
       background: var(--accent);
-      color: var(--accent-btn-text);
+      color: #000;
       border-color: var(--accent);
       font-weight: 700;
     }
 
+    /* Pre-Flight Summary Ticket on Step 3 */
     .summary-ticket {
-      background: var(--surface);
+      background: #101113;
       border: 1px dashed var(--border);
       border-radius: 6px;
-      padding: 8px 12px;
-      margin-top: 8px;
+      padding: 10px 12px;
+      margin-top: 12px;
       font-family: var(--font-mono);
     }
     .ticket-row {
       display: flex;
       justify-content: space-between;
-      font-size: 0.73rem;
+      font-size: 0.75rem;
       color: var(--muted);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     .ticket-row.total {
-      margin-top: 5px;
-      padding-top: 5px;
+      margin-top: 6px;
+      padding-top: 6px;
       border-top: 1px solid var(--border);
       color: var(--text);
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.92rem;
     }
     .ticket-row.total span:last-child {
       color: var(--accent);
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
     .validation-msg {
       font-family: var(--font-mono);
       color: var(--error);
       font-size: 0.72rem;
-      margin-top: 6px;
+      margin-top: 8px;
       display: none;
       text-align: center;
     }
 
-    /* CARD 4: DOCUMENT PREVIEW WINDOW & ACTION CONTROLS */
-    .preview-stage-container {
-      flex: 1;
-      min-height: 180px;
-      background: #090a0b;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .document-paper-sheet {
-      width: 100%;
-      background: #ffffff;
-      color: #0f172a;
-      border-radius: 4px;
-      padding: 16px 14px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 0.68rem;
-      line-height: 1.35;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    }
-
-    .doc-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1.5px solid #0f172a;
-      padding-bottom: 10px;
-    }
-    .doc-title {
-      font-size: 1.15rem;
-      font-weight: 900;
-      margin: 0;
-      color: #0f172a;
-      letter-spacing: -0.02em;
-    }
-    .doc-parties {
-      display: flex;
-      justify-content: space-between;
-      margin: 12px 0 10px;
-    }
-    .doc-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0;
-    }
-    .doc-table th, .doc-table td {
-      padding: 6px 4px;
-      border-bottom: 1px solid #e2e8f0;
-      text-align: left;
-    }
-    .doc-table th {
-      background: #f8fafc;
-      font-weight: 700;
-      color: #475569;
-    }
-    .doc-total-line {
-      text-align: right;
-      font-size: 0.85rem;
-      font-weight: 800;
-      margin: 6px 0 10px;
-      color: #0f172a;
-    }
-    .doc-payout-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 4px;
-      padding: 8px 10px;
-      margin-top: 8px;
-    }
-    .doc-terms {
-      font-size: 0.55rem;
-      color: #64748b;
-      margin-top: 12px;
-      text-align: center;
-      line-height: 1.25;
-    }
-
-    .actions-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      flex-shrink: 0;
-    }
-    .action-btn-primary {
-      background: var(--accent);
-      color: var(--accent-btn-text);
-      padding: 12px;
-      font-size: 0.9rem;
-      font-weight: 800;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-family: var(--font-ui);
-    }
-    .action-btn-secondary {
-      background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 11px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-family: var(--font-ui);
-    }
-
-    .aux-actions-row {
-      display: flex;
-      justify-content: space-around;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-      margin-top: 8px;
-      flex-shrink: 0;
-    }
-    .link-btn {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      text-decoration: underline;
-      cursor: pointer;
-      padding: 2px;
-    }
-
+    /* Sticky Bottom Nav Controls */
     .controls-row {
       display: flex;
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
     .btn {
-      padding: 12px;
+      padding: 13px;
       border-radius: 6px;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       border: none;
       cursor: pointer;
       display: flex;
@@ -477,76 +304,173 @@
     .btn-next {
       flex: 2;
       background: var(--accent);
-      color: var(--accent-btn-text);
+      color: #000;
       letter-spacing: -0.01em;
     }
     .btn-back {
       flex: 1;
       background: var(--surface);
-      color: var(--text);
+      color: #fff;
       border: 1px solid var(--border);
       font-family: var(--font-mono);
-      font-size: 0.78rem;
+      font-size: 0.8rem;
     }
 
     footer {
       text-align: center;
       font-family: var(--font-mono);
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       color: var(--tag);
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
+    /* Screen Hide for Print Template */
+    #invoice-render { display: none; }
+
+    /* ========================================================
+       PRINT ENGINE OVERHAUL (A4 COMPLIANT ON MOBILE SAFARI/CHROME)
+       ======================================================== */
     @media print {
-      @page { margin: 12mm; size: A4 portrait; }
-      body { background: #fff !important; color: #000 !important; overflow: visible !important; }
-      .no-print { display: none !important; }
-      #docPaper {
-        box-shadow: none !important;
-        padding: 0 !important;
-        font-size: 10pt !important;
+      @page {
+        size: A4 portrait;
+        margin: 15mm 20mm;
       }
-      .doc-title { font-size: 24pt !important; }
-      .doc-terms { font-size: 8pt !important; }
+
+      html, body {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      #invoice-render {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        font-size: 10pt;
+        line-height: 1.5;
+        color: #111111;
+      }
+
+      .inv-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        border-bottom: 2px solid #111827;
+        padding-bottom: 18px;
+        margin-bottom: 24px;
+      }
+
+      .inv-title {
+        font-size: 28pt !important;
+        font-weight: 900 !important;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 0 0 10px 0;
+      }
+
+      .inv-parties {
+        display: flex !important;
+        justify-content: space-between !important;
+        margin-bottom: 30px;
+      }
+
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin: 25px 0 !important;
+      }
+
+      th {
+        background: #f3f4f6 !important;
+        color: #111827 !important;
+        font-size: 9pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 10px 12px !important;
+        border-bottom: 1px solid #d1d5db !important;
+        text-align: left;
+      }
+
+      td {
+        padding: 12px !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        font-size: 10.5pt;
+      }
+
+      .inv-total {
+        text-align: right !important;
+        font-size: 16pt !important;
+        font-weight: 800 !important;
+        margin-top: 15px;
+        letter-spacing: -0.02em;
+      }
+
+      .inv-bank {
+        background: #f9fafb !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 8px !important;
+        padding: 16px 20px !important;
+        margin-top: 30px;
+      }
+
+      .inv-legal {
+        font-size: 8pt !important;
+        color: #6b7280 !important;
+        margin-top: 40px;
+        text-align: center;
+        line-height: 1.4;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="app-shell no-print">
+    <!-- Header -->
     <div>
       <div class="ledger-header">
         <div class="brand-title">
           <span>⚡ GigInvoice</span>
         </div>
-        <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()">
-          <span id="themeIcon">🌙</span> <span id="themeLabel">DARK</span>
-        </button>
+        <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT</div>
       </div>
 
+      <!-- Linear Step Breadcrumbs -->
       <div class="step-track">
         <div class="step-item active" id="track-0">1. CREATOR</div>
         <div class="step-item" id="track-1">2. GIG / FEE</div>
         <div class="step-item" id="track-2">3. PAYOUT</div>
-        <div class="step-item" id="track-3">4. PREVIEW</div>
       </div>
     </div>
 
+    <!-- The 3 Cards -->
     <div class="deck">
       
-      <!-- CARD 1: Creator Details -->
+      <!-- CARD 1: Artist / Creator Identity -->
       <div class="card active" id="card-0">
         <div class="card-heading">
           <h2>Creator Details</h2>
-          <p>Saved securely on your device for future invoices.</p>
+          <p>Saved securely in your browser for future invoices.</p>
         </div>
 
         <div class="field">
           <div class="label-row">
-            <label>Artist / DJ / Trading Name</label>
+            <label>Artist / DJ / Alias</label>
             <span class="field-tag">Public Name</span>
           </div>
-          <input type="text" id="artistName" placeholder="Enter DJ, artist, or alias name" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -554,7 +478,7 @@
             <label>Legal Sole Trader Name</label>
             <span class="field-tag">HMRC Required</span>
           </div>
-          <input type="text" id="legalName" placeholder="Your legal first and last name" oninput="clearErr(this); saveData();" />
+          <input type="text" id="legalName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -562,13 +486,13 @@
             <label>Contact / Studio Address</label>
             <span class="field-tag">Postcode / City</span>
           </div>
-          <input type="text" id="artistAddress" placeholder="Studio / trading address or city & postcode" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistAddress" placeholder="e.g. Studio 4, London, EC1A 1BB" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
       </div>
 
-      <!-- CARD 2: Gig Details -->
+      <!-- CARD 2: Performance / Supply Details -->
       <div class="card" id="card-1">
         <div class="card-heading">
           <h2>Where & What Did You Play?</h2>
@@ -580,7 +504,7 @@
             <label>Venue / Client Name</label>
             <span class="field-tag">Required</span>
           </div>
-          <input type="text" id="clientName" placeholder="e.g. Club, festival, school, or promoter" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="clientName" placeholder="e.g. Corsica Studios / Fabric" oninput="clearErr(this); updateSummary();" />
         </div>
 
         <div class="grid-2">
@@ -615,9 +539,10 @@
           <div class="label-row">
             <label>Custom Location</label>
           </div>
-          <input type="text" id="customCityInput" placeholder="Enter city or town name" oninput="clearErr(this)" />
+          <input type="text" id="customCityInput" placeholder="e.g. Cardiff" oninput="clearErr(this)" />
         </div>
 
+        <!-- Grouped Roles Dropdown -->
         <div class="field">
           <div class="label-row">
             <label>Service Classification</label>
@@ -674,9 +599,10 @@
           <div class="label-row">
             <label>Custom Job Description</label>
           </div>
-          <input type="text" id="customServiceInput" placeholder="e.g. Session Bassist or Bespoke Composition" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Luxury Event" oninput="clearErr(this); updateSummary();" />
         </div>
 
+        <!-- Fee Input & Chips -->
         <div class="field">
           <div class="label-row">
             <label>Agreed Fee Total</label>
@@ -699,7 +625,7 @@
         <div class="validation-msg" id="msg-1">Please enter venue, date, and agreed fee.</div>
       </div>
 
-      <!-- CARD 3: Payout Details -->
+      <!-- CARD 3: BACS Payout & Pre-Flight Check -->
       <div class="card" id="card-2">
         <div class="card-heading">
           <h2>Where Send Funds?</h2>
@@ -711,7 +637,7 @@
             <label>Bank Account Name</label>
             <span class="field-tag">Confirmation of Payee</span>
           </div>
-          <input type="text" id="accountName" placeholder="Account holder full name" oninput="clearErr(this); saveData();" />
+          <input type="text" id="accountName" placeholder="As on bank statement" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="grid-2">
@@ -720,14 +646,14 @@
               <label>UK Sort Code</label>
               <span class="field-tag">6-Digit</span>
             </div>
-            <input type="text" id="sortCode" inputmode="numeric" placeholder="00-00-00" maxlength="8" oninput="formatSortCode(this); clearErr(this); saveData();" />
+            <input type="text" id="sortCode" placeholder="20-45-18" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Account Number</label>
               <span class="field-tag">8-Digit</span>
             </div>
-            <input type="text" id="accountNumber" inputmode="numeric" placeholder="00000000" maxlength="8" oninput="formatAccountNumber(this); clearErr(this); saveData();" />
+            <input type="text" id="accountNumber" placeholder="83920147" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
         </div>
 
@@ -742,14 +668,15 @@
           </select>
         </div>
 
+        <!-- Studio Ledger Pre-Flight Ticket -->
         <div class="summary-ticket">
           <div class="ticket-row">
             <span>CLIENT / VENUE:</span>
-            <span id="ticketClient">-</span>
+            <span id="ticketClient">Fabric / Corsica</span>
           </div>
           <div class="ticket-row">
             <span>SERVICE:</span>
-            <span id="ticketService">Live Performance (DJ Set)</span>
+            <span id="ticketService">Live Performance</span>
           </div>
           <div class="ticket-row total">
             <span>TOTAL DUE:</span>
@@ -757,99 +684,13 @@
           </div>
         </div>
 
-        <div class="validation-msg" id="msg-2">Please complete bank name, sort code (6 digits) & account number.</div>
-      </div>
-
-      <!-- CARD 4: DOCUMENT PREVIEW WINDOW & DELIVERY ACTIONS -->
-      <div class="card" id="card-3">
-        <div class="card-heading">
-          <h2>Review & Send Invoice</h2>
-          <p>Check your invoice below before sending or downloading.</p>
-        </div>
-
-        <!-- Scrollable Document Sheet Window -->
-        <div class="preview-stage-container">
-          <div class="document-paper-sheet" id="docPaper">
-            <div class="doc-header">
-              <div>
-                <div class="doc-title">INVOICE</div>
-                <div style="color: #64748b; font-size: 0.6rem; margin-top: 2px;">
-                  Invoice No: <strong id="outInvNum" style="color: #0f172a;">INV-001</strong>
-                </div>
-                <div style="color: #64748b; font-size: 0.6rem;">Date: <span id="outIssueDate">-</span></div>
-                <div style="color: #64748b; font-size: 0.6rem;">Due: <span id="outDueDate">-</span></div>
-              </div>
-              <div style="text-align: right;">
-                <div id="outArtistName" style="font-weight: 800; font-size: 0.8rem; color: #0f172a;"></div>
-                <div id="outLegalName" style="color: #475569; font-size: 0.6rem;"></div>
-                <div id="outArtistAddress" style="color: #64748b; font-size: 0.58rem;"></div>
-              </div>
-            </div>
-
-            <div class="doc-parties">
-              <div>
-                <div style="text-transform: uppercase; font-size: 0.55rem; color: #94a3b8; font-weight: 700;">INVOICE TO:</div>
-                <div id="outClientName" style="font-weight: 700; font-size: 0.78rem; color: #0f172a;"></div>
-                <div id="outClientAddress" style="color: #64748b; font-size: 0.6rem;"></div>
-              </div>
-            </div>
-
-            <table class="doc-table">
-              <thead>
-                <tr>
-                  <th>Description</th>
-                  <th>Date</th>
-                  <th style="text-align: right;">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td id="outDesc">-</td>
-                  <td id="outServiceDate">-</td>
-                  <td style="text-align: right; font-weight: 700;" id="outFee">£0.00</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="doc-total-line">
-              Total Due: <span id="outTotal" style="color: #0f172a;">£0.00</span>
-            </div>
-
-            <div class="doc-payout-box">
-              <div style="font-weight: 700; font-size: 0.65rem; color: #0f172a; margin-bottom: 2px;">UK BACS Payment Details</div>
-              <div>Account Name: <strong id="outAccountName">-</strong></div>
-              <div>Sort Code: <strong id="outSortCode">00-00-00</strong></div>
-              <div>Account Number: <strong id="outAccountNumber">00000000</strong></div>
-            </div>
-
-            <div class="doc-terms">
-              Payment terms: <span id="outTerms">14</span> days. Statutory interest and fixed compensation apply to late payments under the Late Payment of Commercial Debts (Interest) Act 1998. Sole trader exemption.
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="actions-stack">
-          <button class="action-btn-primary" onclick="shareOrEmailPDF()">
-            <span>🚀</span> <span>SEND INVOICE (SHARE / EMAIL)</span>
-          </button>
-          <button class="action-btn-secondary" onclick="downloadPDFDirect()">
-            <span>⬇️</span> <span>SAVE PDF TO PHONE</span>
-          </button>
-        </div>
-
-        <div class="aux-actions-row">
-          <button class="link-btn" onclick="prevStep()">← Edit Details</button>
-          <button class="link-btn" onclick="copyBacsText()">📋 Copy Bank Text</button>
-          <button class="link-btn" onclick="triggerNativePrint()">🖨️ Print</button>
-          <button class="link-btn" onclick="resetForNewInvoice()">+ New Gig</button>
-        </div>
+        <div class="validation-msg" id="msg-2">Please complete bank name, sort code & account number.</div>
       </div>
 
     </div>
 
     <!-- Navigation Bar -->
-    <div id="navFooter">
+    <div>
       <div class="controls-row">
         <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">← BACK</button>
         <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: GIG DETAILS →</button>
@@ -858,64 +699,77 @@
     </div>
   </div>
 
+  <!-- A4 Clean BACS Invoice Print Canvas -->
+  <div id="invoice-render">
+    <div class="inv-header">
+      <div>
+        <h1 class="inv-title">INVOICE</h1>
+        <p style="margin: 4px 0 0; color: #555;">Invoice No: <strong id="outInvNum">INV-2026-001</strong></p>
+        <p style="margin: 2px 0 0; color: #555;">Issue Date: <span id="outIssueDate"></span></p>
+        <p style="margin: 2px 0 0; color: #555;">Due Date: <span id="outDueDate"></span></p>
+      </div>
+      <div style="text-align: right;">
+        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;">Dylan Decorum</h3>
+        <p style="margin: 2px 0;" id="outLegalName">Legal: Dylan Decorum</p>
+        <p style="margin: 2px 0; color: #666;" id="outArtistAddress">London, UK</p>
+      </div>
+    </div>
+
+    <div class="inv-parties">
+      <div>
+        <p style="text-transform: uppercase; font-size: 8pt; color: #666; font-weight: bold; margin-bottom: 4px;">INVOICE TO:</p>
+        <h4 id="outClientName" style="margin: 0; font-size: 13pt;">Client / Venue</h4>
+        <p style="margin: 2px 0; color: #555;" id="outClientAddress">London</p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Date of Supply</th>
+          <th style="text-align: right;">Amount (£)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="outDesc">Live Performance</td>
+          <td id="outServiceDate">-</td>
+          <td style="text-align: right;" id="outFee">£0.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="inv-total">
+      Total Due: <span id="outTotal">£0.00</span>
+    </div>
+
+    <div class="inv-bank">
+      <p style="margin: 0 0 6px; font-weight: bold; font-size: 11pt;">Payment Details (UK BACS Transfer)</p>
+      <p style="margin: 2px 0;">Account Name: <strong id="outAccountName">-</strong></p>
+      <p style="margin: 2px 0;">Sort Code: <strong id="outSortCode">00-00-00</strong></p>
+      <p style="margin: 2px 0;">Account Number: <strong id="outAccountNumber">00000000</strong></p>
+      <p style="margin: 4px 0 0; font-size: 9pt; color: #444;">Please use the invoice number as the payment reference.</p>
+    </div>
+
+    <div class="inv-legal">
+      Payment terms: <span id="outTerms">14</span> days. Statutory interest and fixed compensation apply to late payments under the Late Payment of Commercial Debts (Interest) Act 1998. Not registered for VAT (Sole Trader Exemption).
+    </div>
+  </div>
+
   <script>
     let currentStep = 0;
-    const totalSteps = 4;
-    let generatedInvoiceNumber = 'INV-001';
+    const totalSteps = 3;
 
     window.onload = function() {
-      const savedTheme = localStorage.getItem('music_inv_theme') || 'dark';
-      applyTheme(savedTheme);
-
       document.getElementById('serviceDate').valueAsDate = new Date();
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
         const saved = localStorage.getItem('music_inv_' + id);
         if (saved) document.getElementById(id).value = saved;
       });
-
-      const sortInput = document.getElementById('sortCode');
-      if (sortInput.value) formatSortCode(sortInput);
-
       document.getElementById('feeAmount').value = 250;
       updateSummary();
     };
-
-    function applyTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      const icon = document.getElementById('themeIcon');
-      const label = document.getElementById('themeLabel');
-      if (theme === 'light') {
-        icon.innerText = '☀️';
-        label.innerText = 'DAY';
-      } else {
-        icon.innerText = '🌙';
-        label.innerText = 'NIGHT';
-      }
-      localStorage.setItem('music_inv_theme', theme);
-    }
-
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      applyTheme(newTheme);
-    }
-
-    function formatSortCode(input) {
-      let digits = input.value.replace(/\D/g, '').substring(0, 6);
-      let formatted = '';
-      if (digits.length > 4) {
-        formatted = digits.substring(0, 2) + '-' + digits.substring(2, 4) + '-' + digits.substring(4, 6);
-      } else if (digits.length > 2) {
-        formatted = digits.substring(0, 2) + '-' + digits.substring(2, 4);
-      } else {
-        formatted = digits;
-      }
-      input.value = formatted;
-    }
-
-    function formatAccountNumber(input) {
-      input.value = input.value.replace(/\D/g, '').substring(0, 8);
-    }
 
     function saveData() {
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
@@ -925,8 +779,7 @@
 
     function clearErr(el) {
       el.classList.remove('invalid');
-      const msg = document.getElementById(`msg-${currentStep}`);
-      if (msg) msg.style.display = 'none';
+      document.getElementById(`msg-${currentStep}`).style.display = 'none';
     }
 
     function clearChipStates() {
@@ -1000,20 +853,16 @@
           valid = false;
         }
       } else if (step === 2) {
-        const acct = document.getElementById('accountName');
-        const sort = document.getElementById('sortCode');
-        const num = document.getElementById('accountNumber');
-
-        if (!acct.value.trim()) { acct.classList.add('invalid'); valid = false; }
-        
-        const rawSort = sort.value.replace(/\D/g, '');
-        if (rawSort.length !== 6) { sort.classList.add('invalid'); valid = false; }
-
-        const rawNum = num.value.replace(/\D/g, '');
-        if (rawNum.length < 6 || rawNum.length > 8) { num.classList.add('invalid'); valid = false; }
+        ['accountName', 'sortCode', 'accountNumber'].forEach(id => {
+          const el = document.getElementById(id);
+          if (!el.value.trim()) {
+            el.classList.add('invalid');
+            valid = false;
+          }
+        });
       }
 
-      if (msg) msg.style.display = valid ? 'none' : 'block';
+      msg.style.display = valid ? 'none' : 'block';
       return valid;
     }
 
@@ -1023,36 +872,26 @@
         document.getElementById(`track-${i}`).classList.toggle('active', i === currentStep);
       }
 
-      const backBtn = document.getElementById('btnBack');
+      document.getElementById('btnBack').style.display = currentStep === 0 ? 'none' : 'block';
+
       const nextBtn = document.getElementById('btnNext');
-      const navFooter = document.getElementById('navFooter');
-
-      if (currentStep === 3) {
-        navFooter.style.display = 'none';
+      if (currentStep === 0) {
+        nextBtn.innerText = "NEXT: GIG DETAILS →";
+      } else if (currentStep === 1) {
+        nextBtn.innerText = "NEXT: PAYOUT →";
       } else {
-        navFooter.style.display = 'block';
-        backBtn.style.display = currentStep === 0 ? 'none' : 'block';
-
-        if (currentStep === 0) {
-          nextBtn.innerText = "NEXT: GIG DETAILS →";
-        } else if (currentStep === 1) {
-          nextBtn.innerText = "NEXT: PAYOUT →";
-        } else if (currentStep === 2) {
-          nextBtn.innerText = "⚡ PREVIEW INVOICE →";
-        }
+        nextBtn.innerText = "⚡ GENERATE & DOWNLOAD PDF";
       }
     }
 
     function nextStep() {
       if (!validateStep(currentStep)) return;
 
-      if (currentStep === 2) {
-        populateDocument();
-        currentStep = 3;
-        updateStepUI();
-      } else if (currentStep < totalSteps - 1) {
+      if (currentStep < totalSteps - 1) {
         currentStep++;
         updateStepUI();
+      } else {
+        generateInvoice();
       }
     }
 
@@ -1063,11 +902,11 @@
       }
     }
 
-    function populateDocument() {
+    function generateInvoice() {
       const fee = parseFloat(document.getElementById('feeAmount').value || 0).toFixed(2);
-      const client = document.getElementById('clientName').value.trim();
-      const artist = document.getElementById('artistName').value.trim();
-      const legal = document.getElementById('legalName').value.trim();
+      const client = document.getElementById('clientName').value;
+      const artist = document.getElementById('artistName').value;
+      const legal = document.getElementById('legalName').value;
       const termsDays = parseInt(document.getElementById('paymentTerms').value);
 
       const citySelect = document.getElementById('clientCity');
@@ -1080,8 +919,6 @@
       const dueDate = new Date();
       dueDate.setDate(today.getDate() + termsDays);
 
-      generatedInvoiceNumber = 'INV-' + today.getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
-
       document.getElementById('outArtistName').innerText = artist;
       document.getElementById('outLegalName').innerText = 'Legal: ' + legal;
       document.getElementById('outArtistAddress').innerText = document.getElementById('artistAddress').value;
@@ -1089,7 +926,7 @@
       document.getElementById('outClientName').innerText = client;
       document.getElementById('outClientAddress').innerText = location;
 
-      document.getElementById('outInvNum').innerText = generatedInvoiceNumber;
+      document.getElementById('outInvNum').innerText = 'INV-' + today.getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
       document.getElementById('outIssueDate').innerText = today.toLocaleDateString('en-GB');
       document.getElementById('outDueDate').innerText = dueDate.toLocaleDateString('en-GB');
 
@@ -1098,87 +935,12 @@
       document.getElementById('outFee').innerText = '£' + fee;
       document.getElementById('outTotal').innerText = '£' + fee;
 
-      const rawSort = document.getElementById('sortCode').value.replace(/\D/g, '');
-      const formattedSort = rawSort.length === 6 
-        ? rawSort.substring(0, 2) + '-' + rawSort.substring(2, 4) + '-' + rawSort.substring(4, 6)
-        : document.getElementById('sortCode').value;
-
       document.getElementById('outAccountName').innerText = document.getElementById('accountName').value;
-      document.getElementById('outSortCode').innerText = formattedSort;
-      document.getElementById('outAccountNumber').innerText = document.getElementById('accountNumber').value.replace(/\D/g, '');
+      document.getElementById('outSortCode').innerText = document.getElementById('sortCode').value;
+      document.getElementById('outAccountNumber').innerText = document.getElementById('accountNumber').value;
       document.getElementById('outTerms').innerText = termsDays;
-    }
 
-    function getPdfBlob() {
-      const element = document.getElementById('docPaper');
-      const opt = {
-        margin: 10,
-        filename: `${generatedInvoiceNumber}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      return html2pdf().set(opt).from(element).outputPdf('blob');
-    }
-
-    async function shareOrEmailPDF() {
-      try {
-        const pdfBlob = await getPdfBlob();
-        const file = new File([pdfBlob], `${generatedInvoiceNumber}.pdf`, { type: 'application/pdf' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: `Invoice ${generatedInvoiceNumber}`,
-            text: `Invoice ${generatedInvoiceNumber} for ${document.getElementById('clientName').value}`
-          });
-        } else {
-          downloadPDFDirect();
-        }
-      } catch (err) {
-        downloadPDFDirect();
-      }
-    }
-
-    function downloadPDFDirect() {
-      const element = document.getElementById('docPaper');
-      const opt = {
-        margin: 10,
-        filename: `${generatedInvoiceNumber}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
-    }
-
-    function copyBacsText() {
-      const sort = document.getElementById('outSortCode').innerText;
-      const num = document.getElementById('outAccountNumber').innerText;
-      const name = document.getElementById('outAccountName').innerText;
-      const total = document.getElementById('outTotal').innerText;
-      const text = `BACS Payment Details:\nAccount: ${name}\nSort Code: ${sort}\nAccount No: ${num}\nAmount: ${total}\nRef: ${generatedInvoiceNumber}`;
-
-      navigator.clipboard.writeText(text).then(() => {
-        alert("BACS payment details copied to clipboard!");
-      });
-    }
-
-    function triggerNativePrint() {
       window.print();
-    }
-
-    function resetForNewInvoice() {
-      document.getElementById('clientName').value = '';
-      document.getElementById('serviceDate').valueAsDate = new Date();
-      document.getElementById('customCityInput').value = '';
-      document.getElementById('customServiceInput').value = '';
-      document.getElementById('feeAmount').value = 250;
-      clearChipStates();
-      document.querySelectorAll('.chip')[3].classList.add('active');
-      currentStep = 1;
-      updateSummary();
-      updateStepUI();
     }
   </script>
 </body>
