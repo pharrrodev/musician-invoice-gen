@@ -23,7 +23,7 @@
       --border-focus: #f59e0b;
       --accent: #f59e0b;
       --accent-muted: rgba(245, 158, 11, 0.12);
-      --text: #f4f4f6;
+      --text: #f4f4f5;
       --muted: #8b8d94;
       --tag: #686b74;
       --error: #ef4444;
@@ -52,7 +52,6 @@
       padding: 16px 14px;
     }
 
-    /* Top Breadcrumbs / Progress Header */
     .ledger-header {
       display: flex;
       justify-content: space-between;
@@ -100,7 +99,6 @@
       font-weight: 700;
     }
 
-    /* Card Deck Carousel */
     .deck {
       position: relative;
       flex: 1;
@@ -143,7 +141,6 @@
       margin-top: 2px;
     }
 
-    /* Form Fields & Micro Tags */
     .field { margin-bottom: 12px; }
     .label-row {
       display: flex;
@@ -192,7 +189,6 @@
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-    /* Fee Inputs & Chips */
     .fee-hero-wrapper {
       position: relative;
       display: flex;
@@ -244,7 +240,6 @@
       font-weight: 700;
     }
 
-    /* Pre-Flight Summary Ticket on Step 3 */
     .summary-ticket {
       background: #101113;
       border: 1px dashed var(--border);
@@ -282,7 +277,6 @@
       text-align: center;
     }
 
-    /* Sticky Bottom Nav Controls */
     .controls-row {
       display: flex;
       gap: 8px;
@@ -324,12 +318,9 @@
       margin-top: 8px;
     }
 
-    /* Screen Hide for Print Template */
     #invoice-render { display: none; }
 
-    /* ========================================================
-       PRINT ENGINE OVERHAUL (A4 COMPLIANT ON MOBILE SAFARI/CHROME)
-       ======================================================== */
+    /* Print Styles */
     @media print {
       @page {
         size: A4 portrait;
@@ -450,7 +441,7 @@
       <!-- Linear Step Breadcrumbs -->
       <div class="step-track">
         <div class="step-item active" id="track-0">1. CREATOR</div>
-        <div class="step-item" id="track-1">2. GIG / FEE</div>
+        <div class="step-item" id="track-1">2. WORK / FEE</div>
         <div class="step-item" id="track-2">3. PAYOUT</div>
       </div>
     </div>
@@ -462,15 +453,15 @@
       <div class="card active" id="card-0">
         <div class="card-heading">
           <h2>Creator Details</h2>
-          <p>Saved securely in your browser for future invoices.</p>
+          <p>Saved securely on your device for future invoices.</p>
         </div>
 
         <div class="field">
           <div class="label-row">
-            <label>Artist / DJ / Alias</label>
+            <label>Professional / Trading Name</label>
             <span class="field-tag">Public Name</span>
           </div>
-          <input type="text" id="artistName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -478,7 +469,7 @@
             <label>Legal Sole Trader Name</label>
             <span class="field-tag">HMRC Required</span>
           </div>
-          <input type="text" id="legalName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
+          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -486,25 +477,25 @@
             <label>Contact / Studio Address</label>
             <span class="field-tag">Postcode / City</span>
           </div>
-          <input type="text" id="artistAddress" placeholder="e.g. Studio 4, London, EC1A 1BB" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this); saveData();" />
         </div>
 
-        <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
+        <div class="validation-msg" id="msg-0">Please fill in your details to proceed.</div>
       </div>
 
-      <!-- CARD 2: Performance / Supply Details -->
+      <!-- CARD 2: Work / Performance Details -->
       <div class="card" id="card-1">
         <div class="card-heading">
-          <h2>Where & What Did You Play?</h2>
-          <p>Venue, scope of performance, and agreed fee.</p>
+          <h2>Work & Fee Details</h2>
+          <p>Client, description of work, and agreed amount.</p>
         </div>
 
         <div class="field">
           <div class="label-row">
-            <label>Venue / Client Name</label>
+            <label>Client / Venue / School Name</label>
             <span class="field-tag">Required</span>
           </div>
-          <input type="text" id="clientName" placeholder="e.g. Corsica Studios / Fabric" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="clientName" placeholder="e.g. Venue, School, Client, or Promoter" oninput="clearErr(this); updateSummary();" />
         </div>
 
         <div class="grid-2">
@@ -513,8 +504,9 @@
               <label>Location</label>
               <span class="field-tag">UK</span>
             </div>
-            <select id="clientCity" onchange="handleCityChange(this); clearErr(this);">
-              <option value="London" selected>London</option>
+            <select id="clientCity" onchange="handleCityChange(this); clearErr(this); updateSummary();">
+              <option value="" disabled selected>-- Select City --</option>
+              <option value="London">London</option>
               <option value="Manchester">Manchester</option>
               <option value="Bristol">Bristol</option>
               <option value="Birmingham">Birmingham</option>
@@ -529,7 +521,7 @@
           </div>
           <div class="field">
             <div class="label-row">
-              <label>Date of Supply</label>
+              <label>Date of Work</label>
             </div>
             <input type="date" id="serviceDate" oninput="clearErr(this); updateSummary();" />
           </div>
@@ -539,22 +531,25 @@
           <div class="label-row">
             <label>Custom Location</label>
           </div>
-          <input type="text" id="customCityInput" placeholder="e.g. Cardiff" oninput="clearErr(this)" />
+          <input type="text" id="customCityInput" placeholder="e.g. Cardiff, Belfast, or Online" oninput="clearErr(this); updateSummary();" />
         </div>
 
-        <!-- Grouped Roles Dropdown -->
+        <!-- Blank Generic Dropdown with Grouped Roles -->
         <div class="field">
           <div class="label-row">
-            <label>Service Classification</label>
+            <label>Service Description</label>
           </div>
           <select id="serviceDescription" onchange="handleServiceChange(this); clearErr(this); updateSummary();">
-            <optgroup label="Live & DJ Performance">
-              <option value="Live Performance (DJ Set)" selected>Live Performance (DJ Set)</option>
+            <option value="" disabled selected>-- Select Service Provided --</option>
+            
+            <optgroup label="Live & Performance">
+              <option value="Live Performance (DJ Set)">Live Performance (DJ Set)</option>
               <option value="Headline DJ Set">Headline DJ Set</option>
               <option value="Warmup / Opening DJ Set">Warmup / Opening DJ Set</option>
-              <option value="Live Music Performance (Band / Solo)">Live Music Performance (Band / Solo)</option>
-              <option value="Singer / Vocalist (Live Performance)">Singer / Vocalist (Live)</option>
-              <option value="Wedding / Function Performance">Wedding / Function Performance</option>
+              <option value="Live Music Performance (Solo / Duo)">Live Music Performance (Solo / Duo)</option>
+              <option value="Live Band Performance">Live Band Performance</option>
+              <option value="Singer / Vocalist (Live Performance)">Singer / Vocalist (Live Performance)</option>
+              <option value="Wedding / Private Function Performance">Wedding / Private Function Performance</option>
               <option value="Corporate Event Entertainment">Corporate Event Entertainment</option>
               <option value="Backing Vocalist (Live)">Backing Vocalist (Live)</option>
             </optgroup>
@@ -562,7 +557,7 @@
             <optgroup label="Tuition & Education">
               <option value="Private Instrumental Tuition">Private Instrumental Tuition</option>
               <option value="Singing / Vocal Coaching">Singing / Vocal Coaching</option>
-              <option value="Music School Tutor / Workshop">Music School Tutor / Workshop</option>
+              <option value="Music School Tutor / Workshop Fee">Music School Tutor / Workshop Fee</option>
               <option value="Masterclass Facilitation">Masterclass Facilitation</option>
               <option value="Music Theory Tuition">Music Theory Tuition</option>
               <option value="Ensemble / Choir Direction">Ensemble / Choir Direction</option>
@@ -571,7 +566,7 @@
             <optgroup label="Session & Studio Work">
               <option value="Session Musician / Recording Fee">Session Musician / Recording Fee</option>
               <option value="Session Vocalist (Lead Vocals)">Session Vocalist (Lead Vocals)</option>
-              <option value="Session Vocalist (Backing / Harmonies)">Session Vocalist (Backing)</option>
+              <option value="Session Vocalist (Backing / Harmonies)">Session Vocalist (Backing / Harmonies)</option>
               <option value="Remote Stems Recording Fee">Remote Stems Recording Fee</option>
             </optgroup>
 
@@ -597,38 +592,38 @@
 
         <div class="field" id="customServiceField" style="display:none;">
           <div class="label-row">
-            <label>Custom Job Description</label>
+            <label>Custom Service Description</label>
           </div>
-          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Luxury Event" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Wedding, Choir Conductor, etc." oninput="clearErr(this); updateSummary();" />
         </div>
 
-        <!-- Fee Input & Chips -->
+        <!-- Fee with No Pre-selected Default -->
         <div class="field">
           <div class="label-row">
             <label>Agreed Fee Total</label>
-            <span class="field-tag">GBP (£) FLAT</span>
+            <span class="field-tag">GBP (£)</span>
           </div>
           <div class="fee-hero-wrapper">
-            <input type="number" id="feeAmount" class="fee-hero-input" placeholder="250" oninput="clearErr(this); clearChipStates(); updateSummary();" />
+            <input type="number" id="feeAmount" class="fee-hero-input" placeholder="e.g. 200" oninput="clearErr(this); clearChipStates(); updateSummary();" />
             <span class="fee-currency-badge">GBP</span>
           </div>
           <div class="chips-cluster">
             <div class="chip" onclick="setFee(100, this)">£100</div>
             <div class="chip" onclick="setFee(150, this)">£150</div>
             <div class="chip" onclick="setFee(200, this)">£200</div>
-            <div class="chip active" onclick="setFee(250, this)">£250</div>
+            <div class="chip" onclick="setFee(250, this)">£250</div>
             <div class="chip" onclick="setFee(350, this)">£350</div>
             <div class="chip" onclick="setFee(500, this)">£500</div>
           </div>
         </div>
 
-        <div class="validation-msg" id="msg-1">Please enter venue, date, and agreed fee.</div>
+        <div class="validation-msg" id="msg-1">Please select a service, location, and enter a fee.</div>
       </div>
 
       <!-- CARD 3: BACS Payout & Pre-Flight Check -->
       <div class="card" id="card-2">
         <div class="card-heading">
-          <h2>Where Send Funds?</h2>
+          <h2>Payment Details</h2>
           <p>UK BACS transfer credentials (stored locally).</p>
         </div>
 
@@ -637,7 +632,7 @@
             <label>Bank Account Name</label>
             <span class="field-tag">Confirmation of Payee</span>
           </div>
-          <input type="text" id="accountName" placeholder="As on bank statement" oninput="clearErr(this); saveData();" />
+          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="grid-2">
@@ -646,14 +641,14 @@
               <label>UK Sort Code</label>
               <span class="field-tag">6-Digit</span>
             </div>
-            <input type="text" id="sortCode" placeholder="20-45-18" maxlength="8" oninput="clearErr(this); saveData();" />
+            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Account Number</label>
               <span class="field-tag">8-Digit</span>
             </div>
-            <input type="text" id="accountNumber" placeholder="83920147" maxlength="8" oninput="clearErr(this); saveData();" />
+            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
         </div>
 
@@ -662,25 +657,25 @@
             <label>Payment Terms</label>
           </div>
           <select id="paymentTerms">
-            <option value="7">Net 7 Days (Prompt UK Club/Gig)</option>
+            <option value="7">Net 7 Days (Prompt)</option>
             <option value="14" selected>Net 14 Days (Standard UK Terms)</option>
             <option value="30">Net 30 Days (Agencies & Corporate)</option>
           </select>
         </div>
 
-        <!-- Studio Ledger Pre-Flight Ticket -->
+        <!-- Summary Ticket -->
         <div class="summary-ticket">
           <div class="ticket-row">
-            <span>CLIENT / VENUE:</span>
-            <span id="ticketClient">Fabric / Corsica</span>
+            <span>CLIENT:</span>
+            <span id="ticketClient">Pending entry...</span>
           </div>
           <div class="ticket-row">
             <span>SERVICE:</span>
-            <span id="ticketService">Live Performance</span>
+            <span id="ticketService">Pending entry...</span>
           </div>
           <div class="ticket-row total">
             <span>TOTAL DUE:</span>
-            <span id="ticketTotal">£250.00</span>
+            <span id="ticketTotal">£0.00</span>
           </div>
         </div>
 
@@ -693,13 +688,13 @@
     <div>
       <div class="controls-row">
         <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">← BACK</button>
-        <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: GIG DETAILS →</button>
+        <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
       </div>
       <footer>ZERO LOGINS • ZERO COOKIES • 100% DEVICE PRIVATE</footer>
     </div>
   </div>
 
-  <!-- A4 Clean BACS Invoice Print Canvas -->
+  <!-- Printable Layout -->
   <div id="invoice-render">
     <div class="inv-header">
       <div>
@@ -709,17 +704,17 @@
         <p style="margin: 2px 0 0; color: #555;">Due Date: <span id="outDueDate"></span></p>
       </div>
       <div style="text-align: right;">
-        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;">Dylan Decorum</h3>
-        <p style="margin: 2px 0;" id="outLegalName">Legal: Dylan Decorum</p>
-        <p style="margin: 2px 0; color: #666;" id="outArtistAddress">London, UK</p>
+        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;">-</h3>
+        <p style="margin: 2px 0;" id="outLegalName">-</p>
+        <p style="margin: 2px 0; color: #666;" id="outArtistAddress">-</p>
       </div>
     </div>
 
     <div class="inv-parties">
       <div>
         <p style="text-transform: uppercase; font-size: 8pt; color: #666; font-weight: bold; margin-bottom: 4px;">INVOICE TO:</p>
-        <h4 id="outClientName" style="margin: 0; font-size: 13pt;">Client / Venue</h4>
-        <p style="margin: 2px 0; color: #555;" id="outClientAddress">London</p>
+        <h4 id="outClientName" style="margin: 0; font-size: 13pt;">-</h4>
+        <p style="margin: 2px 0; color: #555;" id="outClientAddress">-</p>
       </div>
     </div>
 
@@ -733,7 +728,7 @@
       </thead>
       <tbody>
         <tr>
-          <td id="outDesc">Live Performance</td>
+          <td id="outDesc">-</td>
           <td id="outServiceDate">-</td>
           <td style="text-align: right;" id="outFee">£0.00</td>
         </tr>
@@ -767,7 +762,6 @@
         const saved = localStorage.getItem('music_inv_' + id);
         if (saved) document.getElementById(id).value = saved;
       });
-      document.getElementById('feeAmount').value = 250;
       updateSummary();
     };
 
@@ -806,12 +800,15 @@
     }
 
     function updateSummary() {
-      const client = document.getElementById('clientName').value.trim() || 'Venue / Promoter';
-      const fee = parseFloat(document.getElementById('feeAmount').value || 0).toFixed(2);
+      const client = document.getElementById('clientName').value.trim() || 'Pending entry...';
+      const rawFee = parseFloat(document.getElementById('feeAmount').value);
+      const fee = isNaN(rawFee) ? '0.00' : rawFee.toFixed(2);
       
       const serviceSelect = document.getElementById('serviceDescription');
       let service = serviceSelect.value;
-      if (service === 'CUSTOM') {
+      if (!service) {
+        service = 'Pending selection...';
+      } else if (service === 'CUSTOM') {
         service = document.getElementById('customServiceInput').value.trim() || 'Custom Music Service';
       }
 
@@ -844,10 +841,12 @@
         if (!client.value.trim()) { client.classList.add('invalid'); valid = false; }
         if (!fee.value || parseFloat(fee.value) <= 0) { fee.classList.add('invalid'); valid = false; }
         if (!date.value) { date.classList.add('invalid'); valid = false; }
+        if (!citySelect.value) { citySelect.classList.add('invalid'); valid = false; }
         if (citySelect.value === 'CUSTOM' && !customCity.value.trim()) {
           customCity.classList.add('invalid');
           valid = false;
         }
+        if (!serviceSelect.value) { serviceSelect.classList.add('invalid'); valid = false; }
         if (serviceSelect.value === 'CUSTOM' && !customService.value.trim()) {
           customService.classList.add('invalid');
           valid = false;
@@ -876,7 +875,7 @@
 
       const nextBtn = document.getElementById('btnNext');
       if (currentStep === 0) {
-        nextBtn.innerText = "NEXT: GIG DETAILS →";
+        nextBtn.innerText = "NEXT: WORK DETAILS →";
       } else if (currentStep === 1) {
         nextBtn.innerText = "NEXT: PAYOUT →";
       } else {
