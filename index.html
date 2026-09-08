@@ -427,5 +427,27 @@
       window.print();
     }
   </script>
+  <script>
+    // Permanently remove Netlify injected badge / drawer elements
+    const purgeNetlifyBadge = () => {
+      const selectors = [
+        '[data-netlify-badge]',
+        '.netlify-badge',
+        '#netlify-badge',
+        'netlify-drawer',
+        'div[class*="netlify"]',
+        'iframe[src*="netlify"]',
+        'a[href*="netlify.com"]'
+      ];
+      selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => el.remove());
+      });
+    };
+
+    // Run immediately and monitor for late injections
+    purgeNetlifyBadge();
+    const netlifyObserver = new MutationObserver(purgeNetlifyBadge);
+    netlifyObserver.observe(document.documentElement, { childList: true, subtree: true });
+  </script>
 </body>
 </html>
