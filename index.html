@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>UK Musician & Artist Invoice Quick-Gen</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2318181b' stroke='%23f59e0b' stroke-width='4'/><circle cx='50' cy='50' r='20' fill='%23f59e0b'/><circle cx='50' cy='50' r='6' fill='%2318181b'/></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2318181b'/><circle cx='50' cy='50' r='36' fill='%2327272a' stroke='%23f59e0b' stroke-width='3'/><circle cx='50' cy='50' r='14' fill='%23f59e0b'/><circle cx='50' cy='50' r='5' fill='%2318181b'/></svg>">
   <style>
     :root {
       --bg: #09090b;
@@ -34,9 +36,8 @@
       padding: 20px 16px;
     }
 
-    /* Header & Progress Indicator */
     header { text-align: center; }
-    h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+    h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; }
     .step-indicator {
       display: flex;
       justify-content: center;
@@ -52,7 +53,6 @@
     }
     .dot.active { background: var(--accent); }
 
-    /* Card Carousel Container */
     .deck {
       position: relative;
       flex: 1;
@@ -83,7 +83,7 @@
     }
 
     .card-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--accent);
       margin-bottom: 12px;
       display: flex;
@@ -92,8 +92,7 @@
     }
     .card-title span { font-size: 0.8rem; color: var(--muted); font-weight: normal; }
 
-    /* Form Inputs */
-    .field { margin-bottom: 12px; }
+    .field { margin-bottom: 11px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; }
     
@@ -104,18 +103,18 @@
       color: #fff;
       padding: 10px;
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       transition: border-color 0.2s;
     }
+    optgroup { background: #18181b; color: var(--accent); font-weight: bold; }
+    option { background: #27272a; color: #fff; font-weight: normal; }
     input:focus, select:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
 
-    /* Validation error glow */
     input.invalid, select.invalid {
       border-color: var(--error) !important;
       background: rgba(239, 68, 68, 0.08) !important;
     }
 
-    /* Fee Quick Pick Chips */
     .chips-row {
       display: flex;
       gap: 6px;
@@ -146,7 +145,6 @@
       text-align: center;
     }
 
-    /* Controls Bottom */
     .action-row {
       display: flex;
       gap: 10px;
@@ -175,7 +173,6 @@
       margin-top: 10px;
     }
 
-    /* Print Template */
     #invoice-render { display: none; }
 
     @media print {
@@ -205,7 +202,6 @@
 <body>
 
   <div class="app-shell no-print">
-    <!-- Header -->
     <header>
       <h1>🎵 Artist Invoice Quick-Gen</h1>
       <div class="step-indicator">
@@ -215,9 +211,8 @@
       </div>
     </header>
 
-    <!-- Carousel Cards Deck -->
     <div class="deck">
-      <!-- CARD 1: Artist Identity -->
+      <!-- CARD 1: Artist Details -->
       <div class="card active" id="card-0">
         <div class="card-title">
           1. Your Details <span>Step 1 of 3</span>
@@ -231,25 +226,25 @@
           <input type="text" id="legalName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
         </div>
         <div class="field">
-          <label>Your Address / City *</label>
-          <input type="text" id="artistAddress" placeholder="e.g. London, EC1A 1BB" oninput="clearErr(this); saveData();" />
+          <label>Your City / Studio Address *</label>
+          <input type="text" id="artistAddress" placeholder="e.g. Studio 12, London, EC1A 1BB" oninput="clearErr(this); saveData();" />
         </div>
-        <div class="validation-msg" id="msg-0">Please fill in all fields to continue.</div>
+        <div class="validation-msg" id="msg-0">Please enter your artist, legal name, and location.</div>
       </div>
 
-      <!-- CARD 2: Gig & Fee -->
+      <!-- CARD 2: Gig Details -->
       <div class="card" id="card-1">
         <div class="card-title">
           2. Gig / Performance <span>Step 2 of 3</span>
         </div>
         <div class="field">
-          <label>Venue / Promoter Name *</label>
+          <label>Venue / Client / School *</label>
           <input type="text" id="clientName" placeholder="e.g. Basement Echo Club Nights" oninput="clearErr(this)" />
         </div>
         
         <div class="grid-2">
           <div class="field">
-            <label>Venue City / Hub *</label>
+            <label>City / Location *</label>
             <select id="clientCity" onchange="handleCityChange(this); clearErr(this);">
               <option value="London" selected>London</option>
               <option value="Manchester">Manchester</option>
@@ -260,32 +255,74 @@
               <option value="Liverpool">Liverpool</option>
               <option value="Brighton">Brighton</option>
               <option value="Edinburgh">Edinburgh</option>
+              <option value="Sheffield">Sheffield</option>
               <option value="CUSTOM">Other (Type Custom)</option>
             </select>
           </div>
           <div class="field">
-            <label>Gig Date *</label>
+            <label>Date of Work *</label>
             <input type="date" id="serviceDate" oninput="clearErr(this)" />
           </div>
         </div>
 
         <div class="field" id="customCityField" style="display:none;">
           <label>Custom Location *</label>
-          <input type="text" id="customCityInput" placeholder="e.g. Sheffield" oninput="clearErr(this)" />
+          <input type="text" id="customCityInput" placeholder="e.g. Cardiff" oninput="clearErr(this)" />
         </div>
 
         <div class="field">
           <label>Service Description *</label>
-          <select id="serviceDescription">
-            <option value="Live Performance (DJ Set)" selected>Live Performance (DJ Set)</option>
-            <option value="Headline DJ Set (2 Hours)">Headline DJ Set (2 Hours)</option>
-            <option value="Warmup / Opening DJ Set">Warmup / Opening DJ Set</option>
-            <option value="Live Music Performance (Band / Solo)">Live Music Performance (Band / Solo)</option>
-            <option value="Session Musician / Recording Fee">Session Musician / Recording Fee</option>
-            <option value="Music Production / Mixing Services">Music Production / Mixing Services</option>
-            <option value="Mastering Services">Mastering Services</option>
-            <option value="Sound Engineering / Live Tech Support">Sound Engineering / Live Tech Support</option>
+          <select id="serviceDescription" onchange="handleServiceChange(this); clearErr(this);">
+            <optgroup label="Live & DJ Performance">
+              <option value="Live Performance (DJ Set)" selected>Live Performance (DJ Set)</option>
+              <option value="Headline DJ Set">Headline DJ Set</option>
+              <option value="Warmup / Opening DJ Set">Warmup / Opening DJ Set</option>
+              <option value="Live Music Performance (Band / Solo)">Live Music Performance (Band / Solo)</option>
+              <option value="Vocalist / Singer (Live Performance)">Vocalist / Singer (Live Performance)</option>
+              <option value="Wedding / Private Function Performance">Wedding / Private Function Performance</option>
+              <option value="Corporate Event Entertainment">Corporate Event Entertainment</option>
+              <option value="Backing Vocalist (Live)">Backing Vocalist (Live)</option>
+            </optgroup>
+
+            <optgroup label="Tuition & Education">
+              <option value="Private Instrumental Tuition">Private Instrumental Tuition</option>
+              <option value="Singing / Vocal Coaching">Singing / Vocal Coaching</option>
+              <option value="Music School Tutor / Workshop">Music School Tutor / Workshop</option>
+              <option value="Masterclass Facilitation">Masterclass Facilitation</option>
+              <option value="Music Theory Tuition">Music Theory Tuition</option>
+              <option value="Ensemble / Choir Direction">Ensemble / Choir Direction</option>
+            </optgroup>
+
+            <optgroup label="Session & Studio Work">
+              <option value="Session Musician / Recording Fee">Session Musician / Recording Fee</option>
+              <option value="Session Vocalist (Lead Vocals)">Session Vocalist (Lead Vocals)</option>
+              <option value="Session Vocalist (Backing / Harmonies)">Session Vocalist (Backing / Harmonies)</option>
+              <option value="Remote Stems Recording Fee">Remote Stems Recording Fee</option>
+            </optgroup>
+
+            <optgroup label="Production, Mixing & Engineering">
+              <option value="Music Production Services">Music Production Services</option>
+              <option value="Audio Mixing Services">Audio Mixing Services</option>
+              <option value="Audio Mastering Services">Audio Mastering Services</option>
+              <option value="Live Sound Engineering (FOH / Monitors)">Live Sound Engineering (FOH / Monitors)</option>
+              <option value="Backline / Tour Tech Support">Backline / Tour Tech Support</option>
+            </optgroup>
+
+            <optgroup label="Writing & Composition">
+              <option value="Songwriting / Topline Writing Fee">Songwriting / Topline Writing Fee</option>
+              <option value="Bespoke Composition & Scoring">Bespoke Composition & Scoring</option>
+              <option value="Arrangement & Transcription Fee">Arrangement & Transcription Fee</option>
+            </optgroup>
+
+            <optgroup label="Custom Option">
+              <option value="CUSTOM">Other (Type Custom Service...)</option>
+            </optgroup>
           </select>
+        </div>
+
+        <div class="field" id="customServiceField" style="display:none;">
+          <label>Custom Service Description *</label>
+          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Corporate Reception" oninput="clearErr(this)" />
         </div>
 
         <div class="field">
@@ -300,7 +337,7 @@
             <span class="chip" onclick="setFee(500)">£500</span>
           </div>
         </div>
-        <div class="validation-msg" id="msg-1">Please enter all gig details and a fee.</div>
+        <div class="validation-msg" id="msg-1">Please enter all gig details and a valid fee.</div>
       </div>
 
       <!-- CARD 3: Bank Details -->
@@ -327,14 +364,13 @@
           <select id="paymentTerms">
             <option value="7">Net 7 Days (Prompt)</option>
             <option value="14" selected>Net 14 Days (UK Standard)</option>
-            <option value="30">Net 30 Days (Corporate / Agency)</option>
+            <option value="30">Net 30 Days (Agencies / Corporate)</option>
           </select>
         </div>
-        <div class="validation-msg" id="msg-2">Please complete your bank details.</div>
+        <div class="validation-msg" id="msg-2">Please complete your bank account details.</div>
       </div>
     </div>
 
-    <!-- Nav Buttons -->
     <div>
       <div class="action-row">
         <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">← Back</button>
@@ -344,7 +380,6 @@
     </div>
   </div>
 
-  <!-- Printable Invoice Section -->
   <div id="invoice-render">
     <div class="inv-header">
       <div>
@@ -433,11 +468,12 @@
 
     function handleCityChange(selectEl) {
       const customField = document.getElementById('customCityField');
-      if (selectEl.value === 'CUSTOM') {
-        customField.style.display = 'block';
-      } else {
-        customField.style.display = 'none';
-      }
+      customField.style.display = selectEl.value === 'CUSTOM' ? 'block' : 'none';
+    }
+
+    function handleServiceChange(selectEl) {
+      const customField = document.getElementById('customServiceField');
+      customField.style.display = selectEl.value === 'CUSTOM' ? 'block' : 'none';
     }
 
     function validateStep(step) {
@@ -447,7 +483,7 @@
       if (step === 0) {
         ['artistName', 'legalName', 'artistAddress'].forEach(id => {
           const el = document.getElementById(id);
-          if (!el.value.trim()) {
+          if (el.value.trim().length < 2) {
             el.classList.add('invalid');
             valid = false;
           }
@@ -458,12 +494,18 @@
         const date = document.getElementById('serviceDate');
         const citySelect = document.getElementById('clientCity');
         const customCity = document.getElementById('customCityInput');
+        const serviceSelect = document.getElementById('serviceDescription');
+        const customService = document.getElementById('customServiceInput');
 
         if (!client.value.trim()) { client.classList.add('invalid'); valid = false; }
         if (!fee.value || parseFloat(fee.value) <= 0) { fee.classList.add('invalid'); valid = false; }
         if (!date.value) { date.classList.add('invalid'); valid = false; }
         if (citySelect.value === 'CUSTOM' && !customCity.value.trim()) {
           customCity.classList.add('invalid');
+          valid = false;
+        }
+        if (serviceSelect.value === 'CUSTOM' && !customService.value.trim()) {
+          customService.classList.add('invalid');
           valid = false;
         }
       } else if (step === 2) {
@@ -526,6 +568,9 @@
       const citySelect = document.getElementById('clientCity');
       const location = citySelect.value === 'CUSTOM' ? document.getElementById('customCityInput').value : citySelect.value;
 
+      const serviceSelect = document.getElementById('serviceDescription');
+      const service = serviceSelect.value === 'CUSTOM' ? document.getElementById('customServiceInput').value : serviceSelect.value;
+
       const today = new Date();
       const dueDate = new Date();
       dueDate.setDate(today.getDate() + termsDays);
@@ -541,7 +586,7 @@
       document.getElementById('outIssueDate').innerText = today.toLocaleDateString('en-GB');
       document.getElementById('outDueDate').innerText = dueDate.toLocaleDateString('en-GB');
 
-      document.getElementById('outDesc').innerText = document.getElementById('serviceDescription').value;
+      document.getElementById('outDesc').innerText = service;
       document.getElementById('outServiceDate').innerText = new Date(document.getElementById('serviceDate').value).toLocaleDateString('en-GB');
       document.getElementById('outFee').innerText = '£' + fee;
       document.getElementById('outTotal').innerText = '£' + fee;
