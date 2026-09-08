@@ -45,6 +45,7 @@
     .app-shell {
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       height: 100dvh;
       max-width: 480px;
       margin: 0 auto;
@@ -82,7 +83,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 4px;
-      margin: 14px 0;
+      margin: 10px 0 14px;
     }
     .step-item {
       font-family: var(--font-mono);
@@ -117,7 +118,7 @@
       pointer-events: none;
       transform: translateY(12px);
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      max-height: calc(100dvh - 190px);
+      max-height: calc(100dvh - 170px);
       overflow-y: auto;
     }
 
@@ -140,9 +141,25 @@
     }
 
     .field { margin-bottom: 12px; }
-    .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-    label { font-family: var(--font-mono); font-size: 0.73rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.04em; }
-    .field-tag { font-family: var(--font-mono); font-size: 0.65rem; color: var(--tag); text-transform: uppercase; }
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    label {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .field-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--tag);
+      text-transform: uppercase;
+    }
 
     input, select {
       width: 100%;
@@ -177,23 +194,96 @@
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16), inset 0 1px 2px rgba(0, 0, 0, 0.2);
     }
-    input.invalid, select.invalid { border-color: var(--error) !important; background: rgba(239, 68, 68, 0.08) !important; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important; }
+
+    input.invalid, select.invalid {
+      border-color: var(--error) !important;
+      background: rgba(239, 68, 68, 0.08) !important;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+    }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .fee-hero-wrapper { position: relative; display: flex; align-items: center; }
-    .fee-hero-input { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; color: var(--accent); padding: 12px 50px 12px 14px; letter-spacing: -0.02em; border-color: #444852; }
-    .fee-hero-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
-    .fee-currency-badge { position: absolute; right: 14px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); background: #282a2e; padding: 3px 6px; border-radius: 4px; pointer-events: none; }
+    .fee-hero-input {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 12px 50px 12px 14px;
+      letter-spacing: -0.02em;
+      border-color: #444852;
+    }
+    .fee-hero-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+    .fee-currency-badge {
+      position: absolute;
+      right: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      background: #282a2e;
+      padding: 3px 6px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
 
-    .chips-cluster { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
-    .chip { font-family: var(--font-mono); background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 8px 0; text-align: center; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600; transition: all 0.15s; }
-    .chip:hover, .chip.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+    .chips-cluster {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .chip {
+      font-family: var(--font-mono);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 0;
+      text-align: center;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .chip:hover, .chip.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
 
-    .validation-msg { font-family: var(--font-mono); color: var(--error); font-size: 0.72rem; margin-top: 8px; display: none; text-align: center; }
+    .validation-msg {
+      font-family: var(--font-mono);
+      color: var(--error);
+      font-size: 0.72rem;
+      margin-top: 8px;
+      display: none;
+      text-align: center;
+    }
 
-    .preview-scrollbox { background: #1f2126; border: 1px solid #363940; border-radius: 8px; padding: 12px; max-height: 230px; overflow-y: auto; margin-bottom: 14px; }
-    .preview-doc { background: #ffffff; color: #111827; padding: 16px; border-radius: 4px; font-size: 0.75rem; line-height: 1.35; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    /* CARD 4: Live Invoice Preview Frame */
+    .preview-scrollbox {
+      background: #1f2126;
+      border: 1px solid #363940;
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 220px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+    .preview-doc {
+      background: #ffffff;
+      color: #111827;
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      line-height: 1.35;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
     .p-head { display: flex; justify-content: space-between; border-bottom: 1.5px solid #111; padding-bottom: 8px; margin-bottom: 10px; }
     .p-title { font-size: 1.15rem; font-weight: 900; margin: 0; }
     .p-sec { margin-bottom: 8px; }
@@ -203,285 +293,532 @@
     .p-tot { text-align: right; font-weight: 800; font-size: 0.95rem; margin-top: 4px; }
     .p-bank { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 8px; margin-top: 8px; font-size: 0.7rem; }
 
-    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
-    .btn-action { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 10px 8px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.15s ease; }
-    .btn-action svg { flex-shrink: 0; }
-    .btn-action:hover { background: #24272e; border-color: var(--accent); color: var(--accent); }
-    .btn-pdf-primary { grid-column: span 2; background: var(--accent); color: #000; font-family: var(--font-ui); font-size: 0.95rem; font-weight: 800; padding: 12px; border: none; border-radius: 6px; }
-    .btn-pdf-primary:hover { background: #d97706; color: #000; }
+    /* Streamlined Single-Focus Export Actions */
+    .btn-pdf-hero {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-pdf-hero:hover { background: #d97706; }
+    .btn-pdf-hero:active { transform: scale(0.99); }
 
-    .toast-note { font-family: var(--font-mono); font-size: 0.7rem; text-align: center; color: var(--success); margin-top: 6px; min-height: 15px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .export-hint {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin: 8px 0 10px;
+      line-height: 1.35;
+    }
 
-    .controls-row { display: flex; gap: 8px; margin-top: 10px; }
-    .btn { padding: 13px; border-radius: 6px; font-weight: 700; font-size: 0.92rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-ui); }
-    .btn-next { flex: 2; background: var(--accent); color: #000; letter-spacing: -0.01em; }
-    .btn-back { flex: 1; background: var(--surface); color: #fff; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.8rem; }
+    .btn-secondary-action {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-secondary-action:hover {
+      background: #24272e;
+      color: #fff;
+      border-color: #4b505c;
+    }
 
-    footer { text-align: center; font-family: var(--font-mono); font-size: 0.65rem; color: var(--tag); margin-top: 8px; }
+    .toast-note {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-align: center;
+      color: var(--success);
+      margin-top: 6px;
+      min-height: 15px;
+    }
+
+    /* Controls Bar */
+    .controls-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn {
+      padding: 13px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-ui);
+    }
+    .btn-next {
+      flex: 2;
+      background: var(--accent);
+      color: #000;
+      letter-spacing: -0.01em;
+    }
+    .btn-back {
+      flex: 1;
+      background: var(--surface);
+      color: #fff;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    footer {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--tag);
+      margin-top: 8px;
+    }
 
     #invoice-render { display: none; }
 
+    /* Clean A4 Print Layout - Zero Browser Headers/Footers */
     @media print {
-      @page { size: A4 portrait; margin: 0mm; }
-      html, body { width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; background: #ffffff !important; color: #000000 !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; }
+      @page {
+        size: A4 portrait;
+        margin: 0mm;
+      }
+
+      html, body {
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+      }
+
       .no-print { display: none !important; }
-      #invoice-render { display: block !important; position: static !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 20mm 20mm !important; margin: 0 !important; font-size: 10pt; line-height: 1.5; color: #111111; }
-      .inv-header { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 2px solid #111827; padding-bottom: 18px; margin-bottom: 24px; }
-      .inv-title { font-size: 28pt !important; font-weight: 900 !important; letter-spacing: -0.03em; line-height: 1; margin: 0 0 10px 0; }
-      .inv-parties { display: flex !important; justify-content: space-between !important; margin-bottom: 30px; }
-      table { width: 100% !important; border-collapse: collapse !important; margin: 25px 0 !important; }
-      th { background: #f3f4f6 !important; color: #111827 !important; font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px !important; border-bottom: 1px solid #d1d5db !important; text-align: left; }
-      td { padding: 12px !important; border-bottom: 1px solid #e5e7eb !important; font-size: 10.5pt; }
-      .inv-total { text-align: right !important; font-size: 16pt !important; font-weight: 800 !important; margin-top: 15px; letter-spacing: -0.02em; }
-      .inv-bank { background: #f9fafb !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important; padding: 16px 20px !important; margin-top: 30px; }
-      .inv-legal { font-size: 8pt !important; color: #6b7280 !important; margin-top: 40px; text-align: center; line-height: 1.4; }
+
+      #invoice-render {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 20mm 20mm !important;
+        box-sizing: border-box !important;
+        font-size: 10pt;
+        line-height: 1.5;
+        color: #111111;
+      }
+
+      .inv-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        border-bottom: 2px solid #111827;
+        padding-bottom: 18px;
+        margin-bottom: 24px;
+      }
+
+      .inv-title {
+        font-size: 28pt !important;
+        font-weight: 900 !important;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 0 0 10px 0;
+      }
+
+      .inv-parties {
+        display: flex !important;
+        justify-content: space-between !important;
+        margin-bottom: 30px;
+      }
+
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin: 25px 0 !important;
+      }
+
+      th {
+        background: #f3f4f6 !important;
+        color: #111827 !important;
+        font-size: 9pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 10px 12px !important;
+        border-bottom: 1px solid #d1d5db !important;
+        text-align: left;
+      }
+
+      td {
+        padding: 12px !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        font-size: 10.5pt;
+      }
+
+      .inv-total {
+        text-align: right !important;
+        font-size: 16pt !important;
+        font-weight: 800 !important;
+        margin-top: 15px;
+        letter-spacing: -0.02em;
+      }
+
+      .inv-bank {
+        background: #f9fafb !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 8px !important;
+        padding: 16px 20px !important;
+        margin-top: 30px;
+      }
+
+      .inv-legal {
+        font-size: 8pt !important;
+        color: #6b7280 !important;
+        margin-top: 40px;
+        text-align: center;
+        line-height: 1.4;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="app-shell no-print">
-    <!-- Header -->
-    <div class="ledger-header">
-      <div class="brand-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-        <span>GigInvoice</span>
+    <div>
+      <div class="ledger-header">
+        <div class="brand-title">
+          <span>⚡ GigInvoice</span>
+        </div>
+        <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT • AUTO-SAVED</div>
       </div>
-      <div class="status-badge" id="ledgerStatus">PROTOTYPE • NO STORAGE</div>
-    </div>
 
-    <!-- WIZARD VIEW -->
-    <div id="wizard-area" style="display: flex; flex-direction: column; flex: 1;">
-      <div class="step-track" id="step-track">
+      <div class="step-track">
         <div class="step-item active" id="track-0">1. ARTIST</div>
         <div class="step-item" id="track-1">2. WORK</div>
         <div class="step-item" id="track-2">3. BACS</div>
         <div class="step-item" id="track-3">4. EXPORT</div>
       </div>
-
-      <div class="deck">
-        
-        <!-- CARD 1: Creator Identity -->
-        <div class="card active" id="card-0">
-          <div class="card-heading">
-            <h2>Creator Details</h2>
-            <p>Session-only preview (nothing is stored on your device).</p>
-          </div>
-          <div class="field">
-            <div class="label-row">
-              <label>Professional / Trading Name</label>
-              <span class="field-tag">Public Name</span>
-            </div>
-            <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this);" />
-          </div>
-          <div class="field">
-            <div class="label-row">
-              <label>Legal Sole Trader Name</label>
-              <span class="field-tag">HMRC Required</span>
-            </div>
-            <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this);" />
-          </div>
-          <div class="field">
-            <div class="label-row">
-              <label>Contact / Studio Address</label>
-              <span class="field-tag">Postcode / City</span>
-            </div>
-            <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this);" />
-          </div>
-          <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
-        </div>
-
-        <!-- CARD 2: Work & Fee -->
-        <div class="card" id="card-1">
-          <div class="card-heading">
-            <h2>Work & Fee Details</h2>
-            <p>Client, description of work, and agreed amount.</p>
-          </div>
-          <div class="field">
-            <div class="label-row">
-              <label>Client / Venue / Promoter</label>
-              <span class="field-tag">Required</span>
-            </div>
-            <input type="text" id="clientName" placeholder="e.g. Venue, School, Client, or Promoter" oninput="clearErr(this)" />
-          </div>
-          <div class="grid-2">
-            <div class="field">
-              <div class="label-row"><label>Location</label><span class="field-tag">UK</span></div>
-              <select id="clientCity" onchange="handleCityChange(this); clearErr(this);">
-                <option value="" disabled selected>-- Select City --</option>
-                <option value="London">London</option>
-                <option value="Manchester">Manchester</option>
-                <option value="Bristol">Bristol</option>
-                <option value="Birmingham">Birmingham</option>
-                <option value="Leeds">Leeds</option>
-                <option value="Glasgow">Glasgow</option>
-                <option value="Liverpool">Liverpool</option>
-                <option value="Brighton">Brighton</option>
-                <option value="Edinburgh">Edinburgh</option>
-                <option value="Sheffield">Sheffield</option>
-                <option value="CUSTOM">Other (Type Custom)</option>
-              </select>
-            </div>
-            <div class="field">
-              <div class="label-row"><label>Date of Work</label></div>
-              <input type="date" id="serviceDate" oninput="clearErr(this)" />
-            </div>
-          </div>
-          <div class="field" id="customCityField" style="display:none;">
-            <div class="label-row"><label>Custom Location</label></div>
-            <input type="text" id="customCityInput" placeholder="e.g. Cardiff, Belfast, or Online" oninput="clearErr(this)" />
-          </div>
-          <div class="field">
-            <div class="label-row"><label>Service Description</label></div>
-            <select id="serviceDescription" onchange="handleServiceChange(this); clearErr(this);">
-              <option value="" disabled selected>-- Select Service Provided --</option>
-              <optgroup label="Live & Performance">
-                <option value="Live Performance (DJ Set)">Live Performance (DJ Set)</option>
-                <option value="Headline DJ Set">Headline DJ Set</option>
-                <option value="Live Music Performance">Live Music Performance</option>
-                <option value="Singer / Vocalist (Live)">Singer / Vocalist (Live)</option>
-              </optgroup>
-              <optgroup label="Tuition & Education">
-                <option value="Private Instrumental Tuition">Private Instrumental Tuition</option>
-                <option value="Music School Tutor">Music School Tutor</option>
-              </optgroup>
-              <optgroup label="Session & Studio Work">
-                <option value="Session Musician / Recording Fee">Session Musician / Recording Fee</option>
-                <option value="Audio Mixing / Mastering">Audio Mixing / Mastering</option>
-              </optgroup>
-              <optgroup label="Custom Option">
-                <option value="CUSTOM">Other (Type Custom Service...)</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="field" id="customServiceField" style="display:none;">
-            <div class="label-row"><label>Custom Service Description</label></div>
-            <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Wedding" oninput="clearErr(this)" />
-          </div>
-          <div class="field">
-            <div class="label-row">
-              <label>Agreed Fee Total</label>
-              <span class="field-tag">GBP (£)</span>
-            </div>
-            <div class="fee-hero-wrapper">
-              <input type="number" id="feeAmount" class="fee-hero-input" placeholder="e.g. 200" oninput="clearErr(this); clearChipStates();" />
-              <span class="fee-currency-badge">GBP</span>
-            </div>
-            <div class="chips-cluster">
-              <div class="chip" onclick="setFee(100, this)">£100</div>
-              <div class="chip" onclick="setFee(150, this)">£150</div>
-              <div class="chip" onclick="setFee(200, this)">£200</div>
-              <div class="chip" onclick="setFee(250, this)">£250</div>
-              <div class="chip" onclick="setFee(350, this)">£350</div>
-              <div class="chip" onclick="setFee(500, this)">£500</div>
-            </div>
-          </div>
-          <div class="validation-msg" id="msg-1">Please select a service, location, and enter a fee.</div>
-        </div>
-
-        <!-- CARD 3: BACS Details -->
-        <div class="card" id="card-2">
-          <div class="card-heading">
-            <h2>Getting Paid (BACS)</h2>
-            <p>Single-session preview only.</p>
-          </div>
-          <div class="field">
-            <div class="label-row">
-              <label>Bank Account Name</label>
-              <span class="field-tag">Confirmation of Payee</span>
-            </div>
-            <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this);" />
-          </div>
-          <div class="grid-2">
-            <div class="field">
-              <div class="label-row"><label>UK Sort Code</label><span class="field-tag">6-Digit</span></div>
-              <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this);" />
-            </div>
-            <div class="field">
-              <div class="label-row"><label>Account Number</label><span class="field-tag">8-Digit</span></div>
-              <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this);" />
-            </div>
-          </div>
-          <div class="field">
-            <div class="label-row"><label>Payment Terms</label></div>
-            <select id="paymentTerms">
-              <option value="7">Net 7 Days (Prompt)</option>
-              <option value="14" selected>Net 14 Days (Standard UK Terms)</option>
-              <option value="30">Net 30 Days (Agencies & Corporate)</option>
-            </select>
-          </div>
-          <div class="validation-msg" id="msg-2">Please complete bank name, sort code & account number.</div>
-        </div>
-
-        <!-- CARD 4: Review & Export Screen -->
-        <div class="card" id="card-3">
-          <div class="card-heading">
-            <h2>Preview & Share</h2>
-            <p>Verify your document and choose your export method.</p>
-          </div>
-          <div class="preview-scrollbox">
-            <div class="preview-doc">
-              <div class="p-head">
-                <div>
-                  <div class="p-title">INVOICE</div>
-                  <div id="prevInvNum" style="color:#555; font-size:0.65rem;">INV-2026-000</div>
-                  <div style="color:#555; font-size:0.65rem;">Due: <span id="prevDueDate">-</span></div>
-                </div>
-                <div style="text-align:right;">
-                  <strong id="prevArtistName" style="font-size:0.8rem;">-</strong>
-                  <div id="prevLegalName" style="font-size:0.65rem; color:#555;">-</div>
-                  <div id="prevArtistAddress" style="font-size:0.65rem; color:#555;">-</div>
-                </div>
-              </div>
-              <div class="p-sec">
-                <div style="font-size:0.62rem; font-weight:bold; color:#666; text-transform:uppercase;">Invoice To:</div>
-                <strong id="prevClientName">-</strong>
-                <div id="prevClientCity" style="color:#555; font-size:0.65rem;">-</div>
-              </div>
-              <table class="p-table">
-                <thead><tr><th>Description</th><th style="text-align:right;">Amount</th></tr></thead>
-                <tbody><tr><td id="prevDesc">-</td><td style="text-align:right;" id="prevFee">£0.00</td></tr></tbody>
-              </table>
-              <div class="p-tot">Total Due: <span id="prevTotal" style="color:#d97706;">£0.00</span></div>
-              <div class="p-bank"><strong>BACS:</strong> <span id="prevAccName">-</span> | Sort: <span id="prevSort">-</span> | Acc: <span id="prevAcc">-</span></div>
-            </div>
-          </div>
-          <div class="action-grid">
-            <button class="btn-action btn-pdf-primary" onclick="triggerPrint()">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Download / Print A4 PDF
-            </button>
-            <button class="btn-action" onclick="shareWhatsApp()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-              WhatsApp Slip
-            </button>
-            <button class="btn-action" onclick="shareEmail()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              Email Client
-            </button>
-            <button class="btn-action" style="grid-column: span 2;" onclick="copyPaymentText()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              Copy Plaintext Payment Slip
-            </button>
-          </div>
-          <div class="toast-note" id="toastMsg"></div>
-        </div>
-
-      </div>
-
-      <!-- Controls -->
-      <div>
-        <div class="controls-row" id="bottom-controls">
-          <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> 
-            BACK
-          </button>
-          <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
-        </div>
-        <footer>SESSION TESTING ONLY • ZERO DATA SAVED TO DEVICE</footer>
-      </div>
     </div>
 
+    <div class="deck">
+      
+      <!-- CARD 1: Creator Identity -->
+      <div class="card active" id="card-0">
+        <div class="card-heading">
+          <h2>Creator Details</h2>
+          <p>Saved securely on your device for future invoices.</p>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Professional / Trading Name</label>
+            <span class="field-tag">Public Name</span>
+          </div>
+          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this); saveData();" />
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Legal Sole Trader Name</label>
+            <span class="field-tag">HMRC Required</span>
+          </div>
+          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this); saveData();" />
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Contact / Studio Address</label>
+            <span class="field-tag">Postcode / City</span>
+          </div>
+          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this); saveData();" />
+        </div>
+
+        <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
+      </div>
+
+      <!-- CARD 2: Work & Fee -->
+      <div class="card" id="card-1">
+        <div class="card-heading">
+          <h2>Work & Fee Details</h2>
+          <p>Client, description of work, and agreed amount.</p>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Client / Venue / School Name</label>
+            <span class="field-tag">Required</span>
+          </div>
+          <input type="text" id="clientName" placeholder="e.g. Venue, School, Client, or Promoter" oninput="clearErr(this)" />
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <div class="label-row">
+              <label>Location</label>
+              <span class="field-tag">UK</span>
+            </div>
+            <select id="clientCity" onchange="handleCityChange(this); clearErr(this);">
+              <option value="" disabled selected>-- Select City --</option>
+              <option value="London">London</option>
+              <option value="Manchester">Manchester</option>
+              <option value="Bristol">Bristol</option>
+              <option value="Birmingham">Birmingham</option>
+              <option value="Leeds">Leeds</option>
+              <option value="Glasgow">Glasgow</option>
+              <option value="Liverpool">Liverpool</option>
+              <option value="Brighton">Brighton</option>
+              <option value="Edinburgh">Edinburgh</option>
+              <option value="Sheffield">Sheffield</option>
+              <option value="CUSTOM">Other (Type Custom)</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="label-row">
+              <label>Date of Work</label>
+            </div>
+            <input type="date" id="serviceDate" oninput="clearErr(this)" />
+          </div>
+        </div>
+
+        <div class="field" id="customCityField" style="display:none;">
+          <div class="label-row">
+            <label>Custom Location</label>
+          </div>
+          <input type="text" id="customCityInput" placeholder="e.g. Cardiff, Belfast, or Online" oninput="clearErr(this)" />
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Service Description</label>
+          </div>
+          <select id="serviceDescription" onchange="handleServiceChange(this); clearErr(this);">
+            <option value="" disabled selected>-- Select Service Provided --</option>
+            
+            <optgroup label="Live & Performance">
+              <option value="Live Performance (DJ Set)">Live Performance (DJ Set)</option>
+              <option value="Headline DJ Set">Headline DJ Set</option>
+              <option value="Warmup / Opening DJ Set">Warmup / Opening DJ Set</option>
+              <option value="Live Music Performance (Solo / Duo)">Live Music Performance (Solo / Duo)</option>
+              <option value="Live Band Performance">Live Band Performance</option>
+              <option value="Singer / Vocalist (Live Performance)">Singer / Vocalist (Live Performance)</option>
+              <option value="Wedding / Private Function Performance">Wedding / Private Function Performance</option>
+              <option value="Corporate Event Entertainment">Corporate Event Entertainment</option>
+              <option value="Backing Vocalist (Live)">Backing Vocalist (Live)</option>
+            </optgroup>
+
+            <optgroup label="Tuition & Education">
+              <option value="Private Instrumental Tuition">Private Instrumental Tuition</option>
+              <option value="Singing / Vocal Coaching">Singing / Vocal Coaching</option>
+              <option value="Music School Tutor / Workshop Fee">Music School Tutor / Workshop Fee</option>
+              <option value="Masterclass Facilitation">Masterclass Facilitation</option>
+              <option value="Music Theory Tuition">Music Theory Tuition</option>
+              <option value="Ensemble / Choir Direction">Ensemble / Choir Direction</option>
+            </optgroup>
+
+            <optgroup label="Session & Studio Work">
+              <option value="Session Musician / Recording Fee">Session Musician / Recording Fee</option>
+              <option value="Session Vocalist (Lead Vocals)">Session Vocalist (Lead Vocals)</option>
+              <option value="Session Vocalist (Backing / Harmonies)">Session Vocalist (Backing / Harmonies)</option>
+              <option value="Remote Stems Recording Fee">Remote Stems Recording Fee</option>
+            </optgroup>
+
+            <optgroup label="Production, Mixing & Engineering">
+              <option value="Music Production Services">Music Production Services</option>
+              <option value="Audio Mixing Services">Audio Mixing Services</option>
+              <option value="Audio Mastering Services">Audio Mastering Services</option>
+              <option value="Live Sound Engineering (FOH / Monitors)">Live Sound Engineering (FOH / Monitors)</option>
+              <option value="Backline / Tour Tech Support">Backline / Tour Tech Support</option>
+            </optgroup>
+
+            <optgroup label="Writing & Composition">
+              <option value="Songwriting / Topline Writing Fee">Songwriting / Topline Writing Fee</option>
+              <option value="Bespoke Composition & Scoring">Bespoke Composition & Scoring</option>
+              <option value="Arrangement & Transcription Fee">Arrangement & Transcription Fee</option>
+            </optgroup>
+
+            <optgroup label="Custom Option">
+              <option value="CUSTOM">Other (Type Custom Service...)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="field" id="customServiceField" style="display:none;">
+          <div class="label-row">
+            <label>Custom Service Description</label>
+          </div>
+          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Wedding, Choir Conductor, etc." oninput="clearErr(this)" />
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Agreed Fee Total</label>
+            <span class="field-tag">GBP (£)</span>
+          </div>
+          <div class="fee-hero-wrapper">
+            <input type="number" id="feeAmount" class="fee-hero-input" placeholder="e.g. 200" oninput="clearErr(this); clearChipStates();" />
+            <span class="fee-currency-badge">GBP</span>
+          </div>
+          <div class="chips-cluster">
+            <div class="chip" onclick="setFee(100, this)">£100</div>
+            <div class="chip" onclick="setFee(150, this)">£150</div>
+            <div class="chip" onclick="setFee(200, this)">£200</div>
+            <div class="chip" onclick="setFee(250, this)">£250</div>
+            <div class="chip" onclick="setFee(350, this)">£350</div>
+            <div class="chip" onclick="setFee(500, this)">£500</div>
+          </div>
+        </div>
+
+        <div class="validation-msg" id="msg-1">Please select a service, location, and enter a fee.</div>
+      </div>
+
+      <!-- CARD 3: BACS Details -->
+      <div class="card" id="card-2">
+        <div class="card-heading">
+          <h2>Getting Paid (BACS)</h2>
+          <p>Saved securely on your device for future invoices.</p>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Bank Account Name</label>
+            <span class="field-tag">Confirmation of Payee</span>
+          </div>
+          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this); saveData();" />
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <div class="label-row">
+              <label>UK Sort Code</label>
+              <span class="field-tag">6-Digit</span>
+            </div>
+            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this); saveData();" />
+          </div>
+          <div class="field">
+            <div class="label-row">
+              <label>Account Number</label>
+              <span class="field-tag">8-Digit</span>
+            </div>
+            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this); saveData();" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label>Payment Terms</label>
+          </div>
+          <select id="paymentTerms">
+            <option value="7">Net 7 Days (Prompt)</option>
+            <option value="14" selected>Net 14 Days (Standard UK Terms)</option>
+            <option value="30">Net 30 Days (Agencies & Corporate)</option>
+          </select>
+        </div>
+
+        <div class="validation-msg" id="msg-2">Please complete bank name, sort code & account number.</div>
+      </div>
+
+      <!-- CARD 4: Review & Single-Action Export -->
+      <div class="card" id="card-3">
+        <div class="card-heading">
+          <h2>Review & Save</h2>
+          <p>Verify your document and generate your official A4 PDF.</p>
+        </div>
+
+        <!-- Scaled Document Preview Box -->
+        <div class="preview-scrollbox">
+          <div class="preview-doc">
+            <div class="p-head">
+              <div>
+                <div class="p-title">INVOICE</div>
+                <div id="prevInvNum" style="color:#555; font-size:0.65rem;">INV-2026-000</div>
+                <div style="color:#555; font-size:0.65rem;">Due: <span id="prevDueDate">-</span></div>
+              </div>
+              <div style="text-align:right;">
+                <strong id="prevArtistName" style="font-size:0.8rem;">-</strong>
+                <div id="prevLegalName" style="font-size:0.65rem; color:#555;">-</div>
+                <div id="prevArtistAddress" style="font-size:0.65rem; color:#666;">-</div>
+              </div>
+            </div>
+
+            <div class="p-sec">
+              <div style="font-size:0.62rem; font-weight:bold; color:#666; text-transform:uppercase;">Invoice To:</div>
+              <strong id="prevClientName">-</strong>
+              <div id="prevClientCity" style="color:#555; font-size:0.65rem;">-</div>
+            </div>
+
+            <table class="p-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th style="text-align:right;">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="prevDesc">-</td>
+                  <td style="text-align:right;" id="prevFee">£0.00</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="p-tot">
+              Total Due: <span id="prevTotal" style="color:#d97706;">£0.00</span>
+            </div>
+
+            <div class="p-bank">
+              <strong>BACS:</strong> <span id="prevAccName">-</span> | Sort: <span id="prevSort">-</span> | Acc: <span id="prevAcc">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Focused Universal Action -->
+        <button class="btn-pdf-hero" onclick="triggerPrint()">
+          ⚡ Download / Save A4 PDF
+        </button>
+        <p class="export-hint">
+          Saves directly to your device. You can then share the PDF file via WhatsApp, Mail, or AirDrop.
+        </p>
+        <button class="btn-secondary-action" onclick="copyBankDetails()">
+          📋 Copy Bank Details Only
+        </button>
+
+        <div class="toast-note" id="toastMsg"></div>
+      </div>
+
+    </div>
+
+    <!-- Navigation Bar -->
+    <div>
+      <div class="controls-row">
+        <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">← BACK</button>
+        <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
+      </div>
+      <footer>ZERO LOGINS • LOCAL STORAGE ENCRYPTED ON-DEVICE • 100% PRIVATE</footer>
+    </div>
   </div>
 
   <!-- A4 Printable Layout -->
@@ -499,6 +836,7 @@
         <p style="margin: 2px 0; color: #666;" id="outArtistAddress">-</p>
       </div>
     </div>
+
     <div class="inv-parties">
       <div>
         <p style="text-transform: uppercase; font-size: 8pt; color: #666; font-weight: bold; margin-bottom: 4px;">INVOICE TO:</p>
@@ -506,11 +844,28 @@
         <p style="margin: 2px 0; color: #555;" id="outClientAddress">-</p>
       </div>
     </div>
+
     <table>
-      <thead><tr><th>Description</th><th>Date of Supply</th><th style="text-align: right;">Amount (£)</th></tr></thead>
-      <tbody><tr><td id="outDesc">-</td><td id="outServiceDate">-</td><td style="text-align: right;" id="outFee">£0.00</td></tr></tbody>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Date of Supply</th>
+          <th style="text-align: right;">Amount (£)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="outDesc">-</td>
+          <td id="outServiceDate">-</td>
+          <td style="text-align: right;" id="outFee">£0.00</td>
+        </tr>
+      </tbody>
     </table>
-    <div class="inv-total">Total Due: <span id="outTotal">£0.00</span></div>
+
+    <div class="inv-total">
+      Total Due: <span id="outTotal">£0.00</span>
+    </div>
+
     <div class="inv-bank">
       <p style="margin: 0 0 6px; font-weight: bold; font-size: 11pt;">Payment Details (UK BACS Transfer)</p>
       <p style="margin: 2px 0;">Account Name: <strong id="outAccountName">-</strong></p>
@@ -518,6 +873,7 @@
       <p style="margin: 2px 0;">Account Number: <strong id="outAccountNumber">00000000</strong></p>
       <p style="margin: 4px 0 0; font-size: 9pt; color: #444;">Please use the invoice number as the payment reference.</p>
     </div>
+
     <div class="inv-legal">
       Payment terms: <span id="outTerms">14</span> days. Statutory interest and fixed compensation apply to late payments under the Late Payment of Commercial Debts (Interest) Act 1998. Not registered for VAT (Sole Trader Exemption).
     </div>
@@ -529,14 +885,24 @@
     let generatedInvoiceNumber = 'INV-' + (new Date().getFullYear()) + '-' + Math.floor(100 + Math.random() * 900);
 
     window.onload = function() {
-      // Purge any stored test data across browsers
-      localStorage.clear();
+      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
+        const saved = localStorage.getItem('music_inv_' + id);
+        if (saved) document.getElementById(id).value = saved;
+      });
       document.getElementById('serviceDate').valueAsDate = new Date();
     };
 
+    function saveData() {
+      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
+        localStorage.setItem('music_inv_' + id, document.getElementById(id).value.trim());
+      });
+    }
+
     function formatSortCode(input) {
-      const clean = input.replace(/\D/g, '').slice(0, 6);
-      if (clean.length === 6) return clean.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
+      const clean = (input || '').replace(/\D/g, '').slice(0, 6);
+      if (clean.length === 6) {
+        return clean.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
+      }
       return input.trim();
     }
 
@@ -546,8 +912,10 @@
       if (msg) msg.style.display = 'none';
     }
 
-    function clearChipStates() { document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); }
-    
+    function clearChipStates() {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    }
+
     function setFee(amount, chipEl) {
       const feeInput = document.getElementById('feeAmount');
       feeInput.value = amount;
@@ -557,11 +925,13 @@
     }
 
     function handleCityChange(selectEl) {
-      document.getElementById('customCityField').style.display = selectEl.value === 'CUSTOM' ? 'block' : 'none';
+      const customField = document.getElementById('customCityField');
+      customField.style.display = selectEl.value === 'CUSTOM' ? 'block' : 'none';
     }
 
     function handleServiceChange(selectEl) {
-      document.getElementById('customServiceField').style.display = selectEl.value === 'CUSTOM' ? 'block' : 'none';
+      const customField = document.getElementById('customServiceField');
+      customField.style.display = selectEl.value === 'CUSTOM' ? 'block' : 'none';
     }
 
     function validateStep(step) {
@@ -571,7 +941,10 @@
       if (step === 0) {
         ['artistName', 'legalName', 'artistAddress'].forEach(id => {
           const el = document.getElementById(id);
-          if (el.value.trim().length < 2) { el.classList.add('invalid'); valid = false; }
+          if (el.value.trim().length < 2) {
+            el.classList.add('invalid');
+            valid = false;
+          }
         });
       } else if (step === 1) {
         const client = document.getElementById('clientName');
@@ -586,13 +959,22 @@
         if (!fee.value || parseFloat(fee.value) <= 0) { fee.classList.add('invalid'); valid = false; }
         if (!date.value) { date.classList.add('invalid'); valid = false; }
         if (!citySelect.value) { citySelect.classList.add('invalid'); valid = false; }
-        if (citySelect.value === 'CUSTOM' && !customCity.value.trim()) { customCity.classList.add('invalid'); valid = false; }
+        if (citySelect.value === 'CUSTOM' && !customCity.value.trim()) {
+          customCity.classList.add('invalid');
+          valid = false;
+        }
         if (!serviceSelect.value) { serviceSelect.classList.add('invalid'); valid = false; }
-        if (serviceSelect.value === 'CUSTOM' && !customService.value.trim()) { customService.classList.add('invalid'); valid = false; }
+        if (serviceSelect.value === 'CUSTOM' && !customService.value.trim()) {
+          customService.classList.add('invalid');
+          valid = false;
+        }
       } else if (step === 2) {
         ['accountName', 'sortCode', 'accountNumber'].forEach(id => {
           const el = document.getElementById(id);
-          if (!el.value.trim()) { el.classList.add('invalid'); valid = false; }
+          if (!el.value.trim()) {
+            el.classList.add('invalid');
+            valid = false;
+          }
         });
       }
 
@@ -622,6 +1004,7 @@
       const dueDate = new Date();
       dueDate.setDate(today.getDate() + termsDays);
 
+      // Populate Live Preview Box (Card 4)
       document.getElementById('prevInvNum').innerText = generatedInvoiceNumber;
       document.getElementById('prevDueDate').innerText = dueDate.toLocaleDateString('en-GB');
       document.getElementById('prevArtistName').innerText = artist;
@@ -636,6 +1019,7 @@
       document.getElementById('prevSort').innerText = sort;
       document.getElementById('prevAcc').innerText = accNum;
 
+      // Populate A4 Print Canvas
       document.getElementById('outArtistName').innerText = artist;
       document.getElementById('outLegalName').innerText = 'Legal: ' + legal;
       document.getElementById('outArtistAddress').innerText = address;
@@ -661,8 +1045,8 @@
       }
 
       document.getElementById('btnBack').style.display = currentStep === 0 ? 'none' : 'block';
-      const nextBtn = document.getElementById('btnNext');
 
+      const nextBtn = document.getElementById('btnNext');
       if (currentStep === 0) {
         nextBtn.innerText = "NEXT: WORK DETAILS →";
         nextBtn.style.display = 'block';
@@ -680,58 +1064,49 @@
 
     function nextStep() {
       if (currentStep < 3 && !validateStep(currentStep)) return;
-      if (currentStep < totalSteps - 1) { currentStep++; updateStepUI(); }
+
+      if (currentStep < totalSteps - 1) {
+        currentStep++;
+        updateStepUI();
+      }
     }
 
     function prevStep() {
-      if (currentStep > 0) { currentStep--; updateStepUI(); }
+      if (currentStep > 0) {
+        currentStep--;
+        updateStepUI();
+      }
     }
 
     function showToast(msg) {
       const toast = document.getElementById('toastMsg');
-      toast.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> ${msg}`;
-      setTimeout(() => { toast.innerHTML = ''; }, 3500);
+      toast.innerText = msg;
+      setTimeout(() => { toast.innerText = ''; }, 3500);
     }
 
-    function triggerPrint() { window.print(); }
-
-    function shareWhatsApp() {
-      const fee = document.getElementById('prevTotal').innerText;
-      const client = document.getElementById('clientName').value.trim();
-      const artist = document.getElementById('artistName').value.trim();
-      const invNum = generatedInvoiceNumber;
-      const sort = formatSortCode(document.getElementById('sortCode').value);
-      const acc = document.getElementById('accountNumber').value.trim();
-      const name = document.getElementById('accountName').value.trim();
-
-      const text = `Hi ${client}, here are the payment details for invoice ${invNum} (${artist}):\n\nAmount: ${fee}\nAccount Name: ${name}\nSort Code: ${sort}\nAccount Number: ${acc}\nReference: ${invNum}\n\nThank you!`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    function triggerPrint() {
+      window.print();
     }
 
-    function shareEmail() {
-      const client = document.getElementById('clientName').value.trim();
-      const fee = document.getElementById('prevTotal').innerText;
-      const artist = document.getElementById('artistName').value.trim();
-      const invNum = generatedInvoiceNumber;
-      const sort = formatSortCode(document.getElementById('sortCode').value);
-      const acc = document.getElementById('accountNumber').value.trim();
-      const name = document.getElementById('accountName').value.trim();
-      const due = document.getElementById('prevDueDate').innerText;
-
-      const subject = `Invoice ${invNum} - ${artist}`;
-      const body = `Hi ${client},\n\nPlease find attached/noted the details for invoice ${invNum}.\n\nTotal Due: ${fee}\nDue Date: ${due}\n\nPayment Transfer Details (BACS):\nAccount Name: ${name}\nSort Code: ${sort}\nAccount Number: ${acc}\nReference: ${invNum}\n\nKind regards,\n${artist}`;
-      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    }
-
-    function copyPaymentText() {
+    function copyBankDetails() {
       const fee = document.getElementById('prevTotal').innerText;
       const invNum = generatedInvoiceNumber;
       const sort = formatSortCode(document.getElementById('sortCode').value);
       const acc = document.getElementById('accountNumber').value.trim();
       const name = document.getElementById('accountName').value.trim();
 
-      const text = `Payment Details for ${invNum}:\nAmount: ${fee}\nName: ${name}\nSort Code: ${sort}\nAccount: ${acc}\nRef: ${invNum}`;
-      navigator.clipboard.writeText(text).then(() => showToast('Payment slip copied')).catch(() => showToast('Failed to copy'));
+      const text = `Payment Details for ${invNum}:\n` +
+                   `Amount: ${fee}\n` +
+                   `Account Name: ${name}\n` +
+                   `Sort Code: ${sort}\n` +
+                   `Account Number: ${acc}\n` +
+                   `Reference: ${invNum}`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ Bank details copied to clipboard');
+      }).catch(() => {
+        showToast('Please manually copy details');
+      });
     }
   </script>
 </body>
