@@ -293,7 +293,7 @@
     .p-tot { text-align: right; font-weight: 800; font-size: 0.95rem; margin-top: 4px; }
     .p-bank { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 8px; margin-top: 8px; font-size: 0.7rem; }
 
-    /* Clean Export Action Grid */
+    /* Action Buttons */
     .action-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -783,7 +783,7 @@
           </div>
         </div>
 
-        <!-- Primary & Quick Action Grid -->
+        <!-- Action Grid -->
         <div class="action-grid">
           <button class="btn-action btn-pdf-primary" onclick="triggerPrint()">
             📄 Download / Print Standard A4 PDF
@@ -892,6 +892,14 @@
       });
     }
 
+    function formatSortCode(input) {
+      const clean = input.replace(/\D/g, '').slice(0, 6);
+      if (clean.length === 6) {
+        return clean.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
+      }
+      return input.trim();
+    }
+
     function clearErr(el) {
       el.classList.remove('invalid');
       const msg = document.getElementById(`msg-${currentStep}`);
@@ -977,7 +985,7 @@
       const address = document.getElementById('artistAddress').value.trim();
       const termsDays = parseInt(document.getElementById('paymentTerms').value);
       const accName = document.getElementById('accountName').value.trim();
-      const sort = document.getElementById('sortCode').value.trim();
+      const sort = formatSortCode(document.getElementById('sortCode').value);
       const accNum = document.getElementById('accountNumber').value.trim();
 
       const citySelect = document.getElementById('clientCity');
@@ -1078,7 +1086,7 @@
       const client = document.getElementById('clientName').value.trim();
       const artist = document.getElementById('artistName').value.trim();
       const invNum = generatedInvoiceNumber;
-      const sort = document.getElementById('sortCode').value.trim();
+      const sort = formatSortCode(document.getElementById('sortCode').value);
       const acc = document.getElementById('accountNumber').value.trim();
       const name = document.getElementById('accountName').value.trim();
 
@@ -1098,7 +1106,7 @@
       const fee = document.getElementById('prevTotal').innerText;
       const artist = document.getElementById('artistName').value.trim();
       const invNum = generatedInvoiceNumber;
-      const sort = document.getElementById('sortCode').value.trim();
+      const sort = formatSortCode(document.getElementById('sortCode').value);
       const acc = document.getElementById('accountNumber').value.trim();
       const name = document.getElementById('accountName').value.trim();
       const due = document.getElementById('prevDueDate').innerText;
@@ -1120,7 +1128,7 @@
     function copyPaymentText() {
       const fee = document.getElementById('prevTotal').innerText;
       const invNum = generatedInvoiceNumber;
-      const sort = document.getElementById('sortCode').value.trim();
+      const sort = formatSortCode(document.getElementById('sortCode').value);
       const acc = document.getElementById('accountNumber').value.trim();
       const name = document.getElementById('accountName').value.trim();
 
