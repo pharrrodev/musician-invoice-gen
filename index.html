@@ -502,7 +502,7 @@
         <div class="brand-title">
           <span>⚡ GigInvoice</span>
         </div>
-        <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT • AUTO-SAVED</div>
+        <div class="status-badge" id="ledgerStatus">TEST MODE • NO STORAGE</div>
       </div>
 
       <div class="step-track">
@@ -519,7 +519,7 @@
       <div class="card active" id="card-0">
         <div class="card-heading">
           <h2>Creator Details</h2>
-          <p>Saved securely on your device for future invoices.</p>
+          <p>Session-only testing mode (no device caching).</p>
         </div>
 
         <div class="field">
@@ -527,7 +527,7 @@
             <label>Professional / Trading Name</label>
             <span class="field-tag">Public Name</span>
           </div>
-          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this)" />
         </div>
 
         <div class="field">
@@ -535,7 +535,7 @@
             <label>Legal Sole Trader Name</label>
             <span class="field-tag">HMRC Required</span>
           </div>
-          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this); saveData();" />
+          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this)" />
         </div>
 
         <div class="field">
@@ -543,7 +543,7 @@
             <label>Contact / Studio Address</label>
             <span class="field-tag">Postcode / City</span>
           </div>
-          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this)" />
         </div>
 
         <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
@@ -688,7 +688,7 @@
       <div class="card" id="card-2">
         <div class="card-heading">
           <h2>Getting Paid (BACS)</h2>
-          <p>Saved securely on your device for future invoices.</p>
+          <p>UK bank transfer credentials (not saved).</p>
         </div>
 
         <div class="field">
@@ -696,7 +696,7 @@
             <label>Bank Account Name</label>
             <span class="field-tag">Confirmation of Payee</span>
           </div>
-          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this); saveData();" />
+          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this)" />
         </div>
 
         <div class="grid-2">
@@ -705,14 +705,14 @@
               <label>UK Sort Code</label>
               <span class="field-tag">6-Digit</span>
             </div>
-            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this); saveData();" />
+            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this)" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Account Number</label>
               <span class="field-tag">8-Digit</span>
             </div>
-            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this); saveData();" />
+            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this)" />
           </div>
         </div>
 
@@ -749,6 +749,7 @@
               <div style="text-align:right;">
                 <strong id="prevArtistName" style="font-size:0.8rem;">-</strong>
                 <div id="prevLegalName" style="font-size:0.65rem; color:#555;">-</div>
+                <div id="prevArtistAddress" style="font-size:0.65rem; color:#555;">-</div>
               </div>
             </div>
 
@@ -810,7 +811,7 @@
         <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">← BACK</button>
         <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
       </div>
-      <footer>ZERO LOGINS • LOCAL STORAGE ENCRYPTED ON-DEVICE • 100% PRIVATE</footer>
+      <footer>TESTING ENVIRONMENT • SESSION MEMORY PURGED ON REFRESH</footer>
     </div>
   </div>
 
@@ -878,19 +879,12 @@
     let generatedInvoiceNumber = 'INV-' + (new Date().getFullYear()) + '-' + Math.floor(100 + Math.random() * 900);
 
     window.onload = function() {
-      // Auto-populate saved creator & bank data from device memory
+      // Clear any existing stored keys from previous runs
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
-        const saved = localStorage.getItem('music_inv_' + id);
-        if (saved) document.getElementById(id).value = saved;
+        localStorage.removeItem('music_inv_' + id);
       });
       document.getElementById('serviceDate').valueAsDate = new Date();
     };
-
-    function saveData() {
-      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
-        localStorage.setItem('music_inv_' + id, document.getElementById(id).value.trim());
-      });
-    }
 
     function formatSortCode(input) {
       const clean = input.replace(/\D/g, '').slice(0, 6);
@@ -1003,6 +997,7 @@
       document.getElementById('prevDueDate').innerText = dueDate.toLocaleDateString('en-GB');
       document.getElementById('prevArtistName').innerText = artist;
       document.getElementById('prevLegalName').innerText = 'Legal: ' + legal;
+      document.getElementById('prevArtistAddress').innerText = address;
       document.getElementById('prevClientName').innerText = client;
       document.getElementById('prevClientCity').innerText = location;
       document.getElementById('prevDesc').innerText = service;
@@ -1078,10 +1073,12 @@
     }
 
     function triggerPrint() {
+      populatePreviewAndPrint();
       window.print();
     }
 
     function shareWhatsApp() {
+      populatePreviewAndPrint();
       const fee = document.getElementById('prevTotal').innerText;
       const client = document.getElementById('clientName').value.trim();
       const artist = document.getElementById('artistName').value.trim();
@@ -1102,6 +1099,7 @@
     }
 
     function shareEmail() {
+      populatePreviewAndPrint();
       const client = document.getElementById('clientName').value.trim();
       const fee = document.getElementById('prevTotal').innerText;
       const artist = document.getElementById('artistName').value.trim();
@@ -1126,6 +1124,7 @@
     }
 
     function copyPaymentText() {
+      populatePreviewAndPrint();
       const fee = document.getElementById('prevTotal').innerText;
       const invNum = generatedInvoiceNumber;
       const sort = formatSortCode(document.getElementById('sortCode').value);
