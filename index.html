@@ -77,28 +77,6 @@
       border-radius: 4px;
     }
 
-    /* 1-Tap Chaser Banner */
-    .overdue-banner {
-      background: #2a2012;
-      border: 1px solid var(--accent);
-      color: #fff;
-      padding: 12px 14px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.15s ease;
-    }
-    .overdue-banner:hover { background: #382915; }
-    .overdue-banner.severity-red {
-      background: #2b1111;
-      border-color: var(--error);
-    }
-    .overdue-banner.severity-red:hover { background: #3d1616; }
-
     /* 4-Step Track */
     .step-track {
       display: grid;
@@ -263,17 +241,14 @@
 <body>
 
   <div class="app-shell no-print">
-    <!-- Header Always Visible -->
+    <!-- Header -->
     <div class="ledger-header">
       <div class="brand-title">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
         <span>GigInvoice</span>
       </div>
-      <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT • AUTO-SAVED</div>
+      <div class="status-badge" id="ledgerStatus">PROTOTYPE • NO STORAGE</div>
     </div>
-
-    <!-- Dynamic Smart Banner Injection -->
-    <div id="overdue-banner-container"></div>
 
     <!-- WIZARD VIEW -->
     <div id="wizard-area" style="display: flex; flex-direction: column; flex: 1;">
@@ -290,28 +265,28 @@
         <div class="card active" id="card-0">
           <div class="card-heading">
             <h2>Creator Details</h2>
-            <p>Saved securely on your device for future invoices.</p>
+            <p>Session-only preview (nothing is stored on your device).</p>
           </div>
           <div class="field">
             <div class="label-row">
               <label>Professional / Trading Name</label>
               <span class="field-tag">Public Name</span>
             </div>
-            <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this); saveData();" />
+            <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this);" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Legal Sole Trader Name</label>
               <span class="field-tag">HMRC Required</span>
             </div>
-            <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this); saveData();" />
+            <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this);" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Contact / Studio Address</label>
               <span class="field-tag">Postcode / City</span>
             </div>
-            <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this); saveData();" />
+            <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this);" />
           </div>
           <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
         </div>
@@ -408,23 +383,23 @@
         <div class="card" id="card-2">
           <div class="card-heading">
             <h2>Getting Paid (BACS)</h2>
-            <p>Saved securely on your device for future invoices.</p>
+            <p>Single-session preview only.</p>
           </div>
           <div class="field">
             <div class="label-row">
               <label>Bank Account Name</label>
               <span class="field-tag">Confirmation of Payee</span>
             </div>
-            <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this); saveData();" />
+            <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this);" />
           </div>
           <div class="grid-2">
             <div class="field">
               <div class="label-row"><label>UK Sort Code</label><span class="field-tag">6-Digit</span></div>
-              <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this); saveData();" />
+              <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this);" />
             </div>
             <div class="field">
               <div class="label-row"><label>Account Number</label><span class="field-tag">8-Digit</span></div>
-              <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this); saveData();" />
+              <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this);" />
             </div>
           </div>
           <div class="field">
@@ -503,33 +478,7 @@
           </button>
           <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
         </div>
-        <footer>ZERO LOGINS • LOCAL STORAGE ENCRYPTED ON-DEVICE • 100% PRIVATE</footer>
-      </div>
-    </div>
-
-    <!-- CHASER VIEW (Hidden by Default) -->
-    <div id="chaser-view" style="display: none; flex-direction: column; flex: 1; margin-top: 14px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:14px;">
-         <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--tag); text-transform:uppercase;">Payment Recovery Mode</div>
-         <button onclick="closeChaser()" style="background:var(--surface); border:1px solid var(--border); color:#fff; border-radius:4px; padding:4px 10px; font-size:0.7rem; font-weight:bold; cursor:pointer;">✕ CLOSE</button>
-      </div>
-
-      <div class="card active" style="position:relative; transform:none; flex:1; display:flex; flex-direction:column; max-height:none;">
-        <div class="card-heading">
-          <h2 id="chaserTitle">Statutory Demand</h2>
-          <p id="chaserSubtitle">Auto-calculating legal fees...</p>
-        </div>
-
-        <div class="preview-scrollbox" style="flex:1; max-height:none; margin-bottom:14px; background:#111827;">
-          <div class="preview-doc" style="font-family:var(--font-mono); font-size:0.72rem; white-space:pre-wrap; background:transparent; box-shadow:none; color:#f3f4f6; padding:0;" id="chaserMessage">
-          </div>
-        </div>
-
-        <div class="action-grid">
-          <button class="btn-action" style="background:#064e3b; border-color:#059669;" onclick="chaserWhatsApp()">💬 Send WhatsApp</button>
-          <button class="btn-action" style="background:#1e3a8a; border-color:#3b82f6;" onclick="chaserEmail()">✉️ Send Email</button>
-          <button class="btn-action" style="grid-column: span 2;" onclick="markAsPaid()">✅ Mark as Paid & Dismiss Tracker</button>
-        </div>
+        <footer>SESSION TESTING ONLY • ZERO DATA SAVED TO DEVICE</footer>
       </div>
     </div>
 
@@ -579,147 +528,12 @@
     const totalSteps = 4;
     let generatedInvoiceNumber = 'INV-' + (new Date().getFullYear()) + '-' + Math.floor(100 + Math.random() * 900);
 
-    // Chaser Engine Global Variables
-    let currentChaserInv = null;
-    let currentChaserMsg = '';
-
     window.onload = function() {
-      // 1. Auto-populate basic data from local storage
-      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
-        const saved = localStorage.getItem('music_inv_' + id);
-        if (saved) document.getElementById(id).value = saved;
-      });
+      // Purge any stored test data across browsers
+      localStorage.clear();
       document.getElementById('serviceDate').valueAsDate = new Date();
-
-      // 2. Scan system for real missed payments
-      checkOverdueInvoices();
     };
 
-    function saveData() {
-      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
-        localStorage.setItem('music_inv_' + id, document.getElementById(id).value.trim());
-      });
-    }
-
-    function saveInvoiceToHistory() {
-      const client = document.getElementById('clientName').value.trim();
-      const fee = parseFloat(document.getElementById('feeAmount').value || 0);
-      const terms = parseInt(document.getElementById('paymentTerms').value);
-      if(!client || fee <= 0) return;
-
-      const dueDate = new Date();
-      dueDate.setDate(dueDate.getDate() + terms);
-
-      const invRecord = { id: generatedInvoiceNumber, client: client, fee: fee, dueDate: dueDate.toISOString() };
-      let history = JSON.parse(localStorage.getItem('music_inv_history') || '[]');
-      
-      const existingIdx = history.findIndex(x => x.id === invRecord.id);
-      if (existingIdx > -1) history[existingIdx] = invRecord;
-      else history.push(invRecord);
-
-      if (history.length > 15) history.shift(); // Keep device memory light
-      localStorage.setItem('music_inv_history', JSON.stringify(history));
-      checkOverdueInvoices();
-    }
-
-    function checkOverdueInvoices() {
-      let history = JSON.parse(localStorage.getItem('music_inv_history') || '[]');
-      const today = new Date();
-      let overdueList = [];
-
-      history.forEach(inv => {
-        let dd = new Date(inv.dueDate);
-        let diffDays = Math.floor((today - dd) / (1000 * 60 * 60 * 24));
-        if (diffDays > 0) {
-          inv.daysLate = diffDays;
-          overdueList.push(inv);
-        }
-      });
-
-      const container = document.getElementById('overdue-banner-container');
-      container.innerHTML = '';
-
-      if (overdueList.length > 0) {
-        overdueList.sort((a,b) => b.daysLate - a.daysLate); // Sort by worst offender
-        let top = overdueList[0];
-        let sevClass = top.daysLate >= 15 ? 'severity-red' : '';
-
-        container.innerHTML = `
-          <div class="overdue-banner ${sevClass}" onclick="openChaser('${top.id}')">
-            <div><strong>⚠️ Overdue:</strong> ${top.client} is ${top.daysLate} days late.</div>
-            <div style="font-size:0.7rem; font-weight:800; text-transform:uppercase;">Chase →</div>
-          </div>
-        `;
-      }
-    }
-
-    /* --- CHASER ENGINE LOGIC --- */
-    function openChaser(id) {
-      let history = JSON.parse(localStorage.getItem('music_inv_history') || '[]');
-      currentChaserInv = history.find(x => x.id === id);
-      if (!currentChaserInv) return;
-
-      document.getElementById('wizard-area').style.display = 'none';
-      document.getElementById('overdue-banner-container').style.display = 'none';
-      document.getElementById('chaser-view').style.display = 'flex';
-
-      const artist = document.getElementById('artistName').value || 'Artist';
-      const sort = formatSortCode(document.getElementById('sortCode').value) || 'XX-XX-XX';
-      const acc = document.getElementById('accountNumber').value || 'XXXXXXXX';
-      const name = document.getElementById('accountName').value || 'Account Holder';
-
-      let title, subtitle, msg;
-      const inv = currentChaserInv;
-
-      if (inv.daysLate <= 7) {
-        title = "Tier 1: Friendly Check-in";
-        subtitle = `Keep it casual. Assume it's an administrative error.`;
-        msg = `Hi ${inv.client},\n\nHope you're doing well!\n\nJust doing a quick admin check on invoice ${inv.id} for £${inv.fee.toFixed(2)}. It looks like it was due on ${new Date(inv.dueDate).toLocaleDateString('en-GB')}.\n\nIf it's already in the payment run, feel free to ignore this! Otherwise, my account details are below for quick reference:\n\nName: ${name}\nSort Code: ${sort}\nAccount: ${acc}\n\nThanks,\n${artist}`;
-      } else if (inv.daysLate <= 14) {
-        title = "Tier 2: Firm Reminder";
-        subtitle = `Professional tone citing agreed terms.`;
-        msg = `Hi ${inv.client},\n\nI am writing to remind you that invoice ${inv.id} for £${inv.fee.toFixed(2)} is now ${inv.daysLate} days overdue.\n\nCould you please confirm when this will be settled? Standard UK payment terms apply, and I would appreciate having this cleared this week to avoid statutory interest accruing.\n\nPayment Details:\nName: ${name}\nSort Code: ${sort}\nAccount: ${acc}\nRef: ${inv.id}\n\nBest regards,\n${artist}`;
-      } else {
-        const statFee = 40.00;
-        const dailyInt = (inv.fee * 0.08) / 365;
-        const totalInt = dailyInt * inv.daysLate;
-        const newTotal = inv.fee + statFee + totalInt;
-
-        title = "Tier 3: Statutory Legal Demand";
-        subtitle = `Added £40 legal fee & 8% daily interest. No more playing nice.`;
-        msg = `FORMAL NOTICE OF LATE PAYMENT\n\nDear ${inv.client},\n\nInvoice ${inv.id} is now ${inv.daysLate} days overdue. As this exceeds standard terms, statutory compensation and interest have now been automatically applied under the Late Payment of Commercial Debts (Interest) Act 1998.\n\nOriginal Fee: £${inv.fee.toFixed(2)}\nStatutory Compensation: £${statFee.toFixed(2)}\nAccrued Interest (8%): £${totalInt.toFixed(2)}\n\nREVISED TOTAL DUE: £${newTotal.toFixed(2)}\n\nPlease settle this total immediately to prevent further action.\n\nName: ${name}\nSort Code: ${sort}\nAccount: ${acc}\nRef: ${inv.id}\n\nRegards,\n${artist}`;
-      }
-
-      document.getElementById('chaserTitle').innerText = title;
-      document.getElementById('chaserSubtitle').innerText = subtitle;
-      document.getElementById('chaserMessage').innerText = msg;
-      currentChaserMsg = msg;
-    }
-
-    function closeChaser() {
-      document.getElementById('chaser-view').style.display = 'none';
-      document.getElementById('wizard-area').style.display = 'flex';
-      document.getElementById('overdue-banner-container').style.display = 'block';
-    }
-
-    function markAsPaid() {
-      let history = JSON.parse(localStorage.getItem('music_inv_history') || '[]');
-      history = history.filter(x => x.id !== currentChaserInv.id); // Purge from memory
-      localStorage.setItem('music_inv_history', JSON.stringify(history));
-      closeChaser();
-      checkOverdueInvoices();
-    }
-
-    function chaserWhatsApp() {
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(currentChaserMsg)}`, '_blank');
-    }
-
-    function chaserEmail() {
-      const subject = `OVERDUE: Invoice ${currentChaserInv.id} - ${currentChaserInv.client}`;
-      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(currentChaserMsg)}`;
-    }
-
-    /* --- STANDARD INVOICING LOGIC --- */
     function formatSortCode(input) {
       const clean = input.replace(/\D/g, '').slice(0, 6);
       if (clean.length === 6) return clean.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
@@ -861,7 +675,6 @@
       } else {
         nextBtn.style.display = 'none';
         populatePreviewAndPrint();
-        saveInvoiceToHistory(); // Background log triggered when they reach Export Step
       }
     }
 
