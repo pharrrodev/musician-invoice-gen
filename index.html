@@ -17,7 +17,7 @@
     
     html, body {
       height: 100dvh;
-      overflow: hidden; /* Zero scrollbars */
+      overflow: hidden;
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -137,7 +137,6 @@
     #invoice-render { display: none; }
 
     @media print {
-      [data-netlify-badge], .netlify-badge, #netlify-badge { display: none !important; }
       @page { margin: 15mm; size: A4 portrait; }
       body { background: #fff !important; color: #000 !important; overflow: visible !important; }
       .no-print { display: none !important; }
@@ -159,22 +158,19 @@
       .inv-bank { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 30px; }
       .inv-legal { font-size: 8pt; color: #666; margin-top: 40px; text-align: center; }
     }
-    .inv-legal { font-size: 8pt; color: #666; margin-top: 40px; text-align: center; }
-    }
 
-    /* Hide Netlify badge completely on screen and print */
+    /* Remove Netlify badge completely on screen and print */
     [data-netlify-badge],
     .netlify-badge,
     #netlify-badge,
     a[href*="netlify.com"],
-    iframe[src*="netlify"] {
+    iframe[src*="netlify"],
+    div[class*="netlify"] {
       display: none !important;
       visibility: hidden !important;
       opacity: 0 !important;
       pointer-events: none !important;
     }
-  </style>
-</head>
   </style>
 </head>
 <body>
@@ -286,7 +282,7 @@
     </div>
   </div>
 
-  <!-- Hidden Printable Invoice Section -->
+  <!-- Printable Invoice Section -->
   <div id="invoice-render">
     <div class="inv-header">
       <div>
@@ -363,16 +359,13 @@
     }
 
     function updateStepUI() {
-      // Toggle card visibility
       for (let i = 0; i < totalSteps; i++) {
         document.getElementById(`card-${i}`).classList.toggle('active', i === currentStep);
         document.getElementById(`dot-${i}`).classList.toggle('active', i === currentStep);
       }
 
-      // Back button state
       document.getElementById('btnBack').style.display = currentStep === 0 ? 'none' : 'block';
 
-      // Next / Download button state
       const nextBtn = document.getElementById('btnNext');
       if (currentStep === 0) {
         nextBtn.innerText = "Next: Gig Details →";
@@ -422,7 +415,6 @@
       document.getElementById('outDueDate').innerText = dueDate.toLocaleDateString('en-GB');
 
       document.getElementById('outDesc').innerText = document.getElementById('serviceDescription').value;
-      document.getElementById('outGigDate') ? document.getElementById('outGigDate').innerText = new Date(document.getElementById('serviceDate').value).toLocaleDateString('en-GB') : null;
       document.getElementById('outServiceDate').innerText = new Date(document.getElementById('serviceDate').value).toLocaleDateString('en-GB');
       document.getElementById('outFee').innerText = '£' + fee;
       document.getElementById('outTotal').innerText = '£' + fee;
