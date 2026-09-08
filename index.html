@@ -71,14 +71,14 @@
       height: 100dvh;
       max-width: 480px;
       margin: 0 auto;
-      padding: 16px 14px;
+      padding: 12px 14px 10px;
     }
 
     .ledger-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
     }
     .brand-title {
@@ -114,11 +114,11 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 5px;
-      margin: 10px 0 14px;
+      margin: 8px 0 10px;
     }
     .step-item {
       font-family: var(--font-mono);
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: var(--tag);
       padding-bottom: 4px;
       border-bottom: 2px solid var(--border);
@@ -138,23 +138,26 @@
       position: relative;
       flex: 1;
       display: flex;
-      align-items: center;
+      align-items: stretch;
+      min-height: 0;
     }
 
     .card {
       position: absolute;
+      inset: 0;
       width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 16px;
+      padding: 14px;
       opacity: 0;
       pointer-events: none;
       transform: translateY(12px);
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      max-height: calc(100dvh - 170px);
       overflow-y: auto;
       box-shadow: 0 4px 20px -2px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
     }
 
     .card.active {
@@ -164,7 +167,8 @@
     }
 
     .card-heading {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      flex-shrink: 0;
     }
     .card-heading h2 {
       font-size: 1.15rem;
@@ -177,16 +181,16 @@
       margin-top: 2px;
     }
 
-    .field { margin-bottom: 12px; }
+    .field { margin-bottom: 10px; }
     .label-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
     label {
       font-family: var(--font-mono);
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       color: var(--muted);
       letter-spacing: 0.04em;
@@ -203,9 +207,9 @@
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 10px 12px;
+      padding: 9px 12px;
       border-radius: 6px;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-family: var(--font-ui);
       transition: border-color 0.15s ease, background 0.15s ease;
     }
@@ -232,10 +236,10 @@
     }
     .fee-hero-input {
       font-family: var(--font-mono);
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: var(--accent);
-      padding: 10px 48px 10px 12px;
+      padding: 9px 48px 9px 12px;
       letter-spacing: -0.02em;
     }
     .fee-currency-badge {
@@ -261,7 +265,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 8px 0;
+      padding: 7px 0;
       text-align: center;
       border-radius: 6px;
       font-size: 0.8rem;
@@ -280,99 +284,151 @@
       background: var(--surface);
       border: 1px dashed var(--border);
       border-radius: 6px;
-      padding: 10px 12px;
-      margin-top: 12px;
+      padding: 8px 12px;
+      margin-top: 8px;
       font-family: var(--font-mono);
     }
     .ticket-row {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
+      font-size: 0.73rem;
       color: var(--muted);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .ticket-row.total {
-      margin-top: 6px;
-      padding-top: 6px;
+      margin-top: 5px;
+      padding-top: 5px;
       border-top: 1px solid var(--border);
       color: var(--text);
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
     }
     .ticket-row.total span:last-child {
       color: var(--accent);
-      font-size: 1.05rem;
+      font-size: 1rem;
     }
 
     .validation-msg {
       font-family: var(--font-mono);
       color: var(--error);
       font-size: 0.72rem;
-      margin-top: 8px;
+      margin-top: 6px;
       display: none;
       text-align: center;
     }
 
-    /* CARD 4: SUCCESS ACTION STACK */
-    .finish-hero {
-      text-align: center;
-      padding: 12px 0 6px;
-    }
-    .finish-badge {
-      font-family: var(--font-mono);
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: rgba(245, 158, 11, 0.12);
-      border: 1px solid var(--accent);
-      padding: 4px 10px;
-      border-radius: 20px;
+    /* CARD 4: DOCUMENT PREVIEW WINDOW & ACTION CONTROLS */
+    .preview-stage-container {
+      flex: 1;
+      min-height: 180px;
+      background: #090a0b;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      overflow-y: auto;
       margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      -webkit-overflow-scrolling: touch;
     }
-    .finish-amount {
-      font-family: var(--font-mono);
-      font-size: 2.2rem;
-      font-weight: 800;
+
+    .document-paper-sheet {
+      width: 100%;
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 4px;
+      padding: 16px 14px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 0.68rem;
+      line-height: 1.35;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1.5px solid #0f172a;
+      padding-bottom: 10px;
+    }
+    .doc-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      margin: 0;
+      color: #0f172a;
       letter-spacing: -0.02em;
-      color: var(--text);
     }
-    .finish-sub {
+    .doc-parties {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0 10px;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+    .doc-table th, .doc-table td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    .doc-table th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #475569;
+    }
+    .doc-total-line {
+      text-align: right;
       font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 4px;
+      font-weight: 800;
+      margin: 6px 0 10px;
+      color: #0f172a;
+    }
+    .doc-payout-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-top: 8px;
+    }
+    .doc-terms {
+      font-size: 0.55rem;
+      color: #64748b;
+      margin-top: 12px;
+      text-align: center;
+      line-height: 1.25;
     }
 
     .actions-stack {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin: 16px 0 12px;
+      gap: 7px;
+      flex-shrink: 0;
     }
     .action-btn-primary {
       background: var(--accent);
       color: var(--accent-btn-text);
-      padding: 14px;
-      font-size: 0.95rem;
+      padding: 12px;
+      font-size: 0.9rem;
       font-weight: 800;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
       font-family: var(--font-ui);
     }
     .action-btn-secondary {
       background: var(--surface);
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 13px;
-      font-size: 0.9rem;
+      padding: 11px;
+      font-size: 0.85rem;
       font-weight: 700;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -380,41 +436,36 @@
       gap: 8px;
       font-family: var(--font-ui);
     }
-    .action-btn-secondary:hover {
-      border-color: var(--accent);
-    }
 
     .aux-actions-row {
       display: flex;
       justify-content: space-around;
-      padding-top: 10px;
+      padding-top: 8px;
       border-top: 1px solid var(--border);
-      margin-top: 10px;
+      margin-top: 8px;
+      flex-shrink: 0;
     }
     .link-btn {
       background: none;
       border: none;
       color: var(--muted);
       font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       text-decoration: underline;
       cursor: pointer;
-      padding: 4px;
-    }
-    .link-btn:hover {
-      color: var(--text);
+      padding: 2px;
     }
 
     .controls-row {
       display: flex;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .btn {
-      padding: 13px;
+      padding: 12px;
       border-radius: 6px;
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       border: none;
       cursor: pointer;
       display: flex;
@@ -435,52 +486,28 @@
       color: var(--text);
       border: 1px solid var(--border);
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
 
     footer {
       text-align: center;
       font-family: var(--font-mono);
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: var(--tag);
-      margin-top: 8px;
+      margin-top: 6px;
     }
-
-    /* Clean A4 Render Document */
-    #invoice-render {
-      position: absolute;
-      left: -9999px;
-      top: -9999px;
-      width: 790px;
-      background: #ffffff;
-      color: #111111;
-      padding: 40px 48px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      box-sizing: border-box;
-      line-height: 1.5;
-    }
-    .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #111; padding-bottom: 20px; }
-    .inv-title { font-size: 26pt; font-weight: 900; margin: 0; letter-spacing: -0.03em; }
-    .inv-parties { display: flex; justify-content: space-between; margin: 28px 0 20px; }
-    table { width: 100%; border-collapse: collapse; margin: 25px 0; }
-    th, td { padding: 12px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; font-size: 10.5pt; }
-    th { background: #f8fafc; font-weight: 700; border-top: 1px solid #e5e7eb; }
-    .inv-total { text-align: right; font-size: 15pt; font-weight: 800; margin-top: 8px; }
-    .inv-bank { background: #f9fafb; border: 1px solid #e5e7eb; padding: 16px 20px; border-radius: 6px; margin-top: 26px; }
-    .inv-legal { font-size: 8.5pt; color: #64748b; margin-top: 36px; text-align: center; line-height: 1.4; }
 
     @media print {
       @page { margin: 12mm; size: A4 portrait; }
       body { background: #fff !important; color: #000 !important; overflow: visible !important; }
       .no-print { display: none !important; }
-      #invoice-render {
-        position: static !important;
-        left: auto !important;
-        top: auto !important;
-        width: 100% !important;
+      #docPaper {
+        box-shadow: none !important;
         padding: 0 !important;
-        display: block !important;
+        font-size: 10pt !important;
       }
+      .doc-title { font-size: 24pt !important; }
+      .doc-terms { font-size: 8pt !important; }
     }
   </style>
 </head>
@@ -501,7 +528,7 @@
         <div class="step-item active" id="track-0">1. CREATOR</div>
         <div class="step-item" id="track-1">2. GIG / FEE</div>
         <div class="step-item" id="track-2">3. PAYOUT</div>
-        <div class="step-item" id="track-3">4. READY</div>
+        <div class="step-item" id="track-3">4. PREVIEW</div>
       </div>
     </div>
 
@@ -733,30 +760,88 @@
         <div class="validation-msg" id="msg-2">Please complete bank name, sort code (6 digits) & account number.</div>
       </div>
 
-      <!-- CARD 4: INVOICE READY / ACTION SUITE -->
+      <!-- CARD 4: DOCUMENT PREVIEW WINDOW & DELIVERY ACTIONS -->
       <div class="card" id="card-3">
-        <div class="finish-hero">
-          <div class="finish-badge">⚡ INVOICE READY</div>
-          <div class="finish-amount" id="finishTotal">£250.00</div>
-          <div class="finish-sub" id="finishMeta">Fabric • INV-2026-001</div>
+        <div class="card-heading">
+          <h2>Review & Send Invoice</h2>
+          <p>Check your invoice below before sending or downloading.</p>
         </div>
 
+        <!-- Scrollable Document Sheet Window -->
+        <div class="preview-stage-container">
+          <div class="document-paper-sheet" id="docPaper">
+            <div class="doc-header">
+              <div>
+                <div class="doc-title">INVOICE</div>
+                <div style="color: #64748b; font-size: 0.6rem; margin-top: 2px;">
+                  Invoice No: <strong id="outInvNum" style="color: #0f172a;">INV-001</strong>
+                </div>
+                <div style="color: #64748b; font-size: 0.6rem;">Date: <span id="outIssueDate">-</span></div>
+                <div style="color: #64748b; font-size: 0.6rem;">Due: <span id="outDueDate">-</span></div>
+              </div>
+              <div style="text-align: right;">
+                <div id="outArtistName" style="font-weight: 800; font-size: 0.8rem; color: #0f172a;"></div>
+                <div id="outLegalName" style="color: #475569; font-size: 0.6rem;"></div>
+                <div id="outArtistAddress" style="color: #64748b; font-size: 0.58rem;"></div>
+              </div>
+            </div>
+
+            <div class="doc-parties">
+              <div>
+                <div style="text-transform: uppercase; font-size: 0.55rem; color: #94a3b8; font-weight: 700;">INVOICE TO:</div>
+                <div id="outClientName" style="font-weight: 700; font-size: 0.78rem; color: #0f172a;"></div>
+                <div id="outClientAddress" style="color: #64748b; font-size: 0.6rem;"></div>
+              </div>
+            </div>
+
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Date</th>
+                  <th style="text-align: right;">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="outDesc">-</td>
+                  <td id="outServiceDate">-</td>
+                  <td style="text-align: right; font-weight: 700;" id="outFee">£0.00</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="doc-total-line">
+              Total Due: <span id="outTotal" style="color: #0f172a;">£0.00</span>
+            </div>
+
+            <div class="doc-payout-box">
+              <div style="font-weight: 700; font-size: 0.65rem; color: #0f172a; margin-bottom: 2px;">UK BACS Payment Details</div>
+              <div>Account Name: <strong id="outAccountName">-</strong></div>
+              <div>Sort Code: <strong id="outSortCode">00-00-00</strong></div>
+              <div>Account Number: <strong id="outAccountNumber">00000000</strong></div>
+            </div>
+
+            <div class="doc-terms">
+              Payment terms: <span id="outTerms">14</span> days. Statutory interest and fixed compensation apply to late payments under the Late Payment of Commercial Debts (Interest) Act 1998. Sole trader exemption.
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
         <div class="actions-stack">
-          <!-- Action 1: Native Share / Direct Email (WhatsApp, Mail, AirDrop) -->
           <button class="action-btn-primary" onclick="shareOrEmailPDF()">
             <span>🚀</span> <span>SEND INVOICE (SHARE / EMAIL)</span>
           </button>
-
-          <!-- Action 2: Direct Save PDF -->
           <button class="action-btn-secondary" onclick="downloadPDFDirect()">
             <span>⬇️</span> <span>SAVE PDF TO PHONE</span>
           </button>
         </div>
 
-        <!-- Fast utility links -->
         <div class="aux-actions-row">
+          <button class="link-btn" onclick="prevStep()">← Edit Details</button>
           <button class="link-btn" onclick="copyBacsText()">📋 Copy Bank Text</button>
-          <button class="link-btn" onclick="triggerNativePrint()">🖨️ Print Paper</button>
+          <button class="link-btn" onclick="triggerNativePrint()">🖨️ Print</button>
           <button class="link-btn" onclick="resetForNewInvoice()">+ New Gig</button>
         </div>
       </div>
@@ -770,64 +855,6 @@
         <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: GIG DETAILS →</button>
       </div>
       <footer>ZERO LOGINS • ZERO COOKIES • 100% DEVICE PRIVATE</footer>
-    </div>
-  </div>
-
-  <!-- A4 Clean BACS Invoice Layout -->
-  <div id="invoice-render">
-    <div class="inv-header">
-      <div>
-        <h1 class="inv-title">INVOICE</h1>
-        <p style="margin: 6px 0 0; color: #475569; font-size: 10pt;">Invoice No: <strong id="outInvNum" style="color: #0f172a;">INV-001</strong></p>
-        <p style="margin: 2px 0 0; color: #475569; font-size: 10pt;">Issue Date: <span id="outIssueDate"></span></p>
-        <p style="margin: 2px 0 0; color: #475569; font-size: 10pt;">Due Date: <span id="outDueDate"></span></p>
-      </div>
-      <div style="text-align: right;">
-        <h3 id="outArtistName" style="margin: 0; font-size: 16pt; font-weight: 800;"></h3>
-        <p style="margin: 3px 0; font-size: 10pt;" id="outLegalName"></p>
-        <p style="margin: 2px 0; color: #475569; font-size: 9.5pt;" id="outArtistAddress"></p>
-      </div>
-    </div>
-
-    <div class="inv-parties">
-      <div>
-        <p style="text-transform: uppercase; font-size: 8pt; color: #64748b; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 4px;">INVOICE TO:</p>
-        <h4 id="outClientName" style="margin: 0; font-size: 14pt; font-weight: 700;"></h4>
-        <p style="margin: 2px 0; color: #475569; font-size: 10pt;" id="outClientAddress"></p>
-      </div>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>Date of Supply</th>
-          <th style="text-align: right;">Amount (£)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td id="outDesc">Live Performance</td>
-          <td id="outServiceDate">-</td>
-          <td style="text-align: right; font-weight: 600;" id="outFee">£0.00</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="inv-total">
-      Total Due: <span id="outTotal">£0.00</span>
-    </div>
-
-    <div class="inv-bank">
-      <p style="margin: 0 0 6px; font-weight: 800; font-size: 11pt;">Payment Details (UK BACS Transfer)</p>
-      <p style="margin: 3px 0; font-size: 10pt;">Account Name: <strong id="outAccountName">-</strong></p>
-      <p style="margin: 3px 0; font-size: 10pt;">Sort Code: <strong id="outSortCode">00-00-00</strong></p>
-      <p style="margin: 3px 0; font-size: 10pt;">Account Number: <strong id="outAccountNumber">00000000</strong></p>
-      <p style="margin: 6px 0 0; font-size: 9pt; color: #475569;">Please use the invoice number as the payment reference.</p>
-    </div>
-
-    <div class="inv-legal">
-      Payment terms: <span id="outTerms">14</span> days. Statutory interest and fixed compensation apply to late payments under the Late Payment of Commercial Debts (Interest) Act 1998. Not registered for VAT (Sole Trader Exemption).
     </div>
   </div>
 
@@ -898,7 +925,8 @@
 
     function clearErr(el) {
       el.classList.remove('invalid');
-      document.getElementById(`msg-${currentStep}`).style.display = 'none';
+      const msg = document.getElementById(`msg-${currentStep}`);
+      if (msg) msg.style.display = 'none';
     }
 
     function clearChipStates() {
@@ -1000,7 +1028,6 @@
       const navFooter = document.getElementById('navFooter');
 
       if (currentStep === 3) {
-        // Hide standard bottom nav bar on Completion screen
         navFooter.style.display = 'none';
       } else {
         navFooter.style.display = 'block';
@@ -1011,7 +1038,7 @@
         } else if (currentStep === 1) {
           nextBtn.innerText = "NEXT: PAYOUT →";
         } else if (currentStep === 2) {
-          nextBtn.innerText = "⚡ FINISH & SEND →";
+          nextBtn.innerText = "⚡ PREVIEW INVOICE →";
         }
       }
     }
@@ -1020,7 +1047,7 @@
       if (!validateStep(currentStep)) return;
 
       if (currentStep === 2) {
-        prepareInvoiceData();
+        populateDocument();
         currentStep = 3;
         updateStepUI();
       } else if (currentStep < totalSteps - 1) {
@@ -1036,7 +1063,7 @@
       }
     }
 
-    function prepareInvoiceData() {
+    function populateDocument() {
       const fee = parseFloat(document.getElementById('feeAmount').value || 0).toFixed(2);
       const client = document.getElementById('clientName').value.trim();
       const artist = document.getElementById('artistName').value.trim();
@@ -1080,16 +1107,10 @@
       document.getElementById('outSortCode').innerText = formattedSort;
       document.getElementById('outAccountNumber').innerText = document.getElementById('accountNumber').value.replace(/\D/g, '');
       document.getElementById('outTerms').innerText = termsDays;
-
-      // Update Card 4 Visual Hero
-      document.getElementById('finishTotal').innerText = '£' + fee;
-      document.getElementById('finishMeta').innerText = `${client} • ${generatedInvoiceNumber}`;
     }
 
-    /* --- STEP 4 ACTION HANDLERS --- */
-
     function getPdfBlob() {
-      const element = document.getElementById('invoice-render');
+      const element = document.getElementById('docPaper');
       const opt = {
         margin: 10,
         filename: `${generatedInvoiceNumber}.pdf`,
@@ -1112,7 +1133,6 @@
             text: `Invoice ${generatedInvoiceNumber} for ${document.getElementById('clientName').value}`
           });
         } else {
-          // Fallback: Direct Download
           downloadPDFDirect();
         }
       } catch (err) {
@@ -1121,7 +1141,7 @@
     }
 
     function downloadPDFDirect() {
-      const element = document.getElementById('invoice-render');
+      const element = document.getElementById('docPaper');
       const opt = {
         margin: 10,
         filename: `${generatedInvoiceNumber}.pdf`,
@@ -1140,7 +1160,7 @@
       const text = `BACS Payment Details:\nAccount: ${name}\nSort Code: ${sort}\nAccount No: ${num}\nAmount: ${total}\nRef: ${generatedInvoiceNumber}`;
 
       navigator.clipboard.writeText(text).then(() => {
-        alert("BACS details copied to clipboard!");
+        alert("BACS payment details copied to clipboard!");
       });
     }
 
@@ -1155,8 +1175,8 @@
       document.getElementById('customServiceInput').value = '';
       document.getElementById('feeAmount').value = 250;
       clearChipStates();
-      document.querySelectorAll('.chip')[3].classList.add('active'); // Default to £250 chip
-      currentStep = 1; // Return to Step 2 (Gig Details), keeping Step 1 creator details intact
+      document.querySelectorAll('.chip')[3].classList.add('active');
+      currentStep = 1;
       updateSummary();
       updateStepUI();
     }
