@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UK Musician & Artist Invoice Quick-Gen</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --card: #18181b;
+      --border: #27272a;
+      --accent: #f59e0b;
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 24px 16px;
+    }
+    .container { max-width: 650px; margin: 0 auto; }
+    h1 { font-size: 1.7rem; margin-bottom: 4px; }
+    p.sub { color: var(--muted); margin-top: 0; font-size: 0.95rem; }
+    
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    h2 { font-size: 1.1rem; color: var(--accent); margin-top: 0; }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field { margin-bottom: 14px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+    input, select {
+      width: 100%;
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    input:focus, select:focus { outline: 1px solid var(--accent); }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      background: #27272a;
+      color: #fff;
+      border: 1px solid #3f3f46;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    #invoice-render { display: none; }
+
+    @media print {
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      #invoice-render {
+        display: block !important;
+        max-width: 100%;
+        margin: 0;
+        padding: 40px;
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #111;
+      }
+      .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 20px; }
+      .inv-title { font-size: 28pt; font-weight: 900; margin: 0; }
+      .inv-parties { display: flex; justify-content: space-between; margin: 25px 0; }
+      table { width: 100%; border-collapse: collapse; margin: 30px 0; }
+      th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+      th { background: #f4f4f5; }
+      .inv-total { text-align: right; font-size: 16pt; font-weight: bold; margin-top: 10px; }
+      .inv-bank { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 30px; }
+      .inv-legal { font-size: 8pt; color: #666; margin-top: 40px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container no-print">
+    <h1>🎵 Musician & Artist Invoice Quick-Gen</h1>
+    <p class="sub">Generate a clean UK BACS invoice with statutory late-fee protection in under 60 seconds.</p>
+
+    <!-- 1. Artist Details -->
+    <div class="card">
+      <h2>1. Your Details (Auto-Saved on Device)</h2>
+      <div class="grid-2">
+        <div class="field">
+          <label>Artist / DJ / Trading Name</label>
+          <input type="text" id="artistName" placeholder="e.g. Dennis Miller / DJ Dennis" oninput="saveData()" />
+        </div>
+        <div class="field">
+          <label>Legal Name (Required by HMRC)</label>
+          <input type="text" id="legalName" placeholder="e.g. Dennis Miller" oninput="saveData()" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Your Address / Postcode</label>
+        <input type="text" id="artistAddress" placeholder="e.g. London, UK" oninput="saveData()" />
+      </div>
+    </div>
+
+    <!-- 2. Gig / Session Details -->
+    <div class="card">
+      <h2>2. Gig or Session Details</h2>
+      <div class="grid-2">
+        <div class="field">
+          <label>Venue / Client / Promoter Name</label>
+          <input type="text" id="clientName" placeholder="e.g. SubClub Shoreditch / Studio XYZ" />
+        </div>
+        <div class="field">
+          <label>Client Location</label>
+          <input type="text" id="clientAddress" placeholder="e.g. London" />
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Date of Service</label>
+          <input type="date" id="serviceDate" />
+        </div>
+        <div class="field">
+          <label>Fee Amount (£ GBP)</label>
+          <input type="number" id="feeAmount" placeholder="e.g. 150" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Service Type</label>
+        <select id="serviceDescription">
+          <option value="Live Performance (DJ Set)" selected>Live Performance (DJ Set)</option>
+          <option value="Live Music Performance (Band / Solo)">Live Music Performance (Band / Solo)</option>
+          <option value="Music Production / Mixing Services">Music Production / Mixing Services</option>
+          <option value="Session Musician / Recording Fee">Session Musician / Recording Fee</option>
+          <option value="Sound Engineering / Tech Support">Sound Engineering / Tech Support</option>
+          <option value="Private Music Tuition / Workshop">Private Music Tuition / Workshop</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 3. Payment Details -->
+    <div class="card">
+      <h2>3. Getting Paid (Auto-Saved on Device)</h2>
+      <div class="grid-2">
+        <div class="field">
+          <label>Bank Account Name</label>
+          <input type="text" id="accountName" placeholder="Name on your bank account" oninput="saveData()" />
+        </div>
+        <div class="field">
+          <label>Payment Terms</label>
+          <select id="paymentTerms">
+            <option value="7">Net 7 Days</option>
+            <option value="14" selected>Net 14 Days (Standard)</option>
+            <option value="30">Net 30 Days</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Sort Code</label>
+          <input type="text" id="sortCode" placeholder="00-00-00" oninput="saveData()" />
+        </div>
+        <div class="field">
+          <label>Account Number</label>
+          <input type="text" id="accountNumber" placeholder="12345678" oninput="saveData()" />
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="generateInvoice()">📄 Generate & Download Invoice (PDF)</button>
+
+    <!-- Promoter Follow-up Helper -->
+    <div class="card" style="margin-top: 24px;">
+      <h2>Overdue Payment?</h2>
+      <p style="font-size: 0.85rem; color: var(--muted);">If payment is late, tap below to copy a polite but firm follow-up message to paste into WhatsApp, DM, or email.</p>
+      <button class="btn-secondary" onclick="copyChaser()">📋 Copy Follow-Up Message</button>
+      <span id="copiedText" style="margin-left: 10px; font-size: 0.85rem; color: #10b981; display: none;">Copied!</span>
+    </div>
+  </div>
+
+  <!-- Hidden Printable Invoice Section -->
+  <div id="invoice-render">
+    <div class="inv-header">
+      <div>
+        <h1 class="inv-title">INVOICE</h1>
+        <p style="margin: 4px 0 0; color: #555;">Invoice No: <strong id="outInvNum">INV-2026-001</strong></p>
+        <p style="margin: 2px 0 0; color: #555;">Issue Date: <span id="outIssueDate"></span></p>
+        <p style="margin: 2px 0 0; color: #555;">Due Date: <span id="outDueDate"></span></p>
+      </div>
+      <div style="text-align: right;">
+        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;">Dennis Miller</h3>
+        <p style="margin: 2px 0;" id="outLegalName">Dennis Miller</p>
+        <p style="margin: 2px 0; color: #666;" id="outArtistAddress">London, UK</p>
+      </div>
+    </div>
+
+    <div class="inv-parties">
+      <div>
+        <p style="text-transform: uppercase; font-size: 8pt; color: #666; font-weight: bold; margin-bottom: 4px;">INVOICE TO:</p>
+        <h4 id="outClientName" style="margin: 0; font-size: 13pt;">Client / Venue</h4>
+        <p style="margin: 2px 0; color: #555;" id="outClientAddress">London</p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Date of Supply</th>
+          <th style="text-align: right;">Amount (£)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="outDesc">Live Performance</td>
+          <td id="outServiceDate">-</td>
+          <td style="text-align: right;" id="outFee">£0.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="inv-total">
+      Total Due: <span id="outTotal">£0.00</span>
+    </div>
+
+    <div class="inv-bank">
+      <p style="margin: 0 0 6px; font-weight: bold; font-size: 11pt;">Payment Details (UK BACS Transfer)</p>
+      <p style="margin: 2px 0;">Account Name: <strong id="outAccountName">-</strong></p>
+      <p style="margin: 2px 0;">Sort Code: <strong id="outSortCode">00-00-00</strong></p>
+      <p style="margin: 2px 0;">Account Number: <strong id="outAccountNumber">00000000</strong></p>
+      <p style="margin: 4px 0 0; font-size: 9pt; color: #444;">Please use the invoice number as the payment reference.</p>
+    </div>
+
+    <div class="inv-legal">
+      Payment terms: <span id="outTerms">14</span> days. Statutory interest and fixed compensation apply to late payments under the Late Payment of Commercial Debts (Interest) Act 1998. Not registered for VAT.
+    </div>
+  </div>
+
+  <script>
+    // 1. Auto-fill from device memory
+    window.onload = function() {
+      document.getElementById('serviceDate').valueAsDate = new Date();
+      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
+        const saved = localStorage.getItem('music_inv_' + id);
+        if (saved) document.getElementById(id).value = saved;
+      });
+    };
+
+    // 2. Persist static details to device
+    function saveData() {
+      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
+        localStorage.setItem('music_inv_' + id, document.getElementById(id).value);
+      });
+    }
+
+    // 3. Render print sheet
+    function generateInvoice() {
+      const fee = parseFloat(document.getElementById('feeAmount').value || 0).toFixed(2);
+      const client = document.getElementById('clientName').value || "Client / Promoter";
+      const artist = document.getElementById('artistName').value || "Artist";
+      const legal = document.getElementById('legalName').value || "";
+      const termsDays = parseInt(document.getElementById('paymentTerms').value);
+
+      const today = new Date();
+      const dueDate = new Date();
+      dueDate.setDate(today.getDate() + termsDays);
+
+      document.getElementById('outArtistName').innerText = artist;
+      document.getElementById('outLegalName').innerText = legal ? 'Legal: ' + legal : '';
+      document.getElementById('outArtistAddress').innerText = document.getElementById('artistAddress').value;
+      
+      document.getElementById('outClientName').innerText = client;
+      document.getElementById('outClientAddress').innerText = document.getElementById('clientAddress').value;
+
+      document.getElementById('outInvNum').innerText = 'INV-' + today.getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
+      document.getElementById('outIssueDate').innerText = today.toLocaleDateString('en-GB');
+      document.getElementById('outDueDate').innerText = dueDate.toLocaleDateString('en-GB');
+
+      document.getElementById('outDesc').innerText = document.getElementById('serviceDescription').value;
+      document.getElementById('outServiceDate').innerText = new Date(document.getElementById('serviceDate').value).toLocaleDateString('en-GB');
+      document.getElementById('outFee').innerText = '£' + fee;
+      document.getElementById('outTotal').innerText = '£' + fee;
+
+      document.getElementById('outAccountName').innerText = document.getElementById('accountName').value || legal || artist;
+      document.getElementById('outSortCode').innerText = document.getElementById('sortCode').value || 'XX-XX-XX';
+      document.getElementById('outAccountNumber').innerText = document.getElementById('accountNumber').value || 'XXXXXXXX';
+      document.getElementById('outTerms').innerText = termsDays;
+
+      window.print();
+    }
+
+    // 4. One-click follow-up text
+    function copyChaser() {
+      const client = document.getElementById('clientName').value || "mate";
+      const fee = document.getElementById('feeAmount').value || "the agreed fee";
+      const text = `Hey ${client}, hope you're good! Just following up on the invoice for the session/gig (£${fee}). Could you let me know when the BACS transfer will be processed? Thanks!`;
+      navigator.clipboard.writeText(text);
+      
+      const ping = document.getElementById('copiedText');
+      ping.style.display = 'inline';
+      setTimeout(() => ping.style.display = 'none', 3000);
+    }
+  </script>
+</body>
+</html>
