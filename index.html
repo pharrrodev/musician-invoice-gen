@@ -10,6 +10,7 @@
       --card: #18181b;
       --border: #27272a;
       --accent: #f59e0b;
+      --error: #ef4444;
       --text: #f4f4f5;
       --muted: #a1a1aa;
     }
@@ -71,6 +72,8 @@
       pointer-events: none;
       transform: translateX(40px);
       transition: all 0.25s ease-out;
+      max-height: 80vh;
+      overflow-y: auto;
     }
 
     .card.active {
@@ -82,7 +85,7 @@
     .card-title {
       font-size: 1.1rem;
       color: var(--accent);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -93,6 +96,7 @@
     .field { margin-bottom: 12px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; }
+    
     input, select {
       width: 100%;
       background: #27272a;
@@ -101,8 +105,46 @@
       padding: 10px;
       border-radius: 6px;
       font-size: 0.95rem;
+      transition: border-color 0.2s;
     }
     input:focus, select:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
+
+    /* Validation error glow */
+    input.invalid, select.invalid {
+      border-color: var(--error) !important;
+      background: rgba(239, 68, 68, 0.08) !important;
+    }
+
+    /* Fee Quick Pick Chips */
+    .chips-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      color: var(--muted);
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .chip:hover, .chip.selected {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    .validation-msg {
+      color: var(--error);
+      font-size: 0.78rem;
+      margin-top: 6px;
+      display: none;
+      text-align: center;
+    }
 
     /* Controls Bottom */
     .action-row {
@@ -143,33 +185,20 @@
       #invoice-render {
         display: block !important;
         max-width: 100%;
-        padding: 40px;
-        font-size: 12pt;
+        padding: 30px;
+        font-size: 11pt;
         line-height: 1.5;
         color: #111;
       }
       .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 20px; }
-      .inv-title { font-size: 28pt; font-weight: 900; margin: 0; }
+      .inv-title { font-size: 26pt; font-weight: 900; margin: 0; }
       .inv-parties { display: flex; justify-content: space-between; margin: 25px 0; }
       table { width: 100%; border-collapse: collapse; margin: 30px 0; }
       th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
-      th { background: #f4f4f5; }
+      th { background: #f4f4f5; font-weight: bold; }
       .inv-total { text-align: right; font-size: 16pt; font-weight: bold; margin-top: 10px; }
       .inv-bank { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 30px; }
-      .inv-legal { font-size: 8pt; color: #666; margin-top: 40px; text-align: center; }
-    }
-
-    /* Remove Netlify badge completely on screen and print */
-    [data-netlify-badge],
-    .netlify-badge,
-    #netlify-badge,
-    a[href*="netlify.com"],
-    iframe[src*="netlify"],
-    div[class*="netlify"] {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
+      .inv-legal { font-size: 8pt; color: #666; margin-top: 35px; text-align: center; }
     }
   </style>
 </head>
@@ -194,52 +223,84 @@
           1. Your Details <span>Step 1 of 3</span>
         </div>
         <div class="field">
-          <label>Artist / DJ / Trading Name</label>
-          <input type="text" id="artistName" placeholder="e.g. Dylan Decorum" oninput="saveData()" />
+          <label>Artist / DJ / Trading Name *</label>
+          <input type="text" id="artistName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
         </div>
         <div class="field">
-          <label>Legal Name (HMRC Required)</label>
-          <input type="text" id="legalName" placeholder="e.g. Dylan Decorum" oninput="saveData()" />
+          <label>Legal Name (HMRC Required) *</label>
+          <input type="text" id="legalName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
         </div>
         <div class="field">
-          <label>Your Address / Postcode</label>
-          <input type="text" id="artistAddress" placeholder="e.g. Studio 12, London, EC1A 1BB" oninput="saveData()" />
+          <label>Your Address / City *</label>
+          <input type="text" id="artistAddress" placeholder="e.g. London, EC1A 1BB" oninput="clearErr(this); saveData();" />
         </div>
+        <div class="validation-msg" id="msg-0">Please fill in all fields to continue.</div>
       </div>
 
       <!-- CARD 2: Gig & Fee -->
       <div class="card" id="card-1">
         <div class="card-title">
-          2. Gig / Session <span>Step 2 of 3</span>
+          2. Gig / Performance <span>Step 2 of 3</span>
         </div>
         <div class="field">
-          <label>Venue / Client Name</label>
-          <input type="text" id="clientName" placeholder="e.g. Basement Echo Club Nights" />
+          <label>Venue / Promoter Name *</label>
+          <input type="text" id="clientName" placeholder="e.g. Basement Echo Club Nights" oninput="clearErr(this)" />
         </div>
-        <div class="field">
-          <label>Venue City / Location</label>
-          <input type="text" id="clientAddress" placeholder="e.g. London, UK" />
-        </div>
+        
         <div class="grid-2">
           <div class="field">
-            <label>Gig Date</label>
-            <input type="date" id="serviceDate" />
+            <label>Venue City / Hub *</label>
+            <select id="clientCity" onchange="handleCityChange(this); clearErr(this);">
+              <option value="London" selected>London</option>
+              <option value="Manchester">Manchester</option>
+              <option value="Bristol">Bristol</option>
+              <option value="Birmingham">Birmingham</option>
+              <option value="Leeds">Leeds</option>
+              <option value="Glasgow">Glasgow</option>
+              <option value="Liverpool">Liverpool</option>
+              <option value="Brighton">Brighton</option>
+              <option value="Edinburgh">Edinburgh</option>
+              <option value="CUSTOM">Other (Type Custom)</option>
+            </select>
           </div>
           <div class="field">
-            <label>Fee (£ GBP)</label>
-            <input type="number" id="feeAmount" placeholder="e.g. 150" />
+            <label>Gig Date *</label>
+            <input type="date" id="serviceDate" oninput="clearErr(this)" />
           </div>
         </div>
+
+        <div class="field" id="customCityField" style="display:none;">
+          <label>Custom Location *</label>
+          <input type="text" id="customCityInput" placeholder="e.g. Sheffield" oninput="clearErr(this)" />
+        </div>
+
         <div class="field">
-          <label>Service Type</label>
+          <label>Service Description *</label>
           <select id="serviceDescription">
             <option value="Live Performance (DJ Set)" selected>Live Performance (DJ Set)</option>
+            <option value="Headline DJ Set (2 Hours)">Headline DJ Set (2 Hours)</option>
+            <option value="Warmup / Opening DJ Set">Warmup / Opening DJ Set</option>
             <option value="Live Music Performance (Band / Solo)">Live Music Performance (Band / Solo)</option>
-            <option value="Music Production / Mixing Services">Music Production / Mixing Services</option>
             <option value="Session Musician / Recording Fee">Session Musician / Recording Fee</option>
-            <option value="Sound Engineering / Tech Support">Sound Engineering / Tech Support</option>
+            <option value="Music Production / Mixing Services">Music Production / Mixing Services</option>
+            <option value="Mastering Services">Mastering Services</option>
+            <option value="Sound Engineering / Live Tech Support">Sound Engineering / Live Tech Support</option>
           </select>
         </div>
+
+        <div class="field">
+          <label>Fee (£ GBP) *</label>
+          <input type="number" id="feeAmount" placeholder="150" oninput="clearErr(this)" />
+          <div class="chips-row">
+            <span class="chip" onclick="setFee(100)">£100</span>
+            <span class="chip" onclick="setFee(150)">£150</span>
+            <span class="chip" onclick="setFee(200)">£200</span>
+            <span class="chip" onclick="setFee(250)">£250</span>
+            <span class="chip" onclick="setFee(350)">£350</span>
+            <span class="chip" onclick="setFee(500)">£500</span>
+          </div>
+        </div>
+        <div class="validation-msg" id="msg-1">Please enter all gig details and a fee.</div>
       </div>
 
       <!-- CARD 3: Bank Details -->
@@ -248,27 +309,28 @@
           3. Getting Paid (BACS) <span>Step 3 of 3</span>
         </div>
         <div class="field">
-          <label>Bank Account Name</label>
-          <input type="text" id="accountName" placeholder="Name on bank account" oninput="saveData()" />
+          <label>Bank Account Name *</label>
+          <input type="text" id="accountName" placeholder="Name on bank account" oninput="clearErr(this); saveData();" />
         </div>
         <div class="grid-2">
           <div class="field">
-            <label>Sort Code</label>
-            <input type="text" id="sortCode" placeholder="00-11-22" oninput="saveData()" />
+            <label>Sort Code *</label>
+            <input type="text" id="sortCode" placeholder="00-11-22" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
           <div class="field">
-            <label>Account Number</label>
-            <input type="text" id="accountNumber" placeholder="98765432" oninput="saveData()" />
+            <label>Account Number *</label>
+            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
         </div>
         <div class="field">
           <label>Payment Terms</label>
           <select id="paymentTerms">
-            <option value="7">Net 7 Days</option>
+            <option value="7">Net 7 Days (Prompt)</option>
             <option value="14" selected>Net 14 Days (UK Standard)</option>
-            <option value="30">Net 30 Days</option>
+            <option value="30">Net 30 Days (Corporate / Agency)</option>
           </select>
         </div>
+        <div class="validation-msg" id="msg-2">Please complete your bank details.</div>
       </div>
     </div>
 
@@ -292,8 +354,8 @@
         <p style="margin: 2px 0 0; color: #555;">Due Date: <span id="outDueDate"></span></p>
       </div>
       <div style="text-align: right;">
-        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;">Dennis Miller</h3>
-        <p style="margin: 2px 0;" id="outLegalName">Dennis Miller</p>
+        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;">Dylan Decorum</h3>
+        <p style="margin: 2px 0;" id="outLegalName">Legal: Dylan Decorum</p>
         <p style="margin: 2px 0; color: #666;" id="outArtistAddress">London, UK</p>
       </div>
     </div>
@@ -354,8 +416,68 @@
 
     function saveData() {
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
-        localStorage.setItem('music_inv_' + id, document.getElementById(id).value);
+        localStorage.setItem('music_inv_' + id, document.getElementById(id).value.trim());
       });
+    }
+
+    function clearErr(el) {
+      el.classList.remove('invalid');
+      document.getElementById(`msg-${currentStep}`).style.display = 'none';
+    }
+
+    function setFee(amount) {
+      const feeInput = document.getElementById('feeAmount');
+      feeInput.value = amount;
+      clearErr(feeInput);
+    }
+
+    function handleCityChange(selectEl) {
+      const customField = document.getElementById('customCityField');
+      if (selectEl.value === 'CUSTOM') {
+        customField.style.display = 'block';
+      } else {
+        customField.style.display = 'none';
+      }
+    }
+
+    function validateStep(step) {
+      let valid = true;
+      const msg = document.getElementById(`msg-${step}`);
+
+      if (step === 0) {
+        ['artistName', 'legalName', 'artistAddress'].forEach(id => {
+          const el = document.getElementById(id);
+          if (!el.value.trim()) {
+            el.classList.add('invalid');
+            valid = false;
+          }
+        });
+      } else if (step === 1) {
+        const client = document.getElementById('clientName');
+        const fee = document.getElementById('feeAmount');
+        const date = document.getElementById('serviceDate');
+        const citySelect = document.getElementById('clientCity');
+        const customCity = document.getElementById('customCityInput');
+
+        if (!client.value.trim()) { client.classList.add('invalid'); valid = false; }
+        if (!fee.value || parseFloat(fee.value) <= 0) { fee.classList.add('invalid'); valid = false; }
+        if (!date.value) { date.classList.add('invalid'); valid = false; }
+        if (citySelect.value === 'CUSTOM' && !customCity.value.trim()) {
+          customCity.classList.add('invalid');
+          valid = false;
+        }
+      } else if (step === 2) {
+        ['accountName', 'sortCode', 'accountNumber'].forEach(id => {
+          const el = document.getElementById(id);
+          if (!el.value.trim()) {
+            el.classList.add('invalid');
+            valid = false;
+          }
+        });
+      }
+
+      msg.style.display = valid ? 'none' : 'block';
+      return valid;
     }
 
     function updateStepUI() {
@@ -377,6 +499,8 @@
     }
 
     function nextStep() {
+      if (!validateStep(currentStep)) return;
+
       if (currentStep < totalSteps - 1) {
         currentStep++;
         updateStepUI();
@@ -394,21 +518,24 @@
 
     function generateInvoice() {
       const fee = parseFloat(document.getElementById('feeAmount').value || 0).toFixed(2);
-      const client = document.getElementById('clientName').value || "Basement Echo Club Nights";
-      const artist = document.getElementById('artistName').value || "Dylan Decorum";
-      const legal = document.getElementById('legalName').value || "";
+      const client = document.getElementById('clientName').value;
+      const artist = document.getElementById('artistName').value;
+      const legal = document.getElementById('legalName').value;
       const termsDays = parseInt(document.getElementById('paymentTerms').value);
+
+      const citySelect = document.getElementById('clientCity');
+      const location = citySelect.value === 'CUSTOM' ? document.getElementById('customCityInput').value : citySelect.value;
 
       const today = new Date();
       const dueDate = new Date();
       dueDate.setDate(today.getDate() + termsDays);
 
       document.getElementById('outArtistName').innerText = artist;
-      document.getElementById('outLegalName').innerText = legal ? 'Legal: ' + legal : '';
+      document.getElementById('outLegalName').innerText = 'Legal: ' + legal;
       document.getElementById('outArtistAddress').innerText = document.getElementById('artistAddress').value;
       
       document.getElementById('outClientName').innerText = client;
-      document.getElementById('outClientAddress').innerText = document.getElementById('clientAddress').value;
+      document.getElementById('outClientAddress').innerText = location;
 
       document.getElementById('outInvNum').innerText = 'INV-' + today.getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
       document.getElementById('outIssueDate').innerText = today.toLocaleDateString('en-GB');
@@ -419,35 +546,13 @@
       document.getElementById('outFee').innerText = '£' + fee;
       document.getElementById('outTotal').innerText = '£' + fee;
 
-      document.getElementById('outAccountName').innerText = document.getElementById('accountName').value || legal || artist;
-      document.getElementById('outSortCode').innerText = document.getElementById('sortCode').value || '00-11-22';
-      document.getElementById('outAccountNumber').innerText = document.getElementById('accountNumber').value || '98765432';
+      document.getElementById('outAccountName').innerText = document.getElementById('accountName').value;
+      document.getElementById('outSortCode').innerText = document.getElementById('sortCode').value;
+      document.getElementById('outAccountNumber').innerText = document.getElementById('accountNumber').value;
       document.getElementById('outTerms').innerText = termsDays;
 
       window.print();
     }
-  </script>
-  <script>
-    // Permanently remove Netlify injected badge / drawer elements
-    const purgeNetlifyBadge = () => {
-      const selectors = [
-        '[data-netlify-badge]',
-        '.netlify-badge',
-        '#netlify-badge',
-        'netlify-drawer',
-        'div[class*="netlify"]',
-        'iframe[src*="netlify"]',
-        'a[href*="netlify.com"]'
-      ];
-      selectors.forEach(sel => {
-        document.querySelectorAll(sel).forEach(el => el.remove());
-      });
-    };
-
-    // Run immediately and monitor for late injections
-    purgeNetlifyBadge();
-    const netlifyObserver = new MutationObserver(purgeNetlifyBadge);
-    netlifyObserver.observe(document.documentElement, { childList: true, subtree: true });
   </script>
 </body>
 </html>
