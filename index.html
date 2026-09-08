@@ -159,6 +159,22 @@
       .inv-bank { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 30px; }
       .inv-legal { font-size: 8pt; color: #666; margin-top: 40px; text-align: center; }
     }
+    .inv-legal { font-size: 8pt; color: #666; margin-top: 40px; text-align: center; }
+    }
+
+    /* Hide Netlify badge completely on screen and print */
+    [data-netlify-badge],
+    .netlify-badge,
+    #netlify-badge,
+    a[href*="netlify.com"],
+    iframe[src*="netlify"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  </style>
+</head>
   </style>
 </head>
 <body>
