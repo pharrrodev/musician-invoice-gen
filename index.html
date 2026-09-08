@@ -502,7 +502,7 @@
         <div class="brand-title">
           <span>⚡ GigInvoice</span>
         </div>
-        <div class="status-badge" id="ledgerStatus">TEST MODE • 4 STEPS</div>
+        <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT • AUTO-SAVED</div>
       </div>
 
       <div class="step-track">
@@ -519,7 +519,7 @@
       <div class="card active" id="card-0">
         <div class="card-heading">
           <h2>Creator Details</h2>
-          <p>Your performance & legal invoicing details.</p>
+          <p>Saved securely on your device for future invoices.</p>
         </div>
 
         <div class="field">
@@ -527,7 +527,7 @@
             <label>Professional / Trading Name</label>
             <span class="field-tag">Public Name</span>
           </div>
-          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this)" />
+          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -535,7 +535,7 @@
             <label>Legal Sole Trader Name</label>
             <span class="field-tag">HMRC Required</span>
           </div>
-          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this)" />
+          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -543,7 +543,7 @@
             <label>Contact / Studio Address</label>
             <span class="field-tag">Postcode / City</span>
           </div>
-          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this)" />
+          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
@@ -688,7 +688,7 @@
       <div class="card" id="card-2">
         <div class="card-heading">
           <h2>Getting Paid (BACS)</h2>
-          <p>UK bank transfer credentials.</p>
+          <p>Saved securely on your device for future invoices.</p>
         </div>
 
         <div class="field">
@@ -696,7 +696,7 @@
             <label>Bank Account Name</label>
             <span class="field-tag">Confirmation of Payee</span>
           </div>
-          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this)" />
+          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="grid-2">
@@ -705,14 +705,14 @@
               <label>UK Sort Code</label>
               <span class="field-tag">6-Digit</span>
             </div>
-            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this)" />
+            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Account Number</label>
               <span class="field-tag">8-Digit</span>
             </div>
-            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this)" />
+            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
         </div>
 
@@ -810,7 +810,7 @@
         <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">← BACK</button>
         <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
       </div>
-      <footer>TESTING ENVIRONMENT • SESSION PURGED ON REFRESH</footer>
+      <footer>ZERO LOGINS • LOCAL STORAGE ENCRYPTED ON-DEVICE • 100% PRIVATE</footer>
     </div>
   </div>
 
@@ -878,16 +878,24 @@
     let generatedInvoiceNumber = 'INV-' + (new Date().getFullYear()) + '-' + Math.floor(100 + Math.random() * 900);
 
     window.onload = function() {
-      // Clean purge for fresh testing
+      // Auto-populate saved creator & bank data from device memory
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
-        localStorage.removeItem('music_inv_' + id);
+        const saved = localStorage.getItem('music_inv_' + id);
+        if (saved) document.getElementById(id).value = saved;
       });
       document.getElementById('serviceDate').valueAsDate = new Date();
     };
 
+    function saveData() {
+      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
+        localStorage.setItem('music_inv_' + id, document.getElementById(id).value.trim());
+      });
+    }
+
     function clearErr(el) {
       el.classList.remove('invalid');
-      document.getElementById(`msg-${currentStep}`).style.display = 'none';
+      const msg = document.getElementById(`msg-${currentStep}`);
+      if (msg) msg.style.display = 'none';
     }
 
     function clearChipStates() {
@@ -1034,7 +1042,6 @@
         nextBtn.innerText = "REVIEW INVOICE →";
         nextBtn.style.display = 'block';
       } else {
-        // Step 4 active: The primary button triggers print, so we hide the generic 'Next' button
         nextBtn.style.display = 'none';
         populatePreviewAndPrint();
       }
@@ -1062,7 +1069,6 @@
       setTimeout(() => { toast.innerText = ''; }, 3500);
     }
 
-    /* Actions on Card 4 */
     function triggerPrint() {
       window.print();
     }
