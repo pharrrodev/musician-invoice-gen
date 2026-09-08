@@ -12,7 +12,6 @@
 
   <!-- Favicons -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2318181b' stroke='%23f59e0b' stroke-width='5'/><circle cx='50' cy='50' r='18' fill='%23f59e0b'/><circle cx='50' cy='50' r='6' fill='%2318181b'/></svg>">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23121214'/><circle cx='50' cy='50' r='36' fill='%2318181b' stroke='%23f59e0b' stroke-width='4'/><circle cx='50' cy='50' r='14' fill='%23f59e0b'/><circle cx='50' cy='50' r='5' fill='%23121214'/></svg>">
 
   <style>
     :root {
@@ -27,6 +26,7 @@
       --muted: #9ca3af;
       --tag: #686b74;
       --error: #ef4444;
+      --success: #10b981;
       --font-ui: 'Plus Jakarta Sans', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -69,7 +69,7 @@
     }
     .status-badge {
       font-family: var(--font-mono);
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
       background: var(--surface);
       color: var(--muted);
@@ -78,15 +78,16 @@
       border-radius: 4px;
     }
 
+    /* 4-Step Track */
     .step-track {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
       margin: 10px 0 14px;
     }
     .step-item {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       color: var(--tag);
       padding-bottom: 4px;
       border-bottom: 2px solid #282a2e;
@@ -127,9 +128,7 @@
       transform: translateY(0);
     }
 
-    .card-heading {
-      margin-bottom: 14px;
-    }
+    .card-heading { margin-bottom: 14px; }
     .card-heading h2 {
       font-size: 1.15rem;
       font-weight: 800;
@@ -176,10 +175,7 @@
       -webkit-appearance: none;
       appearance: none;
     }
-    input::placeholder {
-      color: #717580;
-      font-style: normal;
-    }
+    input::placeholder { color: #717580; font-style: normal; }
 
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238b8d94'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
@@ -207,11 +203,7 @@
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-    .fee-hero-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
+    .fee-hero-wrapper { position: relative; display: flex; align-items: center; }
     .fee-hero-input {
       font-family: var(--font-mono);
       font-size: 1.4rem;
@@ -263,34 +255,6 @@
       font-weight: 700;
     }
 
-    .summary-ticket {
-      background: #101113;
-      border: 1px dashed #282a2e;
-      border-radius: 6px;
-      padding: 10px 12px;
-      margin-top: 12px;
-      font-family: var(--font-mono);
-    }
-    .ticket-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .ticket-row.total {
-      margin-top: 6px;
-      padding-top: 6px;
-      border-top: 1px solid #282a2e;
-      color: var(--text);
-      font-weight: 700;
-      font-size: 0.92rem;
-    }
-    .ticket-row.total span:last-child {
-      color: var(--accent);
-      font-size: 1.05rem;
-    }
-
     .validation-msg {
       font-family: var(--font-mono);
       color: var(--error);
@@ -300,6 +264,89 @@
       text-align: center;
     }
 
+    /* CARD 4: Live Invoice Preview Frame */
+    .preview-scrollbox {
+      background: #1f2126;
+      border: 1px solid #363940;
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 230px;
+      overflow-y: auto;
+      margin-bottom: 14px;
+    }
+    .preview-doc {
+      background: #ffffff;
+      color: #111827;
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      line-height: 1.35;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .p-head { display: flex; justify-content: space-between; border-bottom: 1.5px solid #111; padding-bottom: 8px; margin-bottom: 10px; }
+    .p-title { font-size: 1.15rem; font-weight: 900; margin: 0; }
+    .p-sec { margin-bottom: 8px; }
+    .p-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.72rem; }
+    .p-table th { background: #f3f4f6; text-align: left; padding: 4px; font-weight: 700; }
+    .p-table td { padding: 5px 4px; border-bottom: 1px solid #e5e7eb; }
+    .p-tot { text-align: right; font-weight: 800; font-size: 0.95rem; margin-top: 4px; }
+    .p-bank { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 8px; margin-top: 8px; font-size: 0.7rem; }
+
+    /* Clean Export Action Grid */
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .btn-action {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px 8px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-action:hover {
+      background: #24272e;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-pdf-primary {
+      grid-column: span 2;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+    }
+    .btn-pdf-primary:hover {
+      background: #d97706;
+      color: #000;
+    }
+
+    .toast-note {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-align: center;
+      color: var(--success);
+      margin-top: 6px;
+      min-height: 15px;
+    }
+
+    /* Controls Bar */
     .controls-row {
       display: flex;
       gap: 8px;
@@ -343,6 +390,7 @@
 
     #invoice-render { display: none; }
 
+    /* Print Template */
     @media print {
       @page {
         size: A4 portrait;
@@ -358,9 +406,7 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
       }
 
-      .no-print {
-        display: none !important;
-      }
+      .no-print { display: none !important; }
 
       #invoice-render {
         display: block !important;
@@ -456,13 +502,14 @@
         <div class="brand-title">
           <span>⚡ GigInvoice</span>
         </div>
-        <div class="status-badge" id="ledgerStatus">TEST MODE • NO STORAGE</div>
+        <div class="status-badge" id="ledgerStatus">TEST MODE • 4 STEPS</div>
       </div>
 
       <div class="step-track">
-        <div class="step-item active" id="track-0">1. CREATOR</div>
-        <div class="step-item" id="track-1">2. WORK / FEE</div>
-        <div class="step-item" id="track-2">3. PAYOUT</div>
+        <div class="step-item active" id="track-0">1. ARTIST</div>
+        <div class="step-item" id="track-1">2. WORK</div>
+        <div class="step-item" id="track-2">3. BACS</div>
+        <div class="step-item" id="track-3">4. EXPORT</div>
       </div>
     </div>
 
@@ -472,7 +519,7 @@
       <div class="card active" id="card-0">
         <div class="card-heading">
           <h2>Creator Details</h2>
-          <p>Test session active (no device caching).</p>
+          <p>Your performance & legal invoicing details.</p>
         </div>
 
         <div class="field">
@@ -499,7 +546,7 @@
           <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this)" />
         </div>
 
-        <div class="validation-msg" id="msg-0">Please fill in your details to proceed.</div>
+        <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
       </div>
 
       <!-- CARD 2: Work & Fee -->
@@ -514,7 +561,7 @@
             <label>Client / Venue / School Name</label>
             <span class="field-tag">Required</span>
           </div>
-          <input type="text" id="clientName" placeholder="e.g. Venue, School, Client, or Promoter" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="clientName" placeholder="e.g. Venue, School, Client, or Promoter" oninput="clearErr(this)" />
         </div>
 
         <div class="grid-2">
@@ -523,7 +570,7 @@
               <label>Location</label>
               <span class="field-tag">UK</span>
             </div>
-            <select id="clientCity" onchange="handleCityChange(this); clearErr(this); updateSummary();">
+            <select id="clientCity" onchange="handleCityChange(this); clearErr(this);">
               <option value="" disabled selected>-- Select City --</option>
               <option value="London">London</option>
               <option value="Manchester">Manchester</option>
@@ -542,7 +589,7 @@
             <div class="label-row">
               <label>Date of Work</label>
             </div>
-            <input type="date" id="serviceDate" oninput="clearErr(this); updateSummary();" />
+            <input type="date" id="serviceDate" oninput="clearErr(this)" />
           </div>
         </div>
 
@@ -550,14 +597,14 @@
           <div class="label-row">
             <label>Custom Location</label>
           </div>
-          <input type="text" id="customCityInput" placeholder="e.g. Cardiff, Belfast, or Online" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="customCityInput" placeholder="e.g. Cardiff, Belfast, or Online" oninput="clearErr(this)" />
         </div>
 
         <div class="field">
           <div class="label-row">
             <label>Service Description</label>
           </div>
-          <select id="serviceDescription" onchange="handleServiceChange(this); clearErr(this); updateSummary();">
+          <select id="serviceDescription" onchange="handleServiceChange(this); clearErr(this);">
             <option value="" disabled selected>-- Select Service Provided --</option>
             
             <optgroup label="Live & Performance">
@@ -612,7 +659,7 @@
           <div class="label-row">
             <label>Custom Service Description</label>
           </div>
-          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Wedding, Choir Conductor, etc." oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Wedding, Choir Conductor, etc." oninput="clearErr(this)" />
         </div>
 
         <div class="field">
@@ -621,7 +668,7 @@
             <span class="field-tag">GBP (£)</span>
           </div>
           <div class="fee-hero-wrapper">
-            <input type="number" id="feeAmount" class="fee-hero-input" placeholder="e.g. 200" oninput="clearErr(this); clearChipStates(); updateSummary();" />
+            <input type="number" id="feeAmount" class="fee-hero-input" placeholder="e.g. 200" oninput="clearErr(this); clearChipStates();" />
             <span class="fee-currency-badge">GBP</span>
           </div>
           <div class="chips-cluster">
@@ -640,8 +687,8 @@
       <!-- CARD 3: BACS Details -->
       <div class="card" id="card-2">
         <div class="card-heading">
-          <h2>Payment Details</h2>
-          <p>UK BACS transfer credentials (single-session test).</p>
+          <h2>Getting Paid (BACS)</h2>
+          <p>UK bank transfer credentials.</p>
         </div>
 
         <div class="field">
@@ -680,35 +727,94 @@
           </select>
         </div>
 
-        <div class="summary-ticket">
-          <div class="ticket-row">
-            <span>CLIENT:</span>
-            <span id="ticketClient">Pending entry...</span>
-          </div>
-          <div class="ticket-row">
-            <span>SERVICE:</span>
-            <span id="ticketService">Pending entry...</span>
-          </div>
-          <div class="ticket-row total">
-            <span>TOTAL DUE:</span>
-            <span id="ticketTotal">£0.00</span>
+        <div class="validation-msg" id="msg-2">Please complete bank name, sort code & account number.</div>
+      </div>
+
+      <!-- CARD 4: Review & Export Screen -->
+      <div class="card" id="card-3">
+        <div class="card-heading">
+          <h2>Preview & Share</h2>
+          <p>Verify your document and choose your export method.</p>
+        </div>
+
+        <!-- Scaled Document Preview Box -->
+        <div class="preview-scrollbox">
+          <div class="preview-doc">
+            <div class="p-head">
+              <div>
+                <div class="p-title">INVOICE</div>
+                <div id="prevInvNum" style="color:#555; font-size:0.65rem;">INV-2026-000</div>
+                <div style="color:#555; font-size:0.65rem;">Due: <span id="prevDueDate">-</span></div>
+              </div>
+              <div style="text-align:right;">
+                <strong id="prevArtistName" style="font-size:0.8rem;">-</strong>
+                <div id="prevLegalName" style="font-size:0.65rem; color:#555;">-</div>
+              </div>
+            </div>
+
+            <div class="p-sec">
+              <div style="font-size:0.62rem; font-weight:bold; color:#666; text-transform:uppercase;">Invoice To:</div>
+              <strong id="prevClientName">-</strong>
+              <div id="prevClientCity" style="color:#555; font-size:0.65rem;">-</div>
+            </div>
+
+            <table class="p-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th style="text-align:right;">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="prevDesc">-</td>
+                  <td style="text-align:right;" id="prevFee">£0.00</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="p-tot">
+              Total Due: <span id="prevTotal" style="color:#d97706;">£0.00</span>
+            </div>
+
+            <div class="p-bank">
+              <strong>BACS:</strong> <span id="prevAccName">-</span> | Sort: <span id="prevSort">-</span> | Acc: <span id="prevAcc">-</span>
+            </div>
           </div>
         </div>
 
-        <div class="validation-msg" id="msg-2">Please complete bank name, sort code & account number.</div>
+        <!-- Primary & Quick Action Grid -->
+        <div class="action-grid">
+          <button class="btn-action btn-pdf-primary" onclick="triggerPrint()">
+            📄 Download / Print Standard A4 PDF
+          </button>
+          <button class="btn-action" onclick="shareWhatsApp()">
+            💬 WhatsApp Slip
+          </button>
+          <button class="btn-action" onclick="shareEmail()">
+            ✉️ Email Client
+          </button>
+          <button class="btn-action" style="grid-column: span 2;" onclick="copyPaymentText()">
+            📋 Copy Plaintext Payment Slip
+          </button>
+        </div>
+
+        <div class="toast-note" id="toastMsg"></div>
       </div>
 
     </div>
 
+    <!-- Navigation Bar -->
     <div>
       <div class="controls-row">
         <button class="btn btn-back" id="btnBack" onclick="prevStep()" style="display:none;">← BACK</button>
         <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
       </div>
-      <footer>TESTING ENVIRONMENT • SESSION MEMORY PURGED ON REFRESH</footer>
+      <footer>TESTING ENVIRONMENT • SESSION PURGED ON REFRESH</footer>
     </div>
   </div>
 
+  <!-- A4 Printable Layout -->
   <div id="invoice-render">
     <div class="inv-header">
       <div>
@@ -768,16 +874,15 @@
 
   <script>
     let currentStep = 0;
-    const totalSteps = 3;
+    const totalSteps = 4;
+    let generatedInvoiceNumber = 'INV-' + (new Date().getFullYear()) + '-' + Math.floor(100 + Math.random() * 900);
 
     window.onload = function() {
-      // Purge any existing test keys from prior sessions
+      // Clean purge for fresh testing
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
         localStorage.removeItem('music_inv_' + id);
       });
-
       document.getElementById('serviceDate').valueAsDate = new Date();
-      updateSummary();
     };
 
     function clearErr(el) {
@@ -795,7 +900,6 @@
       clearChipStates();
       if (chipEl) chipEl.classList.add('active');
       clearErr(feeInput);
-      updateSummary();
     }
 
     function handleCityChange(selectEl) {
@@ -806,24 +910,6 @@
     function handleServiceChange(selectEl) {
       const customField = document.getElementById('customServiceField');
       customField.style.display = selectEl.value === 'CUSTOM' ? 'block' : 'none';
-    }
-
-    function updateSummary() {
-      const client = document.getElementById('clientName').value.trim() || 'Pending entry...';
-      const rawFee = parseFloat(document.getElementById('feeAmount').value);
-      const fee = isNaN(rawFee) ? '0.00' : rawFee.toFixed(2);
-      
-      const serviceSelect = document.getElementById('serviceDescription');
-      let service = serviceSelect.value;
-      if (!service) {
-        service = 'Pending selection...';
-      } else if (service === 'CUSTOM') {
-        service = document.getElementById('customServiceInput').value.trim() || 'Custom Music Service';
-      }
-
-      document.getElementById('ticketClient').innerText = client;
-      document.getElementById('ticketService').innerText = service;
-      document.getElementById('ticketTotal').innerText = '£' + fee;
     }
 
     function validateStep(step) {
@@ -870,8 +956,63 @@
         });
       }
 
-      msg.style.display = valid ? 'none' : 'block';
+      if (msg) msg.style.display = valid ? 'none' : 'block';
       return valid;
+    }
+
+    function populatePreviewAndPrint() {
+      const rawFee = parseFloat(document.getElementById('feeAmount').value || 0);
+      const fee = isNaN(rawFee) ? '0.00' : rawFee.toFixed(2);
+      const client = document.getElementById('clientName').value.trim();
+      const artist = document.getElementById('artistName').value.trim();
+      const legal = document.getElementById('legalName').value.trim();
+      const address = document.getElementById('artistAddress').value.trim();
+      const termsDays = parseInt(document.getElementById('paymentTerms').value);
+      const accName = document.getElementById('accountName').value.trim();
+      const sort = document.getElementById('sortCode').value.trim();
+      const accNum = document.getElementById('accountNumber').value.trim();
+
+      const citySelect = document.getElementById('clientCity');
+      const location = citySelect.value === 'CUSTOM' ? document.getElementById('customCityInput').value.trim() : citySelect.value;
+
+      const serviceSelect = document.getElementById('serviceDescription');
+      const service = serviceSelect.value === 'CUSTOM' ? document.getElementById('customServiceInput').value.trim() : serviceSelect.value;
+
+      const today = new Date();
+      const dueDate = new Date();
+      dueDate.setDate(today.getDate() + termsDays);
+
+      // Populate Live Preview (Card 4)
+      document.getElementById('prevInvNum').innerText = generatedInvoiceNumber;
+      document.getElementById('prevDueDate').innerText = dueDate.toLocaleDateString('en-GB');
+      document.getElementById('prevArtistName').innerText = artist;
+      document.getElementById('prevLegalName').innerText = 'Legal: ' + legal;
+      document.getElementById('prevClientName').innerText = client;
+      document.getElementById('prevClientCity').innerText = location;
+      document.getElementById('prevDesc').innerText = service;
+      document.getElementById('prevFee').innerText = '£' + fee;
+      document.getElementById('prevTotal').innerText = '£' + fee;
+      document.getElementById('prevAccName').innerText = accName;
+      document.getElementById('prevSort').innerText = sort;
+      document.getElementById('prevAcc').innerText = accNum;
+
+      // Populate A4 Printable DOM
+      document.getElementById('outArtistName').innerText = artist;
+      document.getElementById('outLegalName').innerText = 'Legal: ' + legal;
+      document.getElementById('outArtistAddress').innerText = address;
+      document.getElementById('outClientName').innerText = client;
+      document.getElementById('outClientAddress').innerText = location;
+      document.getElementById('outInvNum').innerText = generatedInvoiceNumber;
+      document.getElementById('outIssueDate').innerText = today.toLocaleDateString('en-GB');
+      document.getElementById('outDueDate').innerText = dueDate.toLocaleDateString('en-GB');
+      document.getElementById('outDesc').innerText = service;
+      document.getElementById('outServiceDate').innerText = new Date(document.getElementById('serviceDate').value).toLocaleDateString('en-GB');
+      document.getElementById('outFee').innerText = '£' + fee;
+      document.getElementById('outTotal').innerText = '£' + fee;
+      document.getElementById('outAccountName').innerText = accName;
+      document.getElementById('outSortCode').innerText = sort;
+      document.getElementById('outAccountNumber').innerText = accNum;
+      document.getElementById('outTerms').innerText = termsDays;
     }
 
     function updateStepUI() {
@@ -885,21 +1026,26 @@
       const nextBtn = document.getElementById('btnNext');
       if (currentStep === 0) {
         nextBtn.innerText = "NEXT: WORK DETAILS →";
+        nextBtn.style.display = 'block';
       } else if (currentStep === 1) {
-        nextBtn.innerText = "NEXT: PAYOUT →";
+        nextBtn.innerText = "NEXT: BACS DETAILS →";
+        nextBtn.style.display = 'block';
+      } else if (currentStep === 2) {
+        nextBtn.innerText = "REVIEW INVOICE →";
+        nextBtn.style.display = 'block';
       } else {
-        nextBtn.innerText = "⚡ GENERATE & DOWNLOAD PDF";
+        // Step 4 active: The primary button triggers print, so we hide the generic 'Next' button
+        nextBtn.style.display = 'none';
+        populatePreviewAndPrint();
       }
     }
 
     function nextStep() {
-      if (!validateStep(currentStep)) return;
+      if (currentStep < 3 && !validateStep(currentStep)) return;
 
       if (currentStep < totalSteps - 1) {
         currentStep++;
         updateStepUI();
-      } else {
-        generateInvoice();
       }
     }
 
@@ -910,45 +1056,80 @@
       }
     }
 
-    function generateInvoice() {
-      const fee = parseFloat(document.getElementById('feeAmount').value || 0).toFixed(2);
-      const client = document.getElementById('clientName').value;
-      const artist = document.getElementById('artistName').value;
-      const legal = document.getElementById('legalName').value;
-      const termsDays = parseInt(document.getElementById('paymentTerms').value);
+    function showToast(msg) {
+      const toast = document.getElementById('toastMsg');
+      toast.innerText = msg;
+      setTimeout(() => { toast.innerText = ''; }, 3500);
+    }
 
-      const citySelect = document.getElementById('clientCity');
-      const location = citySelect.value === 'CUSTOM' ? document.getElementById('customCityInput').value : citySelect.value;
-
-      const serviceSelect = document.getElementById('serviceDescription');
-      const service = serviceSelect.value === 'CUSTOM' ? document.getElementById('customServiceInput').value : serviceSelect.value;
-
-      const today = new Date();
-      const dueDate = new Date();
-      dueDate.setDate(today.getDate() + termsDays);
-
-      document.getElementById('outArtistName').innerText = artist;
-      document.getElementById('outLegalName').innerText = 'Legal: ' + legal;
-      document.getElementById('outArtistAddress').innerText = document.getElementById('artistAddress').value;
-      
-      document.getElementById('outClientName').innerText = client;
-      document.getElementById('outClientAddress').innerText = location;
-
-      document.getElementById('outInvNum').innerText = 'INV-' + today.getFullYear() + '-' + Math.floor(100 + Math.random() * 900);
-      document.getElementById('outIssueDate').innerText = today.toLocaleDateString('en-GB');
-      document.getElementById('outDueDate').innerText = dueDate.toLocaleDateString('en-GB');
-
-      document.getElementById('outDesc').innerText = service;
-      document.getElementById('outServiceDate').innerText = new Date(document.getElementById('serviceDate').value).toLocaleDateString('en-GB');
-      document.getElementById('outFee').innerText = '£' + fee;
-      document.getElementById('outTotal').innerText = '£' + fee;
-
-      document.getElementById('outAccountName').innerText = document.getElementById('accountName').value;
-      document.getElementById('outSortCode').innerText = document.getElementById('sortCode').value;
-      document.getElementById('outAccountNumber').innerText = document.getElementById('accountNumber').value;
-      document.getElementById('outTerms').innerText = termsDays;
-
+    /* Actions on Card 4 */
+    function triggerPrint() {
       window.print();
+    }
+
+    function shareWhatsApp() {
+      const fee = document.getElementById('prevTotal').innerText;
+      const client = document.getElementById('clientName').value.trim();
+      const artist = document.getElementById('artistName').value.trim();
+      const invNum = generatedInvoiceNumber;
+      const sort = document.getElementById('sortCode').value.trim();
+      const acc = document.getElementById('accountNumber').value.trim();
+      const name = document.getElementById('accountName').value.trim();
+
+      const text = `Hi ${client}, here are the payment details for invoice ${invNum} (${artist}):\n\n` +
+                   `Amount: ${fee}\n` +
+                   `Account Name: ${name}\n` +
+                   `Sort Code: ${sort}\n` +
+                   `Account Number: ${acc}\n` +
+                   `Reference: ${invNum}\n\n` +
+                   `Thank you!`;
+
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function shareEmail() {
+      const client = document.getElementById('clientName').value.trim();
+      const fee = document.getElementById('prevTotal').innerText;
+      const artist = document.getElementById('artistName').value.trim();
+      const invNum = generatedInvoiceNumber;
+      const sort = document.getElementById('sortCode').value.trim();
+      const acc = document.getElementById('accountNumber').value.trim();
+      const name = document.getElementById('accountName').value.trim();
+      const due = document.getElementById('prevDueDate').innerText;
+
+      const subject = `Invoice ${invNum} - ${artist}`;
+      const body = `Hi ${client},\n\nPlease find attached/noted the details for invoice ${invNum}.\n\n` +
+                   `Total Due: ${fee}\n` +
+                   `Due Date: ${due}\n\n` +
+                   `Payment Transfer Details (BACS):\n` +
+                   `Account Name: ${name}\n` +
+                   `Sort Code: ${sort}\n` +
+                   `Account Number: ${acc}\n` +
+                   `Reference: ${invNum}\n\n` +
+                   `Kind regards,\n${artist}`;
+
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function copyPaymentText() {
+      const fee = document.getElementById('prevTotal').innerText;
+      const invNum = generatedInvoiceNumber;
+      const sort = document.getElementById('sortCode').value.trim();
+      const acc = document.getElementById('accountNumber').value.trim();
+      const name = document.getElementById('accountName').value.trim();
+
+      const text = `Payment Details for ${invNum}:\n` +
+                   `Amount: ${fee}\n` +
+                   `Name: ${name}\n` +
+                   `Sort Code: ${sort}\n` +
+                   `Account: ${acc}\n` +
+                   `Ref: ${invNum}`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ Payment slip copied to clipboard');
+      }).catch(() => {
+        showToast('Please manually copy details');
+      });
     }
   </script>
 </body>
