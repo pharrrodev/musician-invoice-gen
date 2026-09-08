@@ -25,7 +25,7 @@
       --border-focus: #f59e0b;
       --accent: #f59e0b;
       --accent-btn-text: #000000;
-      --text: #f4f4f6;
+      --text: #f4f4f5;
       --muted: #8b8d94;
       --tag: #686b74;
       --error: #ef4444;
@@ -400,15 +400,15 @@
       <div class="card active" id="card-0">
         <div class="card-heading">
           <h2>Creator Details</h2>
-          <p>Saved securely in your browser for future invoices.</p>
+          <p>Saved securely on your device for future invoices.</p>
         </div>
 
         <div class="field">
           <div class="label-row">
-            <label>Artist / DJ / Alias</label>
+            <label>Artist / DJ / Trading Name</label>
             <span class="field-tag">Public Name</span>
           </div>
-          <input type="text" id="artistName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistName" placeholder="Enter DJ, artist, or alias name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -416,7 +416,7 @@
             <label>Legal Sole Trader Name</label>
             <span class="field-tag">HMRC Required</span>
           </div>
-          <input type="text" id="legalName" placeholder="e.g. Dylan Decorum" oninput="clearErr(this); saveData();" />
+          <input type="text" id="legalName" placeholder="Your legal first and last name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -424,7 +424,7 @@
             <label>Contact / Studio Address</label>
             <span class="field-tag">Postcode / City</span>
           </div>
-          <input type="text" id="artistAddress" placeholder="e.g. Studio 4, London, EC1A 1BB" oninput="clearErr(this); saveData();" />
+          <input type="text" id="artistAddress" placeholder="Studio / trading address or city & postcode" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
@@ -442,7 +442,7 @@
             <label>Venue / Client Name</label>
             <span class="field-tag">Required</span>
           </div>
-          <input type="text" id="clientName" placeholder="e.g. Corsica Studios / Fabric" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="clientName" placeholder="e.g. Club, festival, school, or promoter" oninput="clearErr(this); updateSummary();" />
         </div>
 
         <div class="grid-2">
@@ -477,7 +477,7 @@
           <div class="label-row">
             <label>Custom Location</label>
           </div>
-          <input type="text" id="customCityInput" placeholder="e.g. Cardiff" oninput="clearErr(this)" />
+          <input type="text" id="customCityInput" placeholder="Enter city or town name" oninput="clearErr(this)" />
         </div>
 
         <div class="field">
@@ -536,7 +536,7 @@
           <div class="label-row">
             <label>Custom Job Description</label>
           </div>
-          <input type="text" id="customServiceInput" placeholder="e.g. Harpist for Luxury Event" oninput="clearErr(this); updateSummary();" />
+          <input type="text" id="customServiceInput" placeholder="e.g. Session Bassist or Bespoke Composition" oninput="clearErr(this); updateSummary();" />
         </div>
 
         <div class="field">
@@ -573,7 +573,7 @@
             <label>Bank Account Name</label>
             <span class="field-tag">Confirmation of Payee</span>
           </div>
-          <input type="text" id="accountName" placeholder="As on bank statement" oninput="clearErr(this); saveData();" />
+          <input type="text" id="accountName" placeholder="Account holder full name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="grid-2">
@@ -582,16 +582,14 @@
               <label>UK Sort Code</label>
               <span class="field-tag">6-Digit</span>
             </div>
-            <!-- Auto-formatting Sort Code Input -->
-            <input type="text" id="sortCode" inputmode="numeric" placeholder="20-45-18" maxlength="8" oninput="formatSortCode(this); clearErr(this); saveData();" />
+            <input type="text" id="sortCode" inputmode="numeric" placeholder="00-00-00" maxlength="8" oninput="formatSortCode(this); clearErr(this); saveData();" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Account Number</label>
               <span class="field-tag">8-Digit</span>
             </div>
-            <!-- Auto-cleaning Account Number Input -->
-            <input type="text" id="accountNumber" inputmode="numeric" placeholder="83920147" maxlength="8" oninput="formatAccountNumber(this); clearErr(this); saveData();" />
+            <input type="text" id="accountNumber" inputmode="numeric" placeholder="00000000" maxlength="8" oninput="formatAccountNumber(this); clearErr(this); saveData();" />
           </div>
         </div>
 
@@ -609,11 +607,11 @@
         <div class="summary-ticket">
           <div class="ticket-row">
             <span>CLIENT / VENUE:</span>
-            <span id="ticketClient">Fabric / Corsica</span>
+            <span id="ticketClient">-</span>
           </div>
           <div class="ticket-row">
             <span>SERVICE:</span>
-            <span id="ticketService">Live Performance</span>
+            <span id="ticketService">Live Performance (DJ Set)</span>
           </div>
           <div class="ticket-row total">
             <span>TOTAL DUE:</span>
@@ -640,22 +638,22 @@
     <div class="inv-header">
       <div>
         <h1 class="inv-title">INVOICE</h1>
-        <p style="margin: 4px 0 0; color: #555;">Invoice No: <strong id="outInvNum">INV-2026-001</strong></p>
+        <p style="margin: 4px 0 0; color: #555;">Invoice No: <strong id="outInvNum">INV-001</strong></p>
         <p style="margin: 2px 0 0; color: #555;">Issue Date: <span id="outIssueDate"></span></p>
         <p style="margin: 2px 0 0; color: #555;">Due Date: <span id="outDueDate"></span></p>
       </div>
       <div style="text-align: right;">
-        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;">Dylan Decorum</h3>
-        <p style="margin: 2px 0;" id="outLegalName">Legal: Dylan Decorum</p>
-        <p style="margin: 2px 0; color: #666;" id="outArtistAddress">London, UK</p>
+        <h3 id="outArtistName" style="margin: 0; font-size: 16pt;"></h3>
+        <p style="margin: 2px 0;" id="outLegalName"></p>
+        <p style="margin: 2px 0; color: #666;" id="outArtistAddress"></p>
       </div>
     </div>
 
     <div class="inv-parties">
       <div>
         <p style="text-transform: uppercase; font-size: 8pt; color: #666; font-weight: bold; margin-bottom: 4px;">INVOICE TO:</p>
-        <h4 id="outClientName" style="margin: 0; font-size: 13pt;">Client / Venue</h4>
-        <p style="margin: 2px 0; color: #555;" id="outClientAddress">London</p>
+        <h4 id="outClientName" style="margin: 0; font-size: 13pt;"></h4>
+        <p style="margin: 2px 0; color: #555;" id="outClientAddress"></p>
       </div>
     </div>
 
@@ -707,7 +705,6 @@
         if (saved) document.getElementById(id).value = saved;
       });
 
-      // Ensure sort code is formatted on initial load
       const sortInput = document.getElementById('sortCode');
       if (sortInput.value) formatSortCode(sortInput);
 
@@ -735,9 +732,7 @@
       applyTheme(newTheme);
     }
 
-    /* --- BACS Auto-Formatting Logic --- */
     function formatSortCode(input) {
-      // Strip everything except digits
       let digits = input.value.replace(/\D/g, '').substring(0, 6);
       let formatted = '';
       if (digits.length > 4) {
@@ -751,7 +746,6 @@
     }
 
     function formatAccountNumber(input) {
-      // Strip non-digits and cap at 8 digits
       input.value = input.value.replace(/\D/g, '').substring(0, 8);
     }
 
@@ -843,11 +837,9 @@
 
         if (!acct.value.trim()) { acct.classList.add('invalid'); valid = false; }
         
-        // Sort code must have exactly 6 raw digits
         const rawSort = sort.value.replace(/\D/g, '');
         if (rawSort.length !== 6) { sort.classList.add('invalid'); valid = false; }
 
-        // UK bank accounts are typically 8 digits
         const rawNum = num.value.replace(/\D/g, '');
         if (rawNum.length < 6 || rawNum.length > 8) { num.classList.add('invalid'); valid = false; }
       }
@@ -925,7 +917,6 @@
       document.getElementById('outFee').innerText = '£' + fee;
       document.getElementById('outTotal').innerText = '£' + fee;
 
-      // Clean, standardized BACS rendering
       const rawSort = document.getElementById('sortCode').value.replace(/\D/g, '');
       const formattedSort = rawSort.length === 6 
         ? rawSort.substring(0, 2) + '-' + rawSort.substring(2, 4) + '-' + rawSort.substring(4, 6)
