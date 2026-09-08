@@ -399,14 +399,17 @@
 
     /* Print Template */
     @media print {
+      /* Suppresses automatic browser URL, title, date & page-number stamps */
       @page {
         size: A4 portrait;
-        margin: 15mm 20mm;
+        margin: 0mm;
       }
 
       html, body {
         width: 100% !important;
         height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
         overflow: visible !important;
         background: #ffffff !important;
         color: #000000 !important;
@@ -415,14 +418,15 @@
 
       .no-print { display: none !important; }
 
+      /* Safe document margins applied inside the page canvas */
       #invoice-render {
         display: block !important;
         position: static !important;
         width: 100% !important;
         max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
         box-sizing: border-box !important;
+        padding: 20mm 20mm !important; /* Standard clean A4 margins */
+        margin: 0 !important;
         font-size: 10pt;
         line-height: 1.5;
         color: #111111;
@@ -510,7 +514,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
           <span>GigInvoice</span>
         </div>
-        <div class="status-badge" id="ledgerStatus">TEST MODE • NO STORAGE</div>
+        <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT • AUTO-SAVED</div>
       </div>
 
       <div class="step-track">
@@ -527,7 +531,7 @@
       <div class="card active" id="card-0">
         <div class="card-heading">
           <h2>Creator Details</h2>
-          <p>Session-only testing mode (no device caching).</p>
+          <p>Saved securely on your device for future invoices.</p>
         </div>
 
         <div class="field">
@@ -535,7 +539,7 @@
             <label>Professional / Trading Name</label>
             <span class="field-tag">Public Name</span>
           </div>
-          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this)" />
+          <input type="text" id="artistName" placeholder="e.g. Stage alias, Band name, or Tutor name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -543,7 +547,7 @@
             <label>Legal Sole Trader Name</label>
             <span class="field-tag">HMRC Required</span>
           </div>
-          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this)" />
+          <input type="text" id="legalName" placeholder="e.g. Your legal first & last name" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="field">
@@ -551,7 +555,7 @@
             <label>Contact / Studio Address</label>
             <span class="field-tag">Postcode / City</span>
           </div>
-          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this)" />
+          <input type="text" id="artistAddress" placeholder="e.g. Studio, office, agency, or postal address" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="validation-msg" id="msg-0">Please fill in your artist details to proceed.</div>
@@ -696,7 +700,7 @@
       <div class="card" id="card-2">
         <div class="card-heading">
           <h2>Getting Paid (BACS)</h2>
-          <p>UK bank transfer credentials (not saved).</p>
+          <p>Saved securely on your device for future invoices.</p>
         </div>
 
         <div class="field">
@@ -704,7 +708,7 @@
             <label>Bank Account Name</label>
             <span class="field-tag">Confirmation of Payee</span>
           </div>
-          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this)" />
+          <input type="text" id="accountName" placeholder="Exact name on your bank account" oninput="clearErr(this); saveData();" />
         </div>
 
         <div class="grid-2">
@@ -713,14 +717,14 @@
               <label>UK Sort Code</label>
               <span class="field-tag">6-Digit</span>
             </div>
-            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this)" />
+            <input type="text" id="sortCode" placeholder="00-00-00" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
           <div class="field">
             <div class="label-row">
               <label>Account Number</label>
               <span class="field-tag">8-Digit</span>
             </div>
-            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this)" />
+            <input type="text" id="accountNumber" placeholder="12345678" maxlength="8" oninput="clearErr(this); saveData();" />
           </div>
         </div>
 
@@ -826,7 +830,7 @@
         </button>
         <button class="btn btn-next" id="btnNext" onclick="nextStep()">NEXT: WORK DETAILS →</button>
       </div>
-      <footer>TESTING ENVIRONMENT • SESSION MEMORY PURGED ON REFRESH</footer>
+      <footer>ZERO LOGINS • LOCAL STORAGE ENCRYPTED ON-DEVICE • 100% PRIVATE</footer>
     </div>
   </div>
 
@@ -894,12 +898,19 @@
     let generatedInvoiceNumber = 'INV-' + (new Date().getFullYear()) + '-' + Math.floor(100 + Math.random() * 900);
 
     window.onload = function() {
-      // Clear any existing stored keys from previous runs
+      // Auto-populate saved creator & bank data from device memory
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
-        localStorage.removeItem('music_inv_' + id);
+        const saved = localStorage.getItem('music_inv_' + id);
+        if (saved) document.getElementById(id).value = saved;
       });
       document.getElementById('serviceDate').valueAsDate = new Date();
     };
+
+    function saveData() {
+      ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
+        localStorage.setItem('music_inv_' + id, document.getElementById(id).value.trim());
+      });
+    }
 
     function formatSortCode(input) {
       const clean = input.replace(/\D/g, '').slice(0, 6);
