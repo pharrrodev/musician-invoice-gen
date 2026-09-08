@@ -269,7 +269,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
         <span>GigInvoice</span>
       </div>
-      <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT</div>
+      <div class="status-badge" id="ledgerStatus">HMRC COMPLIANT • AUTO-SAVED</div>
     </div>
 
     <!-- Dynamic Smart Banner Injection -->
@@ -584,28 +584,14 @@
     let currentChaserMsg = '';
 
     window.onload = function() {
-      // 1. Auto-populate basic data
+      // 1. Auto-populate basic data from local storage
       ['artistName', 'legalName', 'artistAddress', 'accountName', 'sortCode', 'accountNumber'].forEach(id => {
         const saved = localStorage.getItem('music_inv_' + id);
         if (saved) document.getElementById(id).value = saved;
       });
       document.getElementById('serviceDate').valueAsDate = new Date();
 
-      // 2. Inject a fake overdue invoice to demonstrate the smart chaser on first launch
-      let history = JSON.parse(localStorage.getItem('music_inv_history') || '[]');
-      if (history.length === 0) {
-        let mockDate = new Date();
-        mockDate.setDate(mockDate.getDate() - 16); // Forces it to be 16 days late (Statutory Tier)
-        history.push({
-          id: 'INV-2026-999',
-          client: 'Club Savanna (Demo Invoice)',
-          fee: 250.00,
-          dueDate: mockDate.toISOString()
-        });
-        localStorage.setItem('music_inv_history', JSON.stringify(history));
-      }
-
-      // 3. Scan system for missed payments
+      // 2. Scan system for real missed payments
       checkOverdueInvoices();
     };
 
