@@ -4,101 +4,244 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GigChaser ⚡ - Payment Chaser for DJs</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #0a0a0a;
+      color: #f4f4f5;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    /* Top Tool Switcher Nav */
+    .tool-nav {
+      width: 100%;
+      max-width: 420px;
+      margin-bottom: 20px;
+      padding: 4px;
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      display: flex;
+      gap: 6px;
+    }
+    .tool-nav a {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      display: block;
+      transition: all 0.15s ease;
+    }
+    .tool-nav a.inactive {
+      color: #a1a1aa;
+    }
+    .tool-nav a.inactive:hover {
+      color: #ffffff;
+      background: #27272a;
+    }
+    .tool-nav a.active {
+      background: #f59e0b;
+      color: #09090b;
+      font-weight: 700;
+    }
+
+    /* Container Card */
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: #121214;
+      border: 1px solid #27272a;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #f59e0b;
+      letter-spacing: -0.5px;
+    }
+    .header p {
+      font-size: 12px;
+      color: #a1a1aa;
+      margin-top: 4px;
+    }
+
+    /* Form Fields */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-row {
+      display: flex;
+      gap: 10px;
+    }
+    .field-row > div {
+      flex: 1;
+    }
+    label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #a1a1aa;
+    }
+    input {
+      width: 100%;
+      background: #09090b;
+      border: 1px solid #27272a;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #ffffff;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    input:focus {
+      border-color: #f59e0b;
+    }
+
+    /* Tone Selector */
+    .tone-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .tone-btn {
+      flex: 1;
+      padding: 8px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-radius: 8px;
+      border: 1px solid #27272a;
+      background: #09090b;
+      color: #a1a1aa;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tone-btn.active {
+      background: #f59e0b;
+      border-color: #f59e0b;
+      color: #09090b;
+    }
+
+    /* Message Output */
+    .output-box {
+      background: #09090b;
+      border: 1px solid #27272a;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #d4d4d8;
+      min-height: 90px;
+      white-space: pre-wrap;
+    }
+
+    /* Action Buttons */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .btn-action {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-action:hover {
+      opacity: 0.9;
+    }
+    .btn-copy {
+      background: #27272a;
+      color: #ffffff;
+    }
+    .btn-whatsapp {
+      background: #10b981;
+      color: #042f2e;
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-neutral-950 text-white p-4 flex flex-col items-center justify-start font-sans">
+<body>
 
   <!-- Top Tool Switcher Nav -->
-  <nav class="w-full max-w-md my-4 p-1 bg-neutral-900 border border-neutral-800 rounded-xl flex items-center gap-1">
-    <a href="../" class="flex-1 text-center py-2 text-xs font-semibold rounded-lg text-neutral-400 hover:text-white transition">
-      Invoice Generator
-    </a>
-    <a href="./" class="flex-1 text-center py-2 text-xs font-semibold rounded-lg bg-amber-400 text-neutral-950 shadow">
-      GigChaser ⚡
-    </a>
+  <nav class="tool-nav">
+    <a href="../" class="inactive">Invoice Generator</a>
+    <a href="./" class="active">GigChaser ⚡</a>
   </nav>
 
-  <main class="w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-2xl space-y-5">
-    <div class="text-center">
-      <h1 class="text-2xl font-bold tracking-tight text-amber-400">GigChaser ⚡</h1>
-      <p class="text-neutral-400 text-xs mt-1">1-Tap payment reminder generator for gigging artists</p>
+  <!-- Chaser Tool Container -->
+  <main class="card">
+    <div class="header">
+      <h1>GigChaser ⚡</h1>
+      <p>1-Tap payment reminder generator for gigging artists</p>
     </div>
 
-    <div class="space-y-4">
-      <div>
-        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Promoter / Client Name</label>
-        <input 
-          id="promoter"
-          type="text" 
-          placeholder="e.g. Dave"
-          class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
-          oninput="updateMessage()"
-        />
-      </div>
+    <div class="field-group">
+      <label for="promoter">Promoter / Client Name</label>
+      <input id="promoter" type="text" placeholder="e.g. Dave" oninput="updateMessage()">
+    </div>
 
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Venue / Event</label>
-          <input 
-            id="venue"
-            type="text" 
-            placeholder="e.g. Fabric"
-            class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
-            oninput="updateMessage()"
-          />
-        </div>
-        <div>
-          <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Amount (£)</label>
-          <input 
-            id="amount"
-            type="number" 
-            placeholder="e.g. 250"
-            class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
-            oninput="updateMessage()"
-          />
-        </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label for="venue">Venue / Event</label>
+        <input id="venue" type="text" placeholder="e.g. Fabric" oninput="updateMessage()">
       </div>
+      <div class="field-group">
+        <label for="amount">Amount (£)</label>
+        <input id="amount" type="number" placeholder="e.g. 250" oninput="updateMessage()">
+      </div>
+    </div>
 
-      <div>
-        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Invoice Number (Optional)</label>
-        <input 
-          id="invoiceNum"
-          type="text" 
-          placeholder="e.g. 004"
-          class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
-          oninput="updateMessage()"
-        />
-      </div>
+    <div class="field-group">
+      <label for="invoiceNum">Invoice Number (Optional)</label>
+      <input id="invoiceNum" type="text" placeholder="e.g. 004" oninput="updateMessage()">
+    </div>
 
-      <div>
-        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-2">Tone</label>
-        <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="setTone('friendly')" id="btn-friendly" class="tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-amber-400 text-neutral-950 border-amber-400">Friendly</button>
-          <button type="button" onclick="setTone('firm')" id="btn-firm" class="tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-neutral-950 text-neutral-400 border-neutral-700">Firm</button>
-          <button type="button" onclick="setTone('statutory')" id="btn-statutory" class="tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-neutral-950 text-neutral-400 border-neutral-700">Statutory</button>
-        </div>
+    <div class="field-group">
+      <label>Tone</label>
+      <div class="tone-buttons">
+        <button type="button" id="btn-friendly" class="tone-btn active" onclick="setTone('friendly')">Friendly</button>
+        <button type="button" id="btn-firm" class="tone-btn" onclick="setTone('firm')">Firm</button>
+        <button type="button" id="btn-statutory" class="tone-btn" onclick="setTone('statutory')">Statutory</button>
       </div>
+    </div>
 
-      <div>
-        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Generated Message</label>
-        <div id="output" class="bg-neutral-950 border border-neutral-800 rounded-lg p-3 text-xs text-neutral-300 min-h-[90px] whitespace-pre-wrap"></div>
-      </div>
+    <div class="field-group">
+      <label>Generated Message</label>
+      <div id="output" class="output-box"></div>
+    </div>
 
-      <div class="grid grid-cols-2 gap-3 pt-1">
-        <button 
-          id="copyBtn"
-          onclick="copyMessage()"
-          class="w-full bg-neutral-800 hover:bg-neutral-700 text-white font-medium py-3 rounded-lg text-xs transition"
-        >
-          Copy Text
-        </button>
-        <button 
-          onclick="openWhatsApp()"
-          class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 rounded-lg text-xs transition flex items-center justify-center gap-1"
-        >
-          WhatsApp 📲
-        </button>
-      </div>
+    <div class="action-row">
+      <button type="button" id="copyBtn" class="btn-action btn-copy" onclick="copyMessage()">Copy Text</button>
+      <button type="button" class="btn-action btn-whatsapp" onclick="openWhatsApp()">WhatsApp 📲</button>
     </div>
   </main>
 
@@ -107,11 +250,8 @@
 
     function setTone(tone) {
       currentTone = tone;
-      document.querySelectorAll('.tone-btn').forEach(btn => {
-        btn.className = 'tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-neutral-950 text-neutral-400 border-neutral-700';
-      });
-      const activeBtn = document.getElementById(`btn-${tone}`);
-      activeBtn.className = 'tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-amber-400 text-neutral-950 border-amber-400';
+      document.querySelectorAll('.tone-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`btn-${tone}`).classList.add('active');
       updateMessage();
     }
 
