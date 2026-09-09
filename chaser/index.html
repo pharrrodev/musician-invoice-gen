@@ -1,34 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GigChaser ⚡ - Payment Chaser for DJs</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GigChaser ⚡ • UK Payment Reminder</title>
+
+  <!-- Studio Ledger Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    :root {
+      --bg: #0c0d0e;
+      --card-bg: #141517;
+      --surface: #191b1f;
+      --border: #363940;
+      --border-focus: #f59e0b;
+      --accent: #f59e0b;
+      --text: #f4f4f5;
+      --muted: #9ca3af;
+      --tag: #686b74;
+      --success: #10b981;
+      --whatsapp: #25d366;
+      --font-ui: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
-    body {
-      background-color: #0a0a0a;
-      color: #f4f4f5;
-      padding: 16px;
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+      padding: 12px 14px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      min-height: 100dvh;
     }
+
+    .shell {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
     /* Top Tool Switcher Nav */
     .tool-nav {
       width: 100%;
-      max-width: 420px;
-      margin-bottom: 20px;
       padding: 4px;
-      background: #18181b;
-      border: 1px solid #27272a;
-      border-radius: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
       display: flex;
       gap: 6px;
     }
@@ -36,217 +63,292 @@
       flex: 1;
       text-align: center;
       padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 6px;
       text-decoration: none;
-      display: block;
       transition: all 0.15s ease;
+      font-family: var(--font-mono);
     }
     .tool-nav a.inactive {
-      color: #a1a1aa;
+      color: var(--muted);
     }
     .tool-nav a.inactive:hover {
       color: #ffffff;
-      background: #27272a;
+      background: var(--surface);
     }
     .tool-nav a.active {
-      background: #f59e0b;
-      color: #09090b;
-      font-weight: 700;
+      background: var(--accent);
+      color: #000;
     }
 
-    /* Container Card */
     .card {
-      width: 100%;
-      max-width: 420px;
-      background: #121214;
-      border: 1px solid #27272a;
-      border-radius: 16px;
-      padding: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    }
-    .header {
-      text-align: center;
-    }
-    .header h1 {
-      font-size: 20px;
-      font-weight: 800;
-      color: #f59e0b;
-      letter-spacing: -0.5px;
-    }
-    .header p {
-      font-size: 12px;
-      color: #a1a1aa;
-      margin-top: 4px;
+      gap: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     }
 
-    /* Form Fields */
-    .field-group {
+    .header-row {
       display: flex;
-      flex-direction: column;
-      gap: 6px;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #282a2e;
+      padding-bottom: 12px;
     }
-    .field-row {
+    .header-row h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .header-row p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .btn-clear {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--tag);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-clear:hover { color: #fff; border-color: var(--muted); }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .label-row {
       display: flex;
-      gap: 10px;
-    }
-    .field-row > div {
-      flex: 1;
+      justify-content: space-between;
+      align-items: center;
     }
     label {
-      font-size: 10px;
-      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #a1a1aa;
+      color: var(--muted);
+      letter-spacing: 0.04em;
     }
+    .field-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--tag);
+      text-transform: uppercase;
+    }
+
     input {
       width: 100%;
-      background: #09090b;
-      border: 1px solid #27272a;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 11px 13px;
       border-radius: 8px;
-      padding: 10px 12px;
-      color: #ffffff;
-      font-size: 13px;
+      font-size: 0.92rem;
+      font-family: var(--font-ui);
       outline: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
       transition: border-color 0.15s ease;
     }
     input:focus {
-      border-color: #f59e0b;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16);
     }
+    input::placeholder { color: #686b74; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     /* Tone Selector */
     .tone-buttons {
-      display: flex;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
     }
     .tone-btn {
-      flex: 1;
-      padding: 8px 4px;
-      font-size: 11px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
       font-weight: 700;
       text-transform: uppercase;
-      border-radius: 8px;
-      border: 1px solid #27272a;
-      background: #09090b;
-      color: #a1a1aa;
+      padding: 9px 0;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
       cursor: pointer;
       transition: all 0.15s ease;
     }
     .tone-btn.active {
-      background: #f59e0b;
-      border-color: #f59e0b;
-      color: #09090b;
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
     }
 
-    /* Message Output */
+    /* Output Container */
     .output-box {
-      background: #09090b;
-      border: 1px solid #27272a;
+      background: #090a0b;
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 12px;
-      font-size: 12px;
+      font-size: 0.8rem;
       line-height: 1.5;
-      color: #d4d4d8;
-      min-height: 90px;
+      color: #e4e4e7;
+      min-height: 95px;
       white-space: pre-wrap;
+      word-break: break-word;
+      font-family: var(--font-ui);
     }
 
-    /* Action Buttons */
-    .action-row {
-      display: flex;
-      gap: 10px;
+    /* Actions */
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 8px;
       margin-top: 4px;
     }
     .btn-action {
-      flex: 1;
       padding: 12px;
       border-radius: 8px;
       border: none;
-      font-size: 12px;
+      font-size: 0.82rem;
       font-weight: 700;
+      font-family: var(--font-ui);
       cursor: pointer;
-      transition: opacity 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      transition: opacity 0.15s ease;
     }
-    .btn-action:hover {
-      opacity: 0.9;
-    }
+    .btn-action:hover { opacity: 0.9; }
     .btn-copy {
-      background: #27272a;
-      color: #ffffff;
+      background: var(--surface);
+      color: #fff;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
     }
     .btn-whatsapp {
-      background: #10b981;
-      color: #042f2e;
+      background: var(--whatsapp);
+      color: #000;
+      font-weight: 800;
+    }
+
+    footer {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--tag);
+      margin-top: 8px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Tool Switcher Nav -->
-  <nav class="tool-nav">
-    <a href="../" class="inactive">Invoice Generator</a>
-    <a href="./" class="active">GigChaser ⚡</a>
-  </nav>
+  <div class="shell">
+    <!-- Top Tool Switcher Nav -->
+    <nav class="tool-nav">
+      <a href="../" class="inactive">Invoice Generator</a>
+      <a href="./" class="active">GigChaser ⚡</a>
+    </nav>
 
-  <!-- Chaser Tool Container -->
-  <main class="card">
-    <div class="header">
-      <h1>GigChaser ⚡</h1>
-      <p>1-Tap payment reminder generator for gigging artists</p>
-    </div>
-
-    <div class="field-group">
-      <label for="promoter">Promoter / Client Name</label>
-      <input id="promoter" type="text" placeholder="e.g. Dave" oninput="updateMessage()">
-    </div>
-
-    <div class="field-row">
-      <div class="field-group">
-        <label for="venue">Venue / Event</label>
-        <input id="venue" type="text" placeholder="e.g. Fabric" oninput="updateMessage()">
+    <main class="card">
+      <div class="header-row">
+        <div>
+          <h1>GigChaser ⚡</h1>
+          <p>1-Tap payment reminder generator for UK gig workers</p>
+        </div>
+        <button type="button" class="btn-clear" onclick="clearAll()">Clear</button>
       </div>
-      <div class="field-group">
-        <label for="amount">Amount (£)</label>
-        <input id="amount" type="number" placeholder="e.g. 250" oninput="updateMessage()">
+
+      <div class="field">
+        <div class="label-row">
+          <label for="promoter">Promoter / Client Name</label>
+          <span class="field-tag">Contact</span>
+        </div>
+        <input id="promoter" type="text" placeholder="e.g. Dave" oninput="updateMessage()">
       </div>
-    </div>
 
-    <div class="field-group">
-      <label for="invoiceNum">Invoice Number (Optional)</label>
-      <input id="invoiceNum" type="text" placeholder="e.g. 004" oninput="updateMessage()">
-    </div>
-
-    <div class="field-group">
-      <label>Tone</label>
-      <div class="tone-buttons">
-        <button type="button" id="btn-friendly" class="tone-btn active" onclick="setTone('friendly')">Friendly</button>
-        <button type="button" id="btn-firm" class="tone-btn" onclick="setTone('firm')">Firm</button>
-        <button type="button" id="btn-statutory" class="tone-btn" onclick="setTone('statutory')">Statutory</button>
+      <div class="grid-2">
+        <div class="field">
+          <div class="label-row">
+            <label for="venue">Venue / Event</label>
+          </div>
+          <input id="venue" type="text" placeholder="e.g. Fabric" oninput="updateMessage()">
+        </div>
+        <div class="field">
+          <div class="label-row">
+            <label for="amount">Amount (£)</label>
+          </div>
+          <input id="amount" type="number" placeholder="e.g. 250" oninput="updateMessage()">
+        </div>
       </div>
-    </div>
 
-    <div class="field-group">
-      <label>Generated Message</label>
-      <div id="output" class="output-box"></div>
-    </div>
+      <div class="field">
+        <div class="label-row">
+          <label for="invoiceNum">Invoice Number (Optional)</label>
+          <span class="field-tag">Reference</span>
+        </div>
+        <input id="invoiceNum" type="text" placeholder="e.g. INV-2026-458" oninput="updateMessage()">
+      </div>
 
-    <div class="action-row">
-      <button type="button" id="copyBtn" class="btn-action btn-copy" onclick="copyMessage()">Copy Text</button>
-      <button type="button" class="btn-action btn-whatsapp" onclick="openWhatsApp()">WhatsApp 📲</button>
-    </div>
-  </main>
+      <div class="field">
+        <div class="label-row">
+          <label>Reminder Tone</label>
+        </div>
+        <div class="tone-buttons">
+          <button type="button" id="btn-friendly" class="tone-btn active" onclick="setTone('friendly')">Friendly</button>
+          <button type="button" id="btn-firm" class="tone-btn" onclick="setTone('firm')">Firm</button>
+          <button type="button" id="btn-statutory" class="tone-btn" onclick="setTone('statutory')">Statutory</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label-row">
+          <label>Generated Message</label>
+          <span class="field-tag">WhatsApp Ready</span>
+        </div>
+        <div id="output" class="output-box"></div>
+      </div>
+
+      <div class="action-grid">
+        <button type="button" id="copyBtn" class="btn-action btn-copy" onclick="copyMessage()">Copy Text</button>
+        <button type="button" class="btn-action btn-whatsapp" onclick="openWhatsApp()">WhatsApp 📲</button>
+      </div>
+    </main>
+
+    <footer>HMRC COMPLIANT REMINDERS • ZERO LOGINS • 100% PRIVATE</footer>
+  </div>
 
   <script>
     let currentTone = 'friendly';
+
+    window.onload = function() {
+      // Auto-populate from last GigInvoice generation if present
+      const p = localStorage.getItem('last_inv_client');
+      const v = localStorage.getItem('last_inv_venue');
+      const a = localStorage.getItem('last_inv_amount');
+      const num = localStorage.getItem('last_inv_num');
+
+      if (p) document.getElementById('promoter').value = p;
+      if (v) document.getElementById('venue').value = v;
+      if (a) document.getElementById('amount').value = a;
+      if (num) document.getElementById('invoiceNum').value = num;
+
+      updateMessage();
+    };
+
+    function clearAll() {
+      document.getElementById('promoter').value = '';
+      document.getElementById('venue').value = '';
+      document.getElementById('amount').value = '';
+      document.getElementById('invoiceNum').value = '';
+      updateMessage();
+    }
 
     function setTone(tone) {
       currentTone = tone;
@@ -266,12 +368,12 @@
       const amt = amount ? ` of £${amount}` : '';
 
       if (currentTone === 'friendly') {
-        return `Hey ${p}, hope you're well! Just following up on the invoice${inv}${amt}${v}. Let me know once the transfer goes through so I can mark it off. Thanks!`;
+        return `Hey ${p}, hope you're well! Just checking in on invoice${inv}${amt}${v}. Let me know once the BACS transfer has gone through so I can mark it off. Cheers!`;
       }
       if (currentTone === 'firm') {
-        return `Hi ${p}, following up regarding outstanding invoice${inv}${amt}${v}, which is now overdue. Please confirm when the payment will be released. Bank details are on the invoice.`;
+        return `Hi ${p}, following up on invoice${inv}${amt}${v}, which is now overdue. Please confirm when the payment will be released today. Bank details remain as stated on the invoice.`;
       }
-      return `FORMAL NOTICE: Outstanding payment${inv}${amt}${v} is now past its agreed due date. In accordance with the Late Payment of Commercial Debts Act, statutory interest and fixed recovery fees may be applied. Please ensure settlement within 48 hours to avoid escalation.`;
+      return `FORMAL NOTICE: Outstanding payment${inv}${amt}${v} is now past its agreed due date. In accordance with the UK Late Payment of Commercial Debts Act 1998, a statutory late compensation fee of £40 plus interest now applies. Please confirm settlement within 24 hours to clear this account.`;
     }
 
     function updateMessage() {
@@ -282,7 +384,7 @@
       const text = generateText();
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById('copyBtn');
-        btn.textContent = 'Copied! ✓';
+        btn.textContent = '✓ Copied';
         setTimeout(() => { btn.textContent = 'Copy Text'; }, 2000);
       });
     }
@@ -291,8 +393,6 @@
       const text = generateText();
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
-
-    updateMessage();
   </script>
 </body>
 </html>
