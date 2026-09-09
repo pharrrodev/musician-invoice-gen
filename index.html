@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Favicons -->
+  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2318181b' stroke='%23f59e0b' stroke-width='5'/><circle cx='50' cy='50' r='18' fill='%23f59e0b'/><circle cx='50' cy='50' r='6' fill='%2318181b'/></svg>">
 
   <style>
@@ -75,6 +75,7 @@
       text-decoration: none;
       display: block;
       transition: all 0.15s ease;
+      font-family: var(--font-mono);
     }
     .tool-nav a.active {
       background: var(--accent);
@@ -115,7 +116,7 @@
       border-radius: 4px;
     }
 
-    /* 4-Step Track */
+    /* 4-Step Progress Track */
     .step-track {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -330,7 +331,7 @@
     .p-tot { text-align: right; font-weight: 800; font-size: 0.95rem; margin-top: 4px; }
     .p-bank { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 8px; margin-top: 8px; font-size: 0.7rem; }
 
-    /* Streamlined Single-Focus Export Actions */
+    /* Action Controls */
     .btn-pdf-hero {
       width: 100%;
       background: var(--accent);
@@ -436,7 +437,7 @@
 
     #invoice-render { display: none; }
 
-    /* Clean A4 Print Layout - Zero Browser Headers/Footers */
+    /* Clean A4 Print Layout (Suppresses default browser header/footer stamps) */
     @media print {
       @page {
         size: A4 portrait;
@@ -838,7 +839,7 @@
           </div>
         </div>
 
-        <!-- Focused Universal Action -->
+        <!-- Single Primary Action -->
         <button class="btn-pdf-hero" onclick="triggerPrint()">
           ⚡ Download / Save A4 PDF
         </button>
@@ -1047,7 +1048,7 @@
       const dueDate = new Date();
       dueDate.setDate(today.getDate() + termsDays);
 
-      // Populate Live Preview Box (Card 4)
+      // Card 4 live preview
       document.getElementById('prevInvNum').innerText = generatedInvoiceNumber;
       document.getElementById('prevDueDate').innerText = dueDate.toLocaleDateString('en-GB');
       document.getElementById('prevArtistName').innerText = artist;
@@ -1062,7 +1063,7 @@
       document.getElementById('prevSort').innerText = sort;
       document.getElementById('prevAcc').innerText = accNum;
 
-      // Populate A4 Print Canvas
+      // Print DOM
       document.getElementById('outArtistName').innerText = artist;
       document.getElementById('outLegalName').innerText = 'Legal: ' + legal;
       document.getElementById('outArtistAddress').innerText = address;
@@ -1128,6 +1129,18 @@
     }
 
     function triggerPrint() {
+      // Cache latest invoice details to pre-fill GigChaser
+      const client = document.getElementById('clientName').value.trim();
+      const citySelect = document.getElementById('clientCity');
+      const location = citySelect.value === 'CUSTOM' ? document.getElementById('customCityInput').value.trim() : citySelect.value;
+      const rawFee = parseFloat(document.getElementById('feeAmount').value || 0);
+      const fee = isNaN(rawFee) ? '0.00' : rawFee.toFixed(2);
+
+      localStorage.setItem('last_inv_client', client);
+      localStorage.setItem('last_inv_venue', location);
+      localStorage.setItem('last_inv_amount', fee);
+      localStorage.setItem('last_inv_num', generatedInvoiceNumber);
+
       window.print();
     }
 
