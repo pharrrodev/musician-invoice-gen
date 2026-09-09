@@ -437,7 +437,7 @@
 
     #invoice-render { display: none; }
 
-    /* Clean A4 Print Layout (Suppresses default browser header/footer stamps) */
+    /* Clean A4 Print Layout */
     @media print {
       @page {
         size: A4 portrait;
@@ -1129,17 +1129,37 @@
     }
 
     function triggerPrint() {
-      // Cache latest invoice details to pre-fill GigChaser
       const client = document.getElementById('clientName').value.trim();
       const citySelect = document.getElementById('clientCity');
       const location = citySelect.value === 'CUSTOM' ? document.getElementById('customCityInput').value.trim() : citySelect.value;
       const rawFee = parseFloat(document.getElementById('feeAmount').value || 0);
       const fee = isNaN(rawFee) ? '0.00' : rawFee.toFixed(2);
+      const serviceSelect = document.getElementById('serviceDescription');
+      const service = serviceSelect.value === 'CUSTOM' ? document.getElementById('customServiceInput').value.trim() : serviceSelect.value;
 
+      // Legacy single-record keys for backward compatibility
       localStorage.setItem('last_inv_client', client);
       localStorage.setItem('last_inv_venue', location);
       localStorage.setItem('last_inv_amount', fee);
       localStorage.setItem('last_inv_num', generatedInvoiceNumber);
+
+      // Rolling history array (up to 10 recent invoices)
+      try {
+        let history = JSON.parse(localStorage.getItem('music_inv_history') || '[]');
+        history = history.filter(item => item.num !== generatedInvoiceNumber);
+        history.unshift({
+          num: generatedInvoiceNumber,
+          client: client,
+          venue: location,
+          amount: fee,
+          service: service,
+          date: new Date().toLocaleDateString('en-GB')
+        });
+        if (history.length > 10) history = history.slice(0, 10);
+        localStorage.setItem('music_inv_history', JSON.stringify(history));
+      } catch (err) {
+        console.error('History save error', err);
+      }
 
       window.print();
     }
