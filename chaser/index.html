@@ -21,9 +21,11 @@
       --border: #363940;
       --border-focus: #f59e0b;
       --accent: #f59e0b;
+      --accent-muted: rgba(245, 158, 11, 0.12);
       --text: #f4f4f5;
       --muted: #9ca3af;
       --tag: #686b74;
+      --error: #ef4444;
       --success: #10b981;
       --whatsapp: #25d366;
       --font-ui: 'Plus Jakarta Sans', -apple-system, sans-serif;
@@ -73,6 +75,10 @@
       transition: all 0.15s ease;
       font-family: var(--font-mono);
     }
+    .tool-nav a.active {
+      background: var(--accent);
+      color: #000;
+    }
     .tool-nav a.inactive {
       color: var(--muted);
     }
@@ -80,11 +86,26 @@
       color: #ffffff;
       background: var(--surface);
     }
-    .tool-nav a.active {
-      background: var(--accent);
-      color: #000;
+
+    /* Track Spacer so card position perfectly matches invoice page */
+    .status-placeholder {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px 2px 4px;
+    }
+    .status-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 3px 7px;
+      border-radius: 4px;
     }
 
+    /* Main Card */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -209,7 +230,7 @@
       border-color: var(--accent);
     }
 
-    /* Message Output Container */
+    /* Output Container */
     .output-box {
       background: #090a0b;
       border: 1px solid var(--border);
@@ -224,18 +245,18 @@
       font-family: var(--font-ui);
     }
 
-    /* Actions */
+    /* Actions Grid */
     .action-grid {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
       gap: 8px;
-      margin-top: 4px;
+      margin-top: 2px;
     }
     .btn-action {
       padding: 12px;
       border-radius: 8px;
       border: none;
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       font-weight: 700;
       font-family: var(--font-ui);
       cursor: pointer;
@@ -251,7 +272,7 @@
       color: #fff;
       border: 1px solid var(--border);
       font-family: var(--font-mono);
-      font-size: 0.76rem;
+      font-size: 0.78rem;
     }
     .btn-whatsapp {
       background: var(--whatsapp);
@@ -277,6 +298,13 @@
       <a href="./" class="active">GigChaser ⚡</a>
     </nav>
 
+    <!-- Top Status Bar Alignment -->
+    <div class="status-placeholder">
+      <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--tag);">PAYMENT NUDGE</span>
+      <div class="status-badge">WHATSAPP READY</div>
+    </div>
+
+    <!-- Main Card -->
     <main class="card">
       <div class="header-row">
         <div>
@@ -286,7 +314,7 @@
         <button type="button" class="btn-clear" onclick="clearAll()">Clear</button>
       </div>
 
-      <!-- Recent Invoice Picker -->
+      <!-- Recent Invoices Dropdown -->
       <div class="field" id="historyField" style="display: none;">
         <div class="label-row">
           <label for="historySelect">Load Recent Invoice</label>
@@ -361,7 +389,6 @@
     let invoiceHistory = [];
 
     window.onload = function() {
-      // Load rolling history from localStorage
       try {
         const rawHistory = localStorage.getItem('music_inv_history');
         if (rawHistory) {
@@ -388,11 +415,9 @@
           historySelect.appendChild(opt);
         });
 
-        // Auto-select and populate the most recent invoice
         historySelect.value = "0";
         loadFromHistory(0);
       } else {
-        // Fallback to legacy single-invoice keys
         const p = localStorage.getItem('last_inv_client');
         const v = localStorage.getItem('last_inv_venue');
         const a = localStorage.getItem('last_inv_amount');
