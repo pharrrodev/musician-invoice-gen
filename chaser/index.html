@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2318181b' stroke='%23f59e0b' stroke-width='5'/><circle cx='50' cy='50' r='18' fill='%23f59e0b'/><circle cx='50' cy='50' r='6' fill='%2318181b'/></svg>">
+
   <style>
     :root {
       --bg: #0c0d0e;
@@ -142,7 +145,7 @@
       text-transform: uppercase;
     }
 
-    input {
+    input, select {
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -154,12 +157,30 @@
       outline: none;
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
       transition: border-color 0.15s ease;
+      -webkit-appearance: none;
+      appearance: none;
     }
-    input:focus {
+    input:focus, select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16);
     }
     input::placeholder { color: #686b74; }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238b8d94'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 38px;
+      font-size: 0.84rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    option {
+      background: #1b1c1f;
+      color: #fff;
+      font-weight: normal;
+    }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
@@ -188,7 +209,7 @@
       border-color: var(--accent);
     }
 
-    /* Output Container */
+    /* Message Output Container */
     .output-box {
       background: #090a0b;
       border: 1px solid var(--border);
@@ -265,6 +286,17 @@
         <button type="button" class="btn-clear" onclick="clearAll()">Clear</button>
       </div>
 
+      <!-- Recent Invoice Picker -->
+      <div class="field" id="historyField" style="display: none;">
+        <div class="label-row">
+          <label for="historySelect">Load Recent Invoice</label>
+          <span class="field-tag" id="historyCount">0 Saved</span>
+        </div>
+        <select id="historySelect" onchange="loadFromHistory(this.value)">
+          <option value="" disabled selected>-- Select an invoice to chase --</option>
+        </select>
+      </div>
+
       <div class="field">
         <div class="label-row">
           <label for="promoter">Promoter / Client Name</label>
@@ -326,27 +358,74 @@
 
   <script>
     let currentTone = 'friendly';
+    let invoiceHistory = [];
 
     window.onload = function() {
-      // Auto-populate from last GigInvoice generation if present
-      const p = localStorage.getItem('last_inv_client');
-      const v = localStorage.getItem('last_inv_venue');
-      const a = localStorage.getItem('last_inv_amount');
-      const num = localStorage.getItem('last_inv_num');
+      // Load rolling history from localStorage
+      try {
+        const rawHistory = localStorage.getItem('music_inv_history');
+        if (rawHistory) {
+          invoiceHistory = JSON.parse(rawHistory);
+        }
+      } catch (err) {
+        console.error('Failed to parse history', err);
+      }
 
-      if (p) document.getElementById('promoter').value = p;
-      if (v) document.getElementById('venue').value = v;
-      if (a) document.getElementById('amount').value = a;
-      if (num) document.getElementById('invoiceNum').value = num;
+      const historyField = document.getElementById('historyField');
+      const historySelect = document.getElementById('historySelect');
+      const historyCount = document.getElementById('historyCount');
+
+      if (invoiceHistory.length > 0) {
+        historyField.style.display = 'flex';
+        historyCount.innerText = `${invoiceHistory.length} Recent`;
+
+        historySelect.innerHTML = '<option value="" disabled selected>-- Select an invoice to chase --</option>';
+
+        invoiceHistory.forEach((inv, index) => {
+          const opt = document.createElement('option');
+          opt.value = index;
+          opt.textContent = `${inv.client} • £${inv.amount} (${inv.num})`;
+          historySelect.appendChild(opt);
+        });
+
+        // Auto-select and populate the most recent invoice
+        historySelect.value = "0";
+        loadFromHistory(0);
+      } else {
+        // Fallback to legacy single-invoice keys
+        const p = localStorage.getItem('last_inv_client');
+        const v = localStorage.getItem('last_inv_venue');
+        const a = localStorage.getItem('last_inv_amount');
+        const num = localStorage.getItem('last_inv_num');
+
+        if (p) document.getElementById('promoter').value = p;
+        if (v) document.getElementById('venue').value = v;
+        if (a) document.getElementById('amount').value = a;
+        if (num) document.getElementById('invoiceNum').value = num;
+
+        updateMessage();
+      }
+    };
+
+    function loadFromHistory(index) {
+      const selected = invoiceHistory[parseInt(index, 10)];
+      if (!selected) return;
+
+      document.getElementById('promoter').value = selected.client || '';
+      document.getElementById('venue').value = selected.venue || '';
+      document.getElementById('amount').value = selected.amount || '';
+      document.getElementById('invoiceNum').value = selected.num || '';
 
       updateMessage();
-    };
+    }
 
     function clearAll() {
       document.getElementById('promoter').value = '';
       document.getElementById('venue').value = '';
       document.getElementById('amount').value = '';
       document.getElementById('invoiceNum').value = '';
+      const select = document.getElementById('historySelect');
+      if (select) select.selectedIndex = 0;
       updateMessage();
     }
 
