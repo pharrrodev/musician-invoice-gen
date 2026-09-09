@@ -1,1 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GigChaser ⚡ - Payment Chaser for DJs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-neutral-950 text-white p-4 flex items-center justify-center font-sans">
+  <main class="w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-2xl space-y-5">
+    <div class="text-center">
+      <h1 class="text-2xl font-bold tracking-tight text-amber-400">GigChaser ⚡</h1>
+      <p class="text-neutral-400 text-xs mt-1">1-Tap payment reminder generator for gigging artists</p>
+    </div>
 
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Promoter / Client Name</label>
+        <input 
+          id="promoter"
+          type="text" 
+          placeholder="e.g. Dave"
+          class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
+          oninput="updateMessage()"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Venue / Event</label>
+          <input 
+            id="venue"
+            type="text" 
+            placeholder="e.g. Fabric"
+            class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
+            oninput="updateMessage()"
+          />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Amount (£)</label>
+          <input 
+            id="amount"
+            type="number" 
+            placeholder="e.g. 250"
+            class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
+            oninput="updateMessage()"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Invoice Number (Optional)</label>
+        <input 
+          id="invoiceNum"
+          type="text" 
+          placeholder="e.g. 004"
+          class="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-3 text-sm focus:outline-none focus:border-amber-400 text-white"
+          oninput="updateMessage()"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-2">Tone</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="setTone('friendly')" id="btn-friendly" class="tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-amber-400 text-neutral-950 border-amber-400">Friendly</button>
+          <button type="button" onclick="setTone('firm')" id="btn-firm" class="tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-neutral-950 text-neutral-400 border-neutral-700">Firm</button>
+          <button type="button" onclick="setTone('statutory')" id="btn-statutory" class="tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-neutral-950 text-neutral-400 border-neutral-700">Statutory</button>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Generated Message</label>
+        <div id="output" class="bg-neutral-950 border border-neutral-800 rounded-lg p-3 text-xs text-neutral-300 min-h-[90px] whitespace-pre-wrap"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 pt-1">
+        <button 
+          id="copyBtn"
+          onclick="copyMessage()"
+          class="w-full bg-neutral-800 hover:bg-neutral-700 text-white font-medium py-3 rounded-lg text-xs transition"
+        >
+          Copy Text
+        </button>
+        <button 
+          onclick="openWhatsApp()"
+          class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 rounded-lg text-xs transition flex items-center justify-center gap-1"
+        >
+          WhatsApp 📲
+        </button>
+      </div>
+
+      <div class="text-center pt-2">
+        <a href="../" class="text-xs text-neutral-500 hover:text-amber-400 transition">← Back to Invoice Generator</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentTone = 'friendly';
+
+    function setTone(tone) {
+      currentTone = tone;
+      document.querySelectorAll('.tone-btn').forEach(btn => {
+        btn.className = 'tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-neutral-950 text-neutral-400 border-neutral-700';
+      });
+      const activeBtn = document.getElementById(`btn-${tone}`);
+      activeBtn.className = 'tone-btn py-2 text-xs font-semibold uppercase rounded-lg border bg-amber-400 text-neutral-950 border-amber-400';
+      updateMessage();
+    }
+
+    function generateText() {
+      const p = document.getElementById('promoter').value.trim() || 'there';
+      const venue = document.getElementById('venue').value.trim();
+      const amount = document.getElementById('amount').value.trim();
+      const invoiceNum = document.getElementById('invoiceNum').value.trim();
+
+      const v = venue ? ` for the set at ${venue}` : '';
+      const inv = invoiceNum ? ` (Ref: #${invoiceNum})` : '';
+      const amt = amount ? ` of £${amount}` : '';
+
+      if (currentTone === 'friendly') {
+        return `Hey ${p}, hope you're well! Just following up on the invoice${inv}${amt}${v}. Let me know once the transfer goes through so I can mark it off. Thanks!`;
+      }
+      if (currentTone === 'firm') {
+        return `Hi ${p}, following up regarding outstanding invoice${inv}${amt}${v}, which is now overdue. Please confirm when the payment will be released. Bank details are on the invoice.`;
+      }
+      return `FORMAL NOTICE: Outstanding payment${inv}${amt}${v} is now past its agreed due date. In accordance with the Late Payment of Commercial Debts Act, statutory interest and fixed recovery fees may be applied. Please ensure settlement within 48 hours to avoid escalation.`;
+    }
+
+    function updateMessage() {
+      document.getElementById('output').textContent = generateText();
+    }
+
+    function copyMessage() {
+      const text = generateText();
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied! ✓';
+        setTimeout(() => { btn.textContent = 'Copy Text'; }, 2000);
+      });
+    }
+
+    function openWhatsApp() {
+      const text = generateText();
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    updateMessage();
+  </script>
+</body>
+</html>
