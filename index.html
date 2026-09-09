@@ -49,7 +49,44 @@
       height: 100dvh;
       max-width: 480px;
       margin: 0 auto;
-      padding: 16px 14px;
+      padding: 12px 14px 16px;
+    }
+
+    /* Top Tool Switcher Nav */
+    .tool-nav {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 0 12px 0;
+      padding: 4px;
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      display: flex;
+      gap: 6px;
+      box-sizing: border-box;
+    }
+    .tool-nav a {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      display: block;
+      transition: all 0.15s ease;
+    }
+    .tool-nav a.active {
+      background: var(--accent);
+      color: #09090b;
+      font-weight: 700;
+    }
+    .tool-nav a.inactive {
+      color: var(--muted);
+    }
+    .tool-nav a.inactive:hover {
+      color: #ffffff;
+      background: #27272a;
     }
 
     .ledger-header {
@@ -118,7 +155,7 @@
       pointer-events: none;
       transform: translateY(12px);
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      max-height: calc(100dvh - 170px);
+      max-height: calc(100dvh - 220px);
       overflow-y: auto;
     }
 
@@ -506,19 +543,15 @@
   </style>
 </head>
 <body>
-<!-- Top Tool Switcher Nav -->
-<nav class="w-full max-w-md mx-auto my-4 p-1 bg-neutral-900 border border-neutral-800 rounded-xl flex items-center gap-1">
-  <a href="./" class="flex-1 text-center py-2 text-xs font-semibold rounded-lg bg-amber-400 text-neutral-950 shadow">
-    Invoice Generator
-  </a>
-  <a href="./chaser/" class="flex-1 text-center py-2 text-xs font-semibold rounded-lg text-neutral-400 hover:text-white transition">
-    GigChaser ⚡
-  </a>
-</nav>
 
-  
   <div class="app-shell no-print">
     <div>
+      <!-- Top Tool Switcher Nav -->
+      <nav class="tool-nav">
+        <a href="./" class="active">Invoice Generator</a>
+        <a href="./chaser/" class="inactive">GigChaser ⚡</a>
+      </nav>
+
       <div class="ledger-header">
         <div class="brand-title">
           <span>⚡ GigInvoice</span>
